@@ -1,0 +1,856 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Calcul du poids des tuyauteries : tubes, raccords, brides et vannes, avec liste par isométrique et spool, import et export CSV.">
+<meta name="author" content="Kamel Nasralli">
+<meta name="theme-color" content="#0a6a78">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Poids tuyauterie">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Calcul Poids Tuyauterie</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Concept : cartouche de plan d'ingénieur, colonne unique centrée ; teal = tubes, cuivre = raccords, indigo = brides */
+:root{
+  --bg:#edf1f3; --panel:#ffffff; --panel2:#f5f8f9; --ink:#0f1d27; --muted:#566673; --line:#d3dce1;
+  --tube:#0a6a78; --tube-bg:#dcf0f2; --fit:#a05a14; --fit-bg:#f8e9d6; --flg:#434fa0; --flg-bg:#e3e6f7;
+  --on-accent:#ffffff; --warn:#a4380f; --warn-bg:#fbe6dc; --ok:#1b7a43;
+  --f-display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0c1920; --panel:#13252e; --panel2:#0f2028; --ink:#e5eef2; --muted:#8ea3af; --line:#27414e;
+    --tube:#52c4d2; --tube-bg:#12363d; --fit:#e3a255; --fit-bg:#3b2a14; --flg:#98a4ea; --flg-bg:#222a4f;
+    --on-accent:#08181d; --warn:#ff9d78; --warn-bg:#3d2016; --ok:#6fd49a; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0c1920; --panel:#13252e; --panel2:#0f2028; --ink:#e5eef2; --muted:#8ea3af; --line:#27414e;
+  --tube:#52c4d2; --tube-bg:#12363d; --fit:#e3a255; --fit-bg:#3b2a14; --flg:#98a4ea; --flg-bg:#222a4f;
+  --on-accent:#08181d; --warn:#ff9d78; --warn-bg:#3d2016; --ok:#6fd49a; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;
+  padding-block:0 32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:760px;margin:0 auto}
+h1,h2,h3{font-family:var(--f-display);font-weight:600;margin:0;letter-spacing:.005em;text-wrap:balance}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+button,input,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--tube);outline-offset:2px}
+
+/* cartouche */
+.title-block{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap;
+  padding:18px 0 10px;border-bottom:2px solid var(--ink)}
+.title-block h1{font-size:30px;line-height:1.05;font-weight:700}
+.title-block .ref{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right}
+nav.tabs{display:flex;gap:4px;margin-top:2px;border-bottom:1px solid var(--line);overflow-x:auto}
+nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 14px 9px;cursor:pointer;
+  font-family:var(--f-display);font-size:18px;font-weight:600;color:var(--muted);white-space:nowrap;display:flex;gap:8px;align-items:center}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--tube)}
+.badge{font-family:var(--f-mono);font-size:11px;background:var(--tube);color:var(--on-accent);border-radius:9px;padding:1px 7px;font-weight:500}
+
+details.settings{margin-top:14px;background:var(--panel);border:1px solid var(--line);border-radius:6px}
+details.settings>summary{cursor:pointer;padding:11px 14px;font-family:var(--f-display);font-size:17px;font-weight:600;
+  display:flex;justify-content:space-between;align-items:center;gap:8px;list-style:none}
+details.settings>summary::-webkit-details-marker{display:none}
+details.settings>summary .sum{font-family:var(--f-mono);font-size:11.5px;font-weight:400;color:var(--muted);text-align:right}
+details.settings .body{padding:2px 14px 14px;display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:14px;margin-top:14px;min-width:0}
+.panel>h2{font-size:21px;margin-bottom:10px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.grid .full{grid-column:1/-1}
+.two-col{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.two-col>*{min-width:0}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;min-width:0}
+label.f input,label.f select{font-size:15px;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:400;
+  background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:9px 10px;min-height:42px;width:100%;min-width:0}
+label.f input[type=checkbox]{width:22px;min-height:22px;padding:0;accent-color:var(--tube)}
+label.f.chk{flex-direction:row;align-items:center;gap:10px}
+.hint{font-size:12px;color:var(--muted);text-transform:none;letter-spacing:0}
+
+.cats{display:flex;flex-wrap:wrap;gap:6px}
+.cats button{border:1px solid var(--line);background:var(--panel2);border-radius:5px;padding:8px 12px;cursor:pointer;font-size:14px;min-height:40px}
+.cats button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+
+.btn{border:1px solid var(--line);background:var(--panel);border-radius:5px;padding:9px 14px;cursor:pointer;font-weight:500;min-height:42px;font-size:14.5px}
+.btn:hover{border-color:var(--ink)}
+.btn.primary{background:var(--tube);color:var(--on-accent);border-color:var(--tube)}
+.btn.danger{color:var(--warn);border-color:var(--warn)}
+.btn.danger.armed{background:var(--warn);color:var(--panel)}
+.btn.sm{min-height:34px;padding:5px 10px;font-size:13px}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+
+/* résultat */
+.result{border:1px solid var(--line);border-radius:6px;background:var(--panel2);padding:14px;display:grid;gap:14px;min-width:0}
+.big{font-family:var(--f-mono);font-size:40px;line-height:1;font-weight:500;letter-spacing:-.02em}
+.big small{font-size:18px;font-weight:400;color:var(--muted);margin-left:4px}
+.lbl{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.kv{display:grid;grid-template-columns:1fr auto;gap:4px 12px;margin:0;font-size:14px}
+.kv dt{color:var(--muted)} .kv dd{margin:0;text-align:right;font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.sect-row{display:flex;gap:14px;align-items:center}
+.sect-row svg{flex:none;width:92px;height:92px}
+.warn{background:var(--warn-bg);color:var(--warn);border-radius:5px;padding:8px 10px;font-size:13.5px}
+.note{font-size:12.5px;color:var(--muted)}
+.tag{display:inline-block;font-size:11px;font-family:var(--f-mono);padding:2px 7px;border-radius:3px;letter-spacing:.04em;text-transform:uppercase}
+.tag.tube{background:var(--tube-bg);color:var(--tube)} .tag.acc{background:var(--fit-bg);color:var(--fit)} .tag.brd{background:var(--flg-bg);color:var(--flg)}
+
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:5px}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{padding:7px 10px;text-align:right;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;border-bottom:1px solid var(--line);background:var(--panel2)}
+tbody tr+tr td{border-top:1px solid var(--line)}
+tbody td.n{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+tr.pick{cursor:pointer} tr.pick:hover td{background:var(--panel2)}
+tr.sel td{background:var(--tube-bg);color:var(--ink)}
+tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mono)}
+
+/* totaux */
+.totals{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--line);border-radius:6px;background:var(--panel);overflow:hidden}
+.totals>div{padding:12px 12px;border-left:1px solid var(--line);min-width:0}
+.totals>div:first-child{border-left:0}
+.totals .v{font-family:var(--f-mono);font-size:21px;font-weight:500;margin-top:2px;overflow-wrap:anywhere}
+.totals .v small{font-size:12px;color:var(--muted);font-weight:400}
+.totals .tot{background:var(--ink);color:var(--bg)} .totals .tot .lbl,.totals .tot small{color:var(--bg);opacity:.75}
+.totals .t1{box-shadow:inset 0 4px 0 var(--tube)} .totals .t2{box-shadow:inset 0 4px 0 var(--fit)} .totals .t3{box-shadow:inset 0 4px 0 var(--flg)}
+@media (max-width:560px){
+  .totals{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .totals>div:nth-child(3){border-left:0}
+  .totals>div:nth-child(n+3){border-top:1px solid var(--line)}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .big{font-size:36px}
+}
+.strip{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:10px;font-size:13px;color:var(--muted)}
+.strip b{font-family:var(--f-mono);color:var(--ink);font-weight:500}
+
+/* lignes */
+.line{border:1px solid var(--line);border-left-width:5px;border-radius:5px;background:var(--panel);padding:10px 12px;display:grid;gap:8px;min-width:0}
+.line.tube{border-left-color:var(--tube)} .line.acc{border-left-color:var(--fit)} .line.brd{border-left-color:var(--flg)}
+.line .top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.line .name{font-weight:600;overflow-wrap:anywhere}
+.line .sub{font-size:12.5px;color:var(--muted);font-family:var(--f-mono);overflow-wrap:anywhere}
+.line .w{font-family:var(--f-mono);font-size:18px;text-align:right;white-space:nowrap}
+.line .w small{display:block;font-size:11px;color:var(--muted)}
+.line .row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;justify-content:space-between}
+.line .mini{display:flex;gap:8px}
+.line .mini label{display:flex;flex-direction:column;gap:2px;font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.line .mini input{width:84px;padding:6px 8px;min-height:36px;border:1px solid var(--line);background:var(--panel2);border-radius:5px;font-family:var(--f-mono);font-size:14px}
+.stack{display:grid;gap:12px;margin-top:12px}
+.line .isorow{display:grid;grid-template-columns:minmax(0,1fr) 96px;gap:10px}
+.line .isorow input{font-size:16px;font-weight:500}
+.line .lg{display:grid;gap:10px;grid-template-columns:repeat(2,minmax(0,1fr))}
+.line .lf{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-size:13.5px;color:var(--muted)}
+.line .lf b{font-family:var(--f-mono);font-weight:500;color:var(--ink);font-size:15px}
+.spool>header h3 .spn{font-family:var(--f-mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:400;margin-left:6px}
+.empty{padding:26px 14px;text-align:center;color:var(--muted);border:1px dashed var(--line);border-radius:6px}
+.banner{margin-top:12px;font-size:13px;background:var(--fit-bg);color:var(--fit);padding:8px 12px;border-radius:5px}
+
+.spool{border:1px solid var(--line);border-radius:6px;background:var(--panel);margin-top:10px;overflow:hidden}
+.spool>header{display:flex;justify-content:space-between;align-items:baseline;gap:10px;padding:10px 14px;background:var(--panel2);border-bottom:1px solid var(--line)}
+.spool>header h3{font-size:20px}
+.spool>header .num{font-size:20px;font-weight:500}
+.spool .inner{padding:10px 14px;display:grid;gap:10px}
+.bar{display:flex;height:10px;border-radius:3px;overflow:hidden;background:var(--line)}
+.bar i{display:block;height:100%} .bar .b1{background:var(--tube)} .bar .b2{background:var(--fit)} .bar .b3{background:var(--flg)}
+.spool details summary{cursor:pointer;font-size:13px;color:var(--muted);padding:4px 0}
+.isos{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:8px;margin-top:12px}
+.isobox{border:1px solid var(--line);border-top:3px solid var(--ink);border-radius:5px;background:var(--panel);padding:10px 12px;min-width:0}
+.isobox .v{font-family:var(--f-mono);font-size:21px;font-weight:500;margin-top:2px;overflow-wrap:anywhere}
+.isobox .v small{font-size:12px;color:var(--muted);font-weight:400}
+.isobox .sub{font-size:12px;color:var(--muted);font-family:var(--f-mono);margin-top:2px}
+.isof{min-width:0}
+.isof .chips{display:none;flex-wrap:wrap;gap:6px;margin-top:6px}
+.isof:focus-within .chips{display:flex}
+.chip{border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:14px;padding:5px 11px;font-size:13px;font-family:var(--f-mono);cursor:pointer;min-height:32px}
+.chip:hover{border-color:var(--tube);color:var(--tube)}
+.io{margin-top:14px;border:1px solid var(--line);border-radius:6px;background:var(--panel2)}
+.io>summary{cursor:pointer;padding:10px 14px;font-family:var(--f-display);font-size:17px;font-weight:600}
+.io .iobody{padding:0 14px 14px;display:grid;gap:12px}
+.paths{display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px;margin:0;font-size:13px}
+.paths dt{color:var(--muted)} .paths dd{margin:0;font-family:var(--f-mono);font-size:12.5px;overflow-wrap:anywhere}
+.paths dd.plain{font-family:var(--f-body);font-size:13px}
+.imp{margin-top:14px;border:1px solid var(--tube);background:var(--tube-bg);border-radius:6px;padding:12px 14px;font-size:14px}
+.imp ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--warn)}
+.foot{margin-top:22px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);
+  padding:10px 16px;border-radius:5px;font-size:14px;z-index:20;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+@media (prefers-reduced-motion:reduce){#toast{transition:none}}
+</style>
+<style>:root{color-scheme:light}html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="title-block">
+    <h1>Calcul poids tuyauterie</h1>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.0.0 · Kamel Nasralli</div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+
+  <details class="settings" id="settings"></details>
+
+  <main id="view"></main>
+
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire imposé remplace toujours le calcul.<br><b>Créé par Kamel Nasralli</b> · Version 1.0.0 · Format de fichier 1 · Licence MIT</p>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" hidden>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- Données ---------- */
+var NPS=[
+ {l:'1/2"',dn:15,v:.5,od:21.3},{l:'3/4"',dn:20,v:.75,od:26.7},{l:'1"',dn:25,v:1,od:33.4},{l:'1 1/4"',dn:32,v:1.25,od:42.2},
+ {l:'1 1/2"',dn:40,v:1.5,od:48.3},{l:'2"',dn:50,v:2,od:60.3},{l:'2 1/2"',dn:65,v:2.5,od:73.0},{l:'3"',dn:80,v:3,od:88.9},
+ {l:'4"',dn:100,v:4,od:114.3},{l:'5"',dn:125,v:5,od:141.3},{l:'6"',dn:150,v:6,od:168.3},{l:'8"',dn:200,v:8,od:219.1},
+ {l:'10"',dn:250,v:10,od:273.1},{l:'12"',dn:300,v:12,od:323.9},{l:'14"',dn:350,v:14,od:355.6},{l:'16"',dn:400,v:16,od:406.4},
+ {l:'18"',dn:450,v:18,od:457.0},{l:'20"',dn:500,v:20,od:508.0},{l:'24"',dn:600,v:24,od:610.0}
+];
+var N=null;
+var SCHS=[{k:'10S',l:'SCH 10S'},{k:'10',l:'SCH 10'},{k:'20',l:'SCH 20'},{k:'30',l:'SCH 30'},{k:'STD',l:'SCH STD'},{k:'40',l:'SCH 40'},
+ {k:'60',l:'SCH 60'},{k:'XS',l:'SCH XS'},{k:'80',l:'SCH 80'},{k:'100',l:'SCH 100'},{k:'120',l:'SCH 120'},{k:'160',l:'SCH 160'},{k:'XXS',l:'SCH XXS'}];
+var WALL={
+ '10S':[2.11,2.11,2.77,2.77,2.77,2.77,3.05,3.05,3.05,3.40,3.40,3.76,4.19,4.57,4.78,4.78,4.78,5.54,6.35],
+ '10':[2.11,2.11,2.77,2.77,2.77,2.77,3.05,3.05,3.05,3.40,3.40,3.76,4.19,4.57,6.35,6.35,6.35,6.35,6.35],
+ '20':[N,N,N,N,N,N,N,N,N,N,N,6.35,6.35,6.35,7.92,7.92,7.92,9.53,9.53],
+ '30':[N,N,N,N,N,N,N,N,N,N,N,7.04,7.80,8.38,9.53,9.53,11.13,12.70,14.27],
+ 'STD':[2.77,2.87,3.38,3.56,3.68,3.91,5.16,5.49,6.02,6.55,7.11,8.18,9.27,9.53,9.53,9.53,9.53,9.53,9.53],
+ '40':[2.77,2.87,3.38,3.56,3.68,3.91,5.16,5.49,6.02,6.55,7.11,8.18,9.27,10.31,11.13,12.70,14.27,15.09,17.48],
+ '60':[N,N,N,N,N,N,N,N,N,N,N,10.31,12.70,14.27,15.09,16.66,19.05,20.62,24.61],
+ 'XS':[3.73,3.91,4.55,4.85,5.08,5.54,7.01,7.62,8.56,9.53,10.97,12.70,12.70,12.70,12.70,12.70,12.70,12.70,12.70],
+ '80':[3.73,3.91,4.55,4.85,5.08,5.54,7.01,7.62,8.56,9.53,10.97,12.70,15.09,17.48,19.05,21.44,23.83,26.19,30.96],
+ '100':[N,N,N,N,N,N,N,N,N,N,N,15.09,18.26,21.44,23.83,26.19,29.36,32.54,38.89],
+ '120':[N,N,N,N,N,N,N,N,11.13,12.70,14.27,18.26,21.44,25.40,27.79,30.96,34.93,38.10,46.02],
+ '160':[4.78,5.56,6.35,6.35,7.14,8.74,9.53,11.13,13.49,15.88,18.26,23.01,28.58,33.32,35.71,40.49,45.24,50.01,59.54],
+ 'XXS':[7.47,7.82,9.09,9.70,10.15,11.07,14.02,15.24,17.12,19.05,21.95,22.23,25.40,25.40,N,N,N,N,N]
+};
+var TEE_C=[25,29,38,48,57,64,76,86,105,124,143,178,216,254,279,305,343,381,432];
+var RED_H=[38,38,51,51,64,76,89,89,102,127,140,152,178,203,330,356,381,508,508];
+var CAP_E=[25,25,38,38,38,38,38,51,64,76,89,102,127,152,165,178,203,229,267];
+var FLG={ /* kg, bride à collerette (WN) à face plate / RF, valeurs indicatives */
+ 150:[0.9,1.0,1.4,1.8,2.3,3.2,4.5,5.4,7.7,8.6,11.3,18.1,26.3,40.4,52,65,77,91,125],
+ 300:[1.4,1.8,2.3,3.1,3.9,5.0,6.9,8.6,13.0,15.5,20.8,32.0,48,68,90,115,135,160,225],
+ 600:[1.8,2.3,3.2,4.1,5.5,7.0,9.5,12.5,20.0,28,38,63,95,135,170,215,260,320,450],
+ 900:[3.6,4.1,5.2,6.4,8.6,13,16,16,27,40,54,95,150,215,290,380,490,590,830],
+ 1500:[3.6,4.1,5.2,6.4,8.6,13,16,24,38,60,95,150,245,380,520,690,900,1100,1650]
+};
+var CLASSES=[150,300,600,900,1500];
+var FTYPES=[['WN','À collerette (WN)',1],['SO','À emboîtement glissant (SO)',.85],['SW','À souder (SW)',.9],['TH','Filetée (TH)',.82],['BL','Pleine (BL)',.9],['LJ','Collet battu (LJ)',.8]];
+var VALVE_BASE=[2.5,3,4.5,6,8,12,16,21,33,48,62,105,165,240,330,430,560,700,1050]; /* robinet-vanne cl.150 */
+var VTYPES=[['gate','Vanne à opercule',1],['globe','Vanne à soupape',1.1],['check','Clapet anti-retour',.8],['ball','Vanne à boisseau sphérique',.95],['bfly','Vanne papillon',.3]];
+var VCLASS={150:1,300:1.5,600:2.6,900:4.2,1500:6.5};
+var ELB=[['90lr','Coude 90° GR (R=1,5D)',1.5,90],['45lr','Coude 45° GR (R=1,5D)',1.5,45],['90sr','Coude 90° PR (R=1D)',1,90],['90_3d','Coude 90° 3D',3,90],['180','Retour 180° GR',1.5,180]];
+var MATS=[['cs','Acier carbone',7850],['s304','Inox 304 / 304L',7900],['s316','Inox 316 / 316L',8000],['dup','Duplex 2205',7800],['inc','Inconel 625',8440],['cu','Cuivre',8940],['ti','Titane',4510],['al','Aluminium',2700]];
+var FLUIDS=[['eau','Eau (épreuve)',1000],['mer','Eau de mer',1025],['gaz','Gazole',850],['brut','Pétrole brut',870],['gly','Glycol',1110],['air','Vide / gaz',0]];
+var CATS=[['tube','Tube'],['coude','Coude'],['te','Té'],['red','Réduction'],['fond','Fond'],['bride','Bride'],['vanne','Vanne'],['libre','Pièce libre']];
+var DEFSUB={coude:'90lr',te:'egal',red:'conc',bride:'WN',vanne:'gate'};
+
+/* ---------- État ---------- */
+var KEY='cpt.poids.v2';
+var APP_VERSION='1.0.0',FILE_VERSION=1,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
+var D=blank();
+function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:''};}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
+function load(){
+  try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.items){Object.keys(o).forEach(function(k){if(k in S&&k!=='tab'&&k!=='edit')S[k]=o[k];});return;}}}catch(e){}
+  S.items=[
+    {id:uid(),cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:3,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
+    {id:uid(),cat:'coude',sub:'90lr',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
+    {id:uid(),cat:'bride',sub:'WN',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
+    {id:uid(),cat:'tube',sub:'',nps:10,sch:'40',nps2:5,cls:150,len:'12',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
+    {id:uid(),cat:'te',sub:'egal',nps:10,sch:'40',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
+    {id:uid(),cat:'vanne',sub:'gate',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''}
+  ];
+  S.seed=true;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify({mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,items:S.items,seed:S.seed,open:S.open}));}catch(e){}}
+
+/* ---------- Calcul ---------- */
+function num(s){if(typeof s==='number')return isFinite(s)?s:0;var v=parseFloat(String(s||'').replace(',','.'));return isFinite(v)?v:0;}
+function fmt(n,d){if(d===undefined)d=2;return (isFinite(n)?n:0).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function avail(ix,k){return WALL[k]&&WALL[k][ix]!=null;}
+function schOf(ix,k){return avail(ix,k)?k:'STD';}
+function props(ix,k){
+  var t=WALL[k]&&WALL[k][ix]; if(t==null)return null;
+  var od=NPS[ix].od,id=od-2*t,P=Math.PI;
+  var ti=S.insOn?num(S.insT):0;
+  return {od:od,t:t,id:id,
+    wm:0.02466*(S.mat/7850)*t*(od-t), /* coefficient usuel Pipedata : 0,02466 kg/m pour l'acier */
+    ai:P/4*id*id/1e6,
+    ins:ti>0?P/4*(Math.pow(od+2*ti,2)-od*od)/1e6*num(S.insRho):0,
+    surf:P*od/1000,
+    asec:P/4*(od*od-id*id)/100 /* cm² */
+  };
+}
+function sub(arr,k){for(var i=0;i<arr.length;i++)if(arr[i][0]===k)return arr[i];return arr[0];}
+function descr(it){
+  var n=NPS[it.nps]?NPS[it.nps].l:'';
+  var sc=(SCHS.filter(function(s){return s.k===it.sch;})[0]||{}).l||'';
+  switch(it.cat){
+    case 'tube':return 'Tube '+n+' '+sc;
+    case 'coude':return sub(ELB,it.sub)[1]+' '+n+' '+sc;
+    case 'te':return it.sub==='reduit'?'Té réduit '+n+' × '+NPS[it.nps2].l+' '+sc:'Té égal '+n+' '+sc;
+    case 'red':return 'Réduction '+(it.sub==='exc'?'excentrique ':'concentrique ')+n+' × '+NPS[it.nps2].l+' '+sc;
+    case 'fond':return 'Fond bombé '+n+' '+sc;
+    case 'bride':return 'Bride '+sub(FTYPES,it.sub)[0]+' cl.'+it.cls+' '+n;
+    case 'vanne':return sub(VTYPES,it.sub)[1]+' cl.'+it.cls+' '+n;
+    default:return it.name||'Pièce libre';
+  }
+}
+function calc(it){
+  var o={kind:'acc',unit:0,uLabel:'kg',mult:1,metal:0,content:0,insul:0,warn:'',leq:0,auto:0,P:null};
+  var rho=num(S.rho),mf=S.mat/7850,ix=it.nps,qty=Math.max(0,num(it.qty));
+  var uM=0,uC=0,uI=0,uL=0;
+  function seg(i,len,k){
+    var p=props(i,it.sch),fb=false;
+    if(!p){p=props(i,'STD');fb=true;}
+    if(!p)return;
+    if(fb)o.warn='Schedule '+it.sch+' indisponible en '+NPS[i].l+' : SCH STD utilisé pour ce tronçon.';
+    uM+=p.wm*len*(k||1);uC+=p.ai*len*rho;uI+=p.ins*len;uL+=len;
+  }
+  if(it.cat==='tube'){
+    o.kind='tube';o.uLabel='kg/m';o.mult=num(it.len)*qty;
+    var p=props(ix,it.sch);
+    if(!p){o.warn='Schedule '+it.sch+' indisponible en '+NPS[ix].l+'.';}
+    else{o.P=p;uM=p.wm;uC=p.ai*rho;uI=p.ins;uL=1;}
+  }else{
+    o.mult=qty;
+    if(it.cat==='coude'){var e=sub(ELB,it.sub);seg(ix,e[3]*Math.PI/180*e[2]*NPS[ix].v*25.4/1000);}
+    else if(it.cat==='te'){
+      var C=TEE_C[ix];seg(ix,2*C/1000);
+      if(it.sub==='reduit'){var j=it.nps2;seg(j,((C+TEE_C[j])/2)/1000);}else seg(ix,C/1000);
+    }
+    else if(it.cat==='red'){var H=RED_H[ix]/1000;seg(ix,H/2);seg(it.nps2,H/2);}
+    else if(it.cat==='fond'){seg(ix,CAP_E[ix]/1000,1.5);}
+    else if(it.cat==='bride'){
+      o.kind='brd';uM=FLG[it.cls][ix]*sub(FTYPES,it.sub)[2]*mf;
+    }
+    else if(it.cat==='vanne'){uM=VALVE_BASE[ix]*sub(VTYPES,it.sub)[2]*VCLASS[it.cls]*mf;}
+    else {uM=num(it.w);}
+    if(it.cat!=='tube'&&it.cat!=='libre'&&it.cat!=='bride'&&it.cat!=='vanne')o.P=props(ix,it.sch);
+  }
+  o.auto=uM;
+  var ov=num(it.over);
+  o.unit=ov>0?ov:uM;
+  o.metal=o.unit*o.mult;o.content=uC*o.mult;o.insul=uI*o.mult;o.leq=uL*o.mult;
+  if(it.cat==='libre'){o.unit=num(it.w);o.metal=o.unit*o.mult;}
+  return o;
+}
+function sumItems(list){
+  var T={tube:0,acc:0,brd:0,len:0,content:0,insul:0,n:0};
+  list.forEach(function(it){var c=calc(it);T[c.kind]+=c.metal;T.content+=c.content;T.insul+=c.insul;if(it.cat==='tube')T.len+=c.mult;T.n++;});
+  T.total=T.tube+T.acc+T.brd;T.service=T.total+T.content+T.insul;return T;
+}
+
+/* ---------- Rendu ---------- */
+var $=function(id){return document.getElementById(id);};
+function opts(list,val,fn){return list.map(function(x){var v=fn?fn(x)[0]:x[0],l=fn?fn(x)[1]:x[1];return '<option value="'+esc(v)+'"'+(String(v)===String(val)?' selected':'')+'>'+esc(l)+'</option>';}).join('');}
+function npsOpts(val,max){var h='';NPS.forEach(function(n,i){if(max!==undefined&&i>=max)return;h+='<option value="'+i+'"'+(i===val?' selected':'')+'>'+n.l+'  (DN'+n.dn+')</option>';});return h;}
+function schOpts(ix,val){return SCHS.filter(function(s){return avail(ix,s.k);}).map(function(s){return '<option value="'+s.k+'"'+(s.k===val?' selected':'')+'>'+s.l+'</option>';}).join('');}
+
+function renderTabs(){
+  var t=[['fiche','Fiche'],['liste','Liste'],['spool','Rapport par spool']];
+  $('tabs').innerHTML=t.map(function(x){return '<button role="tab" data-tab="'+x[0]+'" aria-selected="'+(S.tab===x[0])+'">'+x[1]+(x[0]==='liste'&&S.items.length?'<span class="badge">'+S.items.length+'</span>':'')+'</button>';}).join('');
+}
+function renderSettings(){
+  var el=$('settings');el.open=S.open;
+  var m=sub(MATS,S.matK)[1];
+  el.innerHTML='<summary><span>Paramètres de calcul</span><span class="sum">'+esc(m)+' · '+fmt(S.mat,0)+' kg/m³ · contenu '+fmt(num(S.rho),0)+' kg/m³'+(S.insOn?' · isolation '+fmt(num(S.insT),0)+' mm':'')+'</span></summary>'+
+  '<div class="body">'+
+  '<label class="f">Matériau<select id="matK">'+opts(MATS,S.matK)+'</select></label>'+
+  '<label class="f">Masse volumique (kg/m³)<input id="mat" inputmode="decimal" value="'+esc(S.mat)+'"></label>'+
+  '<label class="f">Contenu<select id="fluK">'+opts(FLUIDS,S.fluK)+'</select></label>'+
+  '<label class="f">Masse vol. contenu (kg/m³)<input id="rho" inputmode="decimal" value="'+esc(S.rho)+'"></label>'+
+  '<label class="f chk"><input type="checkbox" id="insOn"'+(S.insOn?' checked':'')+'> Isolation thermique</label>'+
+  '<label class="f">Épaisseur isolant (mm)<input id="insT" inputmode="decimal" value="'+esc(S.insT)+'"></label>'+
+  '<label class="f">Masse vol. isolant (kg/m³)<input id="insRho" inputmode="decimal" value="'+esc(S.insRho)+'"></label>'+
+  '<p class="note full" style="grid-column:1/-1;margin:0">Les brides et vannes sont ramenées à la masse volumique du matériau choisi. Les tubes et raccords utilisent leur géométrie réelle.</p>'+
+  '</div>';
+}
+
+function formHTML(){
+  var d=D,c=d.cat,h='<div class="cats" role="group" aria-label="Catégorie">'+CATS.map(function(x){return '<button type="button" data-cat="'+x[0]+'" aria-pressed="'+(d.cat===x[0])+'">'+x[1]+'</button>';}).join('')+'</div>';
+  h+='<div class="grid" style="margin-top:12px">';
+  if(c==='coude')h+='<label class="f full">Type de coude<select data-f="sub">'+opts(ELB,d.sub,function(x){return [x[0],x[1]];})+'</select></label>';
+  if(c==='te')h+='<label class="f full">Type de té<select data-f="sub"><option value="egal"'+(d.sub==='egal'?' selected':'')+'>Té égal</option><option value="reduit"'+(d.sub==='reduit'?' selected':'')+'>Té réduit</option></select></label>';
+  if(c==='red')h+='<label class="f full">Type de réduction<select data-f="sub"><option value="conc"'+(d.sub==='conc'?' selected':'')+'>Concentrique</option><option value="exc"'+(d.sub==='exc'?' selected':'')+'>Excentrique</option></select></label>';
+  if(c==='bride')h+='<label class="f full">Type de bride<select data-f="sub">'+opts(FTYPES,d.sub,function(x){return [x[0],x[1]];})+'</select></label>';
+  if(c==='vanne')h+='<label class="f full">Type de vanne<select data-f="sub">'+opts(VTYPES,d.sub,function(x){return [x[0],x[1]];})+'</select></label>';
+  if(c==='libre'){
+    h+='<label class="f full">Désignation<input data-f="name" type="text" placeholder="ex. Filtre en Y, support, joint" value="'+esc(d.name)+'"></label>';
+    h+='<label class="f">Poids unitaire (kg)<input data-f="w" inputmode="decimal" value="'+esc(d.w)+'"></label>';
+  }else{
+    h+='<label class="f">'+(c==='te'&&d.sub==='reduit'||c==='red'?'NPS principal':'NPS')+'<select data-f="nps">'+npsOpts(d.nps)+'</select></label>';
+    if((c==='te'&&d.sub==='reduit')||c==='red')h+='<label class="f">NPS réduit<select data-f="nps2">'+npsOpts(d.nps2,d.nps)+'</select></label>';
+    if(c==='bride'||c==='vanne')h+='<label class="f">Classe<select data-f="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===d.cls?' selected':'')+'>Classe '+k+'</option>';}).join('')+'</select></label>';
+    if(c!=='bride'&&c!=='vanne')h+='<label class="f">Schedule<select data-f="sch">'+schOpts(d.nps,d.sch)+'</select></label>';
+  }
+  if(c==='tube')h+='<label class="f">Longueur (m)<input data-f="len" inputmode="decimal" placeholder="0" value="'+esc(d.len)+'"></label>';
+  h+='<label class="f">Quantité<input data-f="qty" inputmode="numeric" value="'+esc(d.qty)+'"></label>';
+  h+='<div class="isof"><label class="f">Isométrique (ISO)<input data-f="iso" type="text" autocomplete="off" placeholder="ex. ISO-001" value="'+esc(d.iso)+'"></label><div class="chips"></div></div>';
+  h+='<label class="f">N° spool<input data-f="spool" type="text" placeholder="ex. 1" value="'+esc(d.spool)+'"></label>';
+  if(c!=='libre')h+='<label class="f">Poids unitaire imposé ('+(c==='tube'?'kg/m':'kg')+')<input data-f="over" inputmode="decimal" placeholder="auto" value="'+esc(d.over)+'"><span class="hint">Laissez vide pour le calcul automatique.</span></label>';
+  h+='</div>';
+  return h;
+}
+function isoNames(){var s={};S.items.forEach(function(i){if(i.iso)s[i.iso]=1;});return Object.keys(s);}
+
+function sectionSVG(p){
+  var r=44,ri=r*p.id/p.od;
+  return '<svg viewBox="0 0 100 100" role="img" aria-label="Coupe du tube à l\'échelle"><circle cx="50" cy="50" r="'+r+'" fill="var(--tube)"/><circle cx="50" cy="50" r="'+ri.toFixed(2)+'" fill="var(--panel2)"/><circle cx="50" cy="50" r="'+r+'" fill="none" stroke="var(--ink)" stroke-width="1"/><circle cx="50" cy="50" r="'+ri.toFixed(2)+'" fill="none" stroke="var(--ink)" stroke-width="1"/></svg>';
+}
+function resultHTML(){
+  var d=D,c=calc(d),T='',h='';
+  var tagc=c.kind;
+  var total=c.metal;
+  h+='<div><div class="lbl"><span class="tag '+tagc+'">'+(c.kind==='tube'?'Tube':c.kind==='brd'?'Bride':'Accessoire')+'</span> '+esc(descr(d))+'</div>';
+  h+='<div class="big" style="margin-top:8px">'+fmt(total)+'<small>kg</small></div></div>';
+  h+='<dl class="kv"><dt>Poids unitaire</dt><dd>'+fmt(c.unit)+' '+c.uLabel+(num(d.over)>0?' (imposé)':'')+'</dd>'+
+     '<dt>'+(d.cat==='tube'?'Longueur totale':'Quantité')+'</dt><dd>'+(d.cat==='tube'?fmt(c.mult)+' m':fmt(c.mult,0))+'</dd>'+
+     (c.content>0?'<dt>Contenu</dt><dd>'+fmt(c.content)+' kg</dd>':'')+
+     (c.insul>0?'<dt>Isolation</dt><dd>'+fmt(c.insul)+' kg</dd>':'')+
+     '</dl>';
+  if(c.warn)h+='<div class="warn">'+esc(c.warn)+'</div>';
+  var p=c.P;
+  if(p){
+    h+='<div class="sect-row">'+sectionSVG(p)+'<dl class="kv" style="flex:1;min-width:0"><dt>Ø extérieur</dt><dd>'+fmt(p.od,1)+' mm</dd><dt>Épaisseur</dt><dd>'+fmt(p.t,2)+' mm</dd><dt>Ø intérieur</dt><dd>'+fmt(p.id,1)+' mm</dd></dl></div>';
+    h+='<dl class="kv"><dt>Section métal</dt><dd>'+fmt(p.asec,2)+' cm²</dd><dt>Volume intérieur</dt><dd>'+fmt(p.ai*1000,2)+' L/m</dd><dt>Surface extérieure</dt><dd>'+fmt(p.surf,3)+' m²/m</dd>'+(p.ins>0?'<dt>Isolation</dt><dd>'+fmt(p.ins,2)+' kg/m</dd>':'')+'</dl>';
+  }
+  if(d.cat==='bride'||d.cat==='vanne')h+='<p class="note" style="margin:0">Valeur indicative de catalogue (±10 %). Utilisez le poids imposé pour une valeur fabricant.</p>';
+  if(d.cat==='coude'||d.cat==='te'||d.cat==='red'||d.cat==='fond')h+='<p class="note" style="margin:0">Raccord soudé à bout, calculé d\'après les longueurs ASME B16.9.</p>';
+  var edit=S.edit;
+  h+='<div class="actions"><button class="btn primary" data-act="add">'+(edit?'Mettre à jour la ligne':'Ajouter à la liste')+'</button>'+(edit?'<button class="btn" data-act="cancel">Annuler</button>':'')+'</div>';
+  return h;
+}
+function schedHTML(){
+  var d=D;
+  if(['tube','coude','te','red','fond'].indexOf(d.cat)<0)return '';
+  var rows=SCHS.filter(function(s){return avail(d.nps,s.k);}).map(function(s){
+    var p=props(d.nps,s.k);
+    return '<tr class="pick'+(s.k===d.sch?' sel':'')+'" data-sch="'+s.k+'" tabindex="0"><td>'+s.l+'</td><td class="n">'+fmt(p.t,2)+'</td><td class="n">'+fmt(p.id,1)+'</td><td class="n">'+fmt(p.wm,2)+'</td></tr>';
+  }).join('');
+  return '<h3 style="font-size:18px;margin:16px 0 8px">Schedules disponibles en '+NPS[d.nps].l+' (Ø ext. '+fmt(NPS[d.nps].od,1)+' mm)</h3><div class="tbl-wrap"><table><thead><tr><th>Schedule</th><th>e (mm)</th><th>Ø int (mm)</th><th>kg/m</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="note" style="margin:6px 0 0">Touchez une ligne pour la choisir.</p>';
+}
+function renderFiche(){
+  $('view').innerHTML='<div class="panel"><h2>'+(S.edit?'Modifier la ligne':'Fiche de calcul')+'</h2><div class="two-col"><div id="form">'+formHTML()+'</div><div class="result" id="result">'+resultHTML()+'</div></div><div id="sched">'+schedHTML()+'</div></div>';
+}
+function updResult(){$('result').innerHTML=resultHTML();}
+
+function isoTotals(){
+  var m={},o=[];
+  S.items.forEach(function(it){var k=it.iso||'Sans ISO';if(!m[k]){m[k]=[];o.push(k);}m[k].push(it);});
+  return o.sort(function(a,b){return a.localeCompare(b,'fr',{numeric:true});}).map(function(k){var T=sumItems(m[k]);T.iso=k;return T;});
+}
+function totalsHTML(T){
+  var I=isoTotals(),multi=I.length>1;
+  var lab=multi?'Total général':(I.length===1&&I[0].iso!=='Sans ISO'?'Total · '+esc(I[0].iso):'Total');
+  var h='<div class="totals"><div class="t1"><div class="lbl">Tubes</div><div class="v">'+fmt(T.tube)+' <small>kg</small></div></div>'+
+   '<div class="t2"><div class="lbl">Accessoires</div><div class="v">'+fmt(T.acc)+' <small>kg</small></div></div>'+
+   '<div class="t3"><div class="lbl">Brides</div><div class="v">'+fmt(T.brd)+' <small>kg</small></div></div>'+
+   '<div class="tot"><div class="lbl">'+lab+'</div><div class="v">'+fmt(T.total)+' <small>kg</small></div></div></div>'+
+   '<div class="strip"><span>Tube posé <b>'+fmt(T.len)+' m</b></span></div>';
+  if(multi){
+    h+='<div class="isos">'+I.map(function(g){
+      return '<div class="isobox"><div class="lbl">'+esc(g.iso)+'</div><div class="v">'+fmt(g.total)+' <small>kg</small></div>'+
+        '<div class="sub">Tubes '+fmt(g.tube)+' · Acc. '+fmt(g.acc)+' · Brides '+fmt(g.brd)+'</div></div>';
+    }).join('')+'</div>';
+  }
+  return h;
+}
+var SUBOPTS={
+  coude:ELB.map(function(x){return [x[0],x[1]];}),
+  te:[['egal','Té égal'],['reduit','Té réduit']],
+  red:[['conc','Réduction concentrique'],['exc','Réduction excentrique']],
+  bride:FTYPES.map(function(x){return [x[0],x[1]];}),
+  vanne:VTYPES.map(function(x){return [x[0],x[1]];})
+};
+function lineHTML(it){
+  var c=calc(it),cat=it.cat,h='';
+  var kl=c.kind==='tube'?'Tube':c.kind==='brd'?'Bride':'Accessoire';
+  h+='<article class="line '+c.kind+'" data-id="'+it.id+'"><div class="top"><div class="name">'+esc(descr(it))+'</div><span class="tag '+c.kind+'">'+kl+'</span></div>';
+  h+='<div class="isorow"><div class="isof"><label class="f">Isométrique (ISO)<input data-q="iso" type="text" autocomplete="off" placeholder="ex. ISO-001" value="'+esc(it.iso)+'"></label><div class="chips"></div></div>'+
+     '<label class="f">N° spool<input data-q="spool" type="text" placeholder="1" value="'+esc(it.spool)+'"></label></div>';
+  h+='<div class="lg">';
+  h+='<label class="f">Catégorie<select data-q="cat">'+opts(CATS,cat)+'</select></label>';
+  if(SUBOPTS[cat])h+='<label class="f">Pièce<select data-q="sub">'+opts(SUBOPTS[cat],it.sub)+'</select></label>';
+  if(cat==='libre'){
+    h+='<label class="f">Désignation<input data-q="name" type="text" placeholder="ex. Filtre en Y" value="'+esc(it.name)+'"></label>';
+    h+='<label class="f">Poids unitaire (kg)<input data-q="w" inputmode="decimal" value="'+esc(it.w)+'"></label>';
+  }else{
+    h+='<label class="f">NPS<select data-q="nps">'+npsOpts(it.nps)+'</select></label>';
+    if((cat==='te'&&it.sub==='reduit')||cat==='red')h+='<label class="f">NPS réduit<select data-q="nps2">'+npsOpts(it.nps2,it.nps)+'</select></label>';
+    if(cat==='bride'||cat==='vanne')h+='<label class="f">Classe<select data-q="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===it.cls?' selected':'')+'># '+k+'</option>';}).join('')+'</select></label>';
+    else h+='<label class="f">Schedule<select data-q="sch">'+schOpts(it.nps,it.sch)+'</select></label>';
+  }
+  if(cat==='tube')h+='<label class="f">Longueur (m)<input data-q="len" inputmode="decimal" value="'+esc(it.len)+'"></label>';
+  h+='<label class="f">Quantité<input data-q="qty" inputmode="numeric" value="'+esc(it.qty)+'"></label>';
+  if(cat!=='libre')h+='<label class="f">Poids imposé ('+(cat==='tube'?'kg/m':'kg')+')<input data-q="over" inputmode="decimal" placeholder="auto" value="'+esc(it.over)+'"></label>';
+  h+='</div>';
+  h+='<div class="warn" data-warn'+(c.warn?'':' hidden')+'>'+esc(c.warn)+'</div>';
+  h+='<div class="lf"><span>Poids unit. : <b class="u">'+fmt(c.unit)+' '+c.uLabel+'</b></span><span>Total : <b class="t">'+fmt(c.metal)+' kg</b></span></div>';
+  h+='<div class="actions" style="justify-content:flex-end"><button class="btn sm" data-act="dup">Dupliquer</button><button class="btn sm danger" data-act="del">Supprimer</button></div></article>';
+  return h;
+}
+function refreshLine(el,it){
+  var c=calc(it);
+  el.querySelector('.name').textContent=descr(it);
+  el.querySelector('.u').textContent=fmt(c.unit)+' '+c.uLabel;
+  el.querySelector('.t').textContent=fmt(c.metal)+' kg';
+  var w=el.querySelector('[data-warn]');w.textContent=c.warn;w.hidden=!c.warn;
+}
+function updTotals(){var el=$('tot');if(el)el.innerHTML=totalsHTML(sumItems(S.items));}
+function renderListe(){
+  var h='<div class="panel"><h2>Liste de calcul</h2><div class="actions"><button class="btn primary" data-act="addline">+ Ajouter une pièce</button><button class="btn danger" data-act="clear" id="clr">Vider la liste</button></div>';
+  h+=impHTML()+ioHTML();
+  h+='<div style="margin-top:14px" id="tot">'+totalsHTML(sumItems(S.items))+'</div>';
+  if(S.seed&&S.items.length)h+='<div class="banner">Lignes d\'exemple. Videz la liste pour commencer votre propre calcul.</div>';
+  h+='<div class="stack">';
+  if(!S.items.length)h+='<div class="empty">Aucune pièce. Touchez « Ajouter une pièce » pour créer la première ligne.</div>';
+  S.items.forEach(function(it){h+=lineHTML(it);});
+  h+='</div></div>';
+  $('view').innerHTML=h;
+}
+
+function groupSpools(){
+  var m={},order=[];
+  S.items.forEach(function(it){var k=(it.iso||'Sans ISO')+'\u0001'+(it.spool||'—');if(!m[k]){m[k]=[];order.push(k);}m[k].push(it);});
+  return order.sort(function(a,b){return a.localeCompare(b,'fr',{numeric:true});}).map(function(k){var T=sumItems(m[k]);var p=k.split('\u0001');T.iso=p[0];T.sp=p[1];T.items=m[k];return T;});
+}
+function renderSpool(){
+  var G=groupSpools(),T=sumItems(S.items);
+  var h='<div class="panel"><h2>Rapport par spool</h2><div class="actions"><button class="btn" data-act="csv2">Exporter CSV (spools)</button></div><p class="note" style="margin:8px 0 0">Fichier : <span class="mono">'+fileNames().spool+'</span>, enregistré dans le dossier « Téléchargements » de votre appareil.</p>';
+  h+='<div style="margin-top:14px">'+totalsHTML(T)+'</div>';
+  if(!G.length)h+='<div class="stack"><div class="empty">Aucun spool. Ajoutez des pièces avec un nom d\'ISO et un numéro de spool.</div></div>';
+  G.forEach(function(g){
+    var tot=g.total||1;
+    h+='<section class="spool"><header><h3>'+esc(g.iso)+' <span class="spn">Spool '+esc(g.sp)+'</span></h3><span class="num">'+fmt(g.total)+' kg</span></header><div class="inner">'+
+     '<div class="bar" aria-hidden="true"><i class="b1" style="width:'+(g.tube/tot*100).toFixed(1)+'%"></i><i class="b2" style="width:'+(g.acc/tot*100).toFixed(1)+'%"></i><i class="b3" style="width:'+(g.brd/tot*100).toFixed(1)+'%"></i></div>'+
+     '<dl class="kv"><dt>Tubes ('+fmt(g.len)+' m)</dt><dd>'+fmt(g.tube)+' kg</dd><dt>Accessoires</dt><dd>'+fmt(g.acc)+' kg</dd><dt>Brides</dt><dd>'+fmt(g.brd)+' kg</dd></dl>'+
+     '<details><summary>'+g.items.length+' ligne'+(g.items.length>1?'s':'')+'</summary><div class="tbl-wrap"><table><thead><tr><th>Désignation</th><th>Qté</th><th>kg</th></tr></thead><tbody>'+
+     g.items.map(function(it){var c=calc(it);return '<tr><td>'+esc(descr(it))+(it.cat==='tube'?' · '+fmt(num(it.len))+' m':'')+'</td><td class="n">'+fmt(num(it.qty),0)+'</td><td class="n">'+fmt(c.metal)+'</td></tr>';}).join('')+
+     '</tbody></table></div></details></div></section>';
+  });
+  h+='</div>';
+  $('view').innerHTML=h;
+}
+function render(){
+  renderTabs();renderSettings();$('settings').hidden=S.tab!=='fiche';
+  if(S.tab==='fiche')renderFiche();else if(S.tab==='liste')renderListe();else renderSpool();
+}
+
+/* ---------- Actions ---------- */
+var tt;
+function toast(m){var t=$('toast');t.textContent=m;t.className='on';clearTimeout(tt);tt=setTimeout(function(){t.className='';},2600);}
+function csvCell(v){var s=String(v==null?'':v);return /[;"\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
+function csvNum(n,d){return (isFinite(n)?n:0).toFixed(d===undefined?2:d).replace('.',',');}
+function csvLines(){
+  var r=[['ISO','Spool','Désignation','Classe','NPS','Schedule','Longueur (m)','Quantité','Poids unitaire','Unité','Poids total (kg)','Catégorie (code)','Type (code)','NPS réduit','Poids imposé','Désignation libre','Poids libre (kg)']];
+  S.items.forEach(function(it){var c=calc(it);var sc=(it.cat==='bride'||it.cat==='vanne'||it.cat==='libre')?'':it.sch;
+    r.push([it.iso,it.spool,descr(it),(it.cat==='bride'||it.cat==='vanne')?it.cls:'',it.cat==='libre'?'':NPS[it.nps].l,sc,it.cat==='tube'?csvNum(num(it.len)):'',csvNum(num(it.qty),0),csvNum(c.unit),c.uLabel,csvNum(c.metal),
+      it.cat,it.sub||'',((it.cat==='te'&&it.sub==='reduit')||it.cat==='red')?NPS[it.nps2].l:'',num(it.over)>0?csvNum(num(it.over),3):'',it.cat==='libre'?it.name:'',it.cat==='libre'?csvNum(num(it.w),3):'']);});
+  var T=sumItems(S.items);r.push(['TOTAL','','','','','','','','','',csvNum(T.total),'','','','','','']);
+  return r;
+}
+function csvSpools(){
+  var r=[['ISO','Spool','Lignes','Tubes (m)','Tubes (kg)','Accessoires (kg)','Brides (kg)','Total (kg)']];
+  groupSpools().forEach(function(g){r.push([g.iso,g.sp,g.items.length,csvNum(g.len),csvNum(g.tube),csvNum(g.acc),csvNum(g.brd),csvNum(g.total)]);});
+  var T=sumItems(S.items);r.push(['TOTAL','',S.items.length,csvNum(T.len),csvNum(T.tube),csvNum(T.acc),csvNum(T.brd),csvNum(T.total)]);
+  return r;
+}
+function p2(n){return (n<10?'0':'')+n;}
+function stamp(){var d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());}
+function fileNames(){var d=stamp();return {csv:'poids-tuyauterie-liste_'+d+'.csv',spool:'poids-tuyauterie-spools_'+d+'.csv',json:'poids-tuyauterie-projet_'+d+'.json'};}
+function anchorDownload(name,data,mime){
+  var b=new Blob([data],{type:mime}),u=URL.createObjectURL(b),a=document.createElement('a');
+  a.href=u;a.download=name;document.body.appendChild(a);a.click();
+  setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800);
+}
+function exportFile(name,text,mime,bom){
+  var data=(bom?'﻿':'')+text;
+  var viewer=!!(window.claude&&window.claude.use);
+  Promise.resolve(viewer?window.claude.use('downloads'):null).then(function(dl){
+    if(dl)return dl.save({filename:name,data:data});
+    if(!viewer){anchorDownload(name,data,mime);return;}
+    throw {code:'unavailable'};
+  }).then(function(){
+    var d=new Date();S.last={name:name,t:p2(d.getHours())+':'+p2(d.getMinutes())};
+    toast('Fichier prêt : '+name);if(S.tab==='liste')renderListe();
+  }).catch(function(e){
+    if(e&&e.code==='declined')return;
+    try{navigator.clipboard.writeText(data).then(function(){toast('Téléchargement indisponible : contenu copié');},function(){toast('Export indisponible dans cette vue');});}
+    catch(x){toast('Export indisponible dans cette vue');}
+  });
+}
+function exportCSV(rows,name){exportFile(name,rows.map(function(r){return r.map(csvCell).join(';');}).join('\r\n'),'text/csv;charset=utf-8',true);}
+function exportJSON(){
+  var o={app:APP_NAME,author:AUTHOR,appVersion:APP_VERSION,fileVersion:FILE_VERSION,exportedAt:new Date().toISOString(),
+    settings:{matK:S.matK,mat:S.mat,fluK:S.fluK,rho:S.rho,insOn:S.insOn,insT:S.insT,insRho:S.insRho},
+    items:S.items.map(function(it){var c=clean(it);delete c.id;return c;})};
+  exportFile(fileNames().json,JSON.stringify(o,null,2),'application/json',false);
+}
+/* ---------- Import ---------- */
+function norm(s){return String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();}
+function parseCSV(text){
+  text=text.replace(/^﻿/,'');
+  var first=text.split(/\r?\n/)[0]||'';
+  var c1=(first.match(/;/g)||[]).length,c2=(first.match(/,/g)||[]).length,c3=(first.match(/\t/g)||[]).length;
+  var sep=';';if(c2>c1&&c2>=c3)sep=',';else if(c3>c1&&c3>c2)sep='\t';
+  var rows=[],row=[],f='',q=false;
+  for(var i=0;i<text.length;i++){
+    var ch=text[i];
+    if(q){if(ch==='"'){if(text[i+1]==='"'){f+='"';i++;}else q=false;}else f+=ch;}
+    else if(ch==='"')q=true;
+    else if(ch===sep){row.push(f);f='';}
+    else if(ch==='\n'||ch==='\r'){if(ch==='\r'&&text[i+1]==='\n')i++;row.push(f);f='';if(row.length>1||row[0]!=='')rows.push(row);row=[];}
+    else f+=ch;
+  }
+  if(f!==''||row.length){row.push(f);if(row.length>1||row[0]!=='')rows.push(row);}
+  return rows;
+}
+function npsIndex(v){
+  if(typeof v==='number'&&v>=0&&v<NPS.length&&v%1===0)return v;
+  var s=norm(v).replace(/"/g,'').replace(/\s+/g,' ').trim();if(!s)return -1;
+  var m=/^dn\s*(\d+)$/.exec(s),i;
+  if(m){for(i=0;i<NPS.length;i++)if(NPS[i].dn===+m[1])return i;return -1;}
+  for(i=0;i<NPS.length;i++)if(NPS[i].l.replace(/"/g,'')===s)return i;
+  var n=num(s);for(i=0;i<NPS.length;i++)if(Math.abs(NPS[i].v-n)<1e-6)return i;
+  return -1;
+}
+var CATLAB={tube:'tube',coude:'coude',te:'te',reduction:'red',red:'red',fond:'fond',bride:'bride',vanne:'vanne','piece libre':'libre',libre:'libre'};
+function cleanItem(o,warn,ln){
+  var cat=CATLAB[norm(o.cat)];
+  if(!cat){warn.push('Ligne '+ln+' ignorée : catégorie inconnue.');return null;}
+  var it=blank();it.id=uid();it.cat=cat;
+  var so=SUBOPTS[cat],sub=String(o.sub||'');
+  it.sub=so?(so.some(function(x){return x[0]===sub;})?sub:DEFSUB[cat]):'';
+  if(cat!=='libre'){
+    var ix=npsIndex(o.nps);
+    if(ix<0){warn.push('Ligne '+ln+' ignorée : NPS « '+o.nps+' » inconnu.');return null;}
+    it.nps=ix;
+    var j=npsIndex(o.nps2);it.nps2=j>=0?j:Math.max(0,ix-1);
+  }
+  var sc=norm(o.sch).replace(/^sch\s*/,'').toUpperCase();it.sch=WALL[sc]?sc:'STD';
+  var cl=parseInt(String(o.cls).replace(/\D/g,''),10);it.cls=CLASSES.indexOf(cl)>=0?cl:150;
+  it.len=String(o.len==null?'':o.len);it.qty=o.qty===''||o.qty==null?1:num(o.qty);
+  it.iso=String(o.iso||'');it.spool=String(o.spool||'');
+  it.over=num(o.over)>0?String(o.over):'';it.name=String(o.name||'');it.w=String(o.w==null?'':o.w);
+  fixItem(it);
+  if(cat==='tube'&&!(num(it.len)>0))warn.push('Ligne '+ln+' : longueur de tube manquante.');
+  if(cat==='libre'&&!(num(it.w)>0))warn.push('Ligne '+ln+' : poids de la pièce libre manquant.');
+  return it;
+}
+function importText(name,text){
+  var items=[],warn=[],settings=null;
+  var t=text.replace(/^﻿/,'').trim();
+  if(/\.json$/i.test(name)||t.charAt(0)==='{'){
+    var o;try{o=JSON.parse(t);}catch(e){return {error:'Fichier JSON illisible.'};}
+    if(!o||!Array.isArray(o.items))return {error:'Ce fichier JSON n\'est pas une sauvegarde de cette application.'};
+    if(o.fileVersion>FILE_VERSION)warn.push('Fichier créé par une version plus récente ('+o.appVersion+') : certaines données peuvent être ignorées.');
+    o.items.forEach(function(r,i){var it=cleanItem(r,warn,i+1);if(it)items.push(it);});
+    if(o.settings)settings=o.settings;
+  }else{
+    var rows=parseCSV(t);
+    if(rows.length<2)return {error:'Fichier vide.'};
+    var h=rows[0].map(norm);
+    function col(fn){for(var i=0;i<h.length;i++)if(fn(h[i]))return i;return -1;}
+    var ci={iso:col(function(x){return x==='iso';}),spool:col(function(x){return x==='spool';}),cat:col(function(x){return x.indexOf('categorie')===0;}),
+      sub:col(function(x){return x.indexOf('type')===0;}),nps:col(function(x){return x==='nps';}),nps2:col(function(x){return x.indexOf('nps reduit')===0;}),
+      sch:col(function(x){return x==='schedule';}),cls:col(function(x){return x==='classe';}),len:col(function(x){return x.indexOf('longueur')===0;}),
+      qty:col(function(x){return x.indexOf('quantite')===0;}),over:col(function(x){return x.indexOf('poids impose')===0;}),
+      name:col(function(x){return x.indexOf('designation libre')===0;}),w:col(function(x){return x.indexOf('poids libre')===0;})};
+    if(ci.cat<0)return {error:'Format non reconnu. Importez un CSV exporté par cette application (colonne « Catégorie (code) » requise).'};
+    for(var r=1;r<rows.length;r++){
+      var row=rows[r];if(norm(row[0])==='total'&&!String(row[ci.cat]||'').trim())continue;
+      function g(k){return ci[k]>=0?(row[ci[k]]||''):'';}
+      var it=cleanItem({iso:g('iso'),spool:g('spool'),cat:g('cat'),sub:g('sub'),nps:g('nps'),nps2:g('nps2'),sch:g('sch'),cls:g('cls'),len:g('len'),qty:g('qty'),over:g('over'),name:g('name'),w:g('w')},warn,r+1);
+      if(it)items.push(it);
+    }
+  }
+  if(!items.length)return {error:'Aucune ligne exploitable dans ce fichier.'};
+  return {name:name,items:items,warn:warn,settings:settings};
+}
+function applySettings(o){
+  if(!o)return;
+  if(MATS.some(function(m){return m[0]===o.matK;})){S.matK=o.matK;}
+  if(num(o.mat)>0)S.mat=num(o.mat);
+  if(FLUIDS.some(function(m){return m[0]===o.fluK;})){S.fluK=o.fluK;}
+  if(num(o.rho)>=0&&o.rho!=null)S.rho=num(o.rho);
+  S.insOn=!!o.insOn;if(o.insT!=null)S.insT=num(o.insT);if(o.insRho!=null)S.insRho=num(o.insRho);
+}
+function impHTML(){
+  var m=S.imp;if(!m)return '';
+  var n=m.items.length;
+  return '<div class="imp"><b>'+esc(m.name)+'</b> : '+n+' ligne'+(n>1?'s':'')+' trouvée'+(n>1?'s':'')+'.'+
+    (m.warn.length?'<ul>'+m.warn.slice(0,5).map(function(w){return '<li>'+esc(w)+'</li>';}).join('')+(m.warn.length>5?'<li>et '+(m.warn.length-5)+' autre(s) remarque(s)</li>':'')+'</ul>':'')+
+    '<div class="actions" style="margin-top:8px"><button class="btn primary sm" data-act="imp-add">Ajouter à la liste</button><button class="btn sm" data-act="imp-replace">Remplacer la liste</button><button class="btn sm" data-act="imp-cancel">Annuler</button></div></div>';
+}
+function ioHTML(){
+  var f=fileNames();
+  return '<details class="io" open><summary>Import / Export</summary><div class="iobody"><div class="actions"><button class="btn" data-act="import">Importer un fichier</button><button class="btn" data-act="csv">Exporter CSV</button><button class="btn" data-act="json">Sauvegarde .json</button></div>'+
+    '<dl class="paths"><dt>Liste (CSV)</dt><dd>'+f.csv+'</dd><dt>Spools (CSV)</dt><dd>'+f.spool+'</dd><dt>Projet complet</dt><dd>'+f.json+'</dd>'+
+    '<dt>Enregistré dans</dt><dd class="plain">le dossier « Téléchargements » de votre appareil. Sur iPhone et iPad, choisissez « Enregistrer dans Fichiers ».</dd>'+
+    (S.last?'<dt>Dernier export</dt><dd>'+esc(S.last.name)+' à '+S.last.t+'</dd>':'')+
+    '<dt>Import accepté</dt><dd class="plain">CSV exporté par cette application (modifiable dans Excel) ou sauvegarde .json.</dd></dl></div></details>';
+}
+function clean(d){var o={};Object.keys(d).forEach(function(k){o[k]=d[k];});return o;}
+function fixItem(d){
+  if(!avail(d.nps,d.sch))d.sch='STD';
+  if(d.nps2>=d.nps)d.nps2=Math.max(0,d.nps-1);
+  if(DEFSUB[d.cat]&&!d.sub)d.sub=DEFSUB[d.cat];
+}
+function fixDraft(){fixItem(D);}
+function setCat(c){D.cat=c;D.sub=DEFSUB[c]||'';fixDraft();}
+
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-tab],[data-cat],[data-act],[data-sch]');if(!b)return;
+  if(b.dataset.tab){S.tab=b.dataset.tab;render();window.scrollTo(0,0);return;}
+  if(b.dataset.cat){setCat(b.dataset.cat);renderFiche();return;}
+  if(b.dataset.sch){D.sch=b.dataset.sch;renderFiche();return;}
+  var a=b.dataset.act,line=e.target.closest('[data-id]'),id=line&&line.dataset.id;
+  if(a==='add'){
+    var it=clean(D);
+    if(it.cat==='tube'&&!(num(it.len)>0)){toast('Saisissez une longueur de tube.');return;}
+    if(!(num(it.qty)>0)){toast('La quantité doit être supérieure à 0.');return;}
+    if(it.cat==='libre'&&!(num(it.w)>0)){toast('Saisissez le poids unitaire.');return;}
+    if(S.edit){
+      var k=S.items.findIndex(function(x){return x.id===S.edit;});it.id=S.edit;if(k>=0)S.items[k]=it;
+      S.edit=null;D=blank();D.iso=it.iso;D.spool=it.spool;S.tab='liste';save();toast('Ligne mise à jour');render();window.scrollTo(0,0);return;
+    }
+    if(S.seed){S.items=[];S.seed=false;}
+    it.id=uid();S.items.push(it);toast('Ajouté à la liste');
+    save();renderTabs();renderFiche();return;
+  }
+  if(a==='cancel'){S.edit=null;D=blank();S.tab='liste';render();return;}
+  if(a==='addline'){
+    var last=S.items[S.items.length-1];
+    if(S.seed){S.items=[];S.seed=false;last=null;}
+    var n=blank();n.id=uid();if(last){n.iso=last.iso;n.spool=last.spool;}
+    S.items.push(n);save();renderTabs();renderListe();
+    var fe=document.querySelector('[data-id="'+n.id+'"] input');if(fe&&fe.scrollIntoView)fe.scrollIntoView({block:'center'});
+    return;
+  }
+  if(a==='new'){S.edit=null;var keepI=D.iso,keepS=D.spool;D=blank();D.iso=keepI;D.spool=keepS;S.tab='fiche';render();return;}
+  if(a==='edit'){var f=S.items.filter(function(x){return x.id===id;})[0];if(f){D=clean(f);S.edit=id;S.tab='fiche';render();window.scrollTo(0,0);}return;}
+  if(a==='dup'){var s=S.items.filter(function(x){return x.id===id;})[0];if(s){var cp=clean(s);cp.id=uid();S.items.splice(S.items.indexOf(s)+1,0,cp);S.seed=false;save();renderTabs();renderListe();toast('Ligne dupliquée');}return;}
+  if(a==='del'){S.items=S.items.filter(function(x){return x.id!==id;});save();renderTabs();renderListe();toast('Ligne supprimée');return;}
+  if(a==='clear'){
+    if(b.classList.contains('armed')){S.items=[];S.seed=false;save();renderTabs();renderListe();toast('Liste vidée');}
+    else{b.classList.add('armed');b.textContent='Confirmer : tout supprimer';setTimeout(function(){if($('clr')){$('clr').classList.remove('armed');$('clr').textContent='Vider la liste';}},4000);}
+    return;
+  }
+  if(a==='csv'){if(!S.items.length){toast('La liste est vide.');return;}exportCSV(csvLines(),fileNames().csv);return;}
+  if(a==='csv2'){if(!S.items.length){toast('La liste est vide.');return;}exportCSV(csvSpools(),fileNames().spool);return;}
+  if(a==='json'){if(!S.items.length){toast('La liste est vide.');return;}exportJSON();return;}
+  if(a==='import'){$('file').click();return;}
+  if(a==='imp-cancel'){S.imp=null;renderListe();return;}
+  if(a==='imp-add'||a==='imp-replace'){
+    var m=S.imp;if(!m)return;
+    if(a==='imp-replace'){S.items=m.items;applySettings(m.settings);}
+    else{if(S.seed){S.items=[];}S.items=S.items.concat(m.items);}
+    S.seed=false;S.imp=null;save();render();toast(m.items.length+' ligne(s) importée(s)');return;
+  }
+});
+document.addEventListener('focusin',function(e){
+  var t=e.target;
+  if(!(t.dataset&&(t.dataset.q==='iso'||t.dataset.f==='iso')))return;
+  var box=t.closest('.isof'),ch=box&&box.querySelector('.chips');if(!ch)return;
+  var names=isoNames().filter(function(n){return n!==t.value;});
+  ch.innerHTML=names.map(function(n){return '<button type="button" class="chip" data-iso="'+esc(n)+'">'+esc(n)+'</button>';}).join('');
+});
+document.addEventListener('mousedown',function(e){if(e.target.closest&&e.target.closest('.chip'))e.preventDefault();});
+document.addEventListener('click',function(e){
+  var c=e.target.closest&&e.target.closest('.chip');if(!c)return;
+  var box=c.closest('.isof'),inp=box.querySelector('input');
+  inp.value=c.dataset.iso;
+  inp.dispatchEvent(new Event('input',{bubbles:true}));
+  inp.dispatchEvent(new Event('change',{bubbles:true}));
+  box.querySelector('.chips').innerHTML='';
+  inp.blur();
+});
+document.addEventListener('keydown',function(e){
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('tr.pick')){e.preventDefault();D.sch=e.target.dataset.sch;renderFiche();}
+});
+
+/* formulaire de la fiche */
+function onField(e,commit){
+  var t=e.target,f=t.dataset.f;if(!f)return false;
+  var v=t.value;
+  if(f==='nps'||f==='nps2'||f==='cls')v=parseInt(v,10);
+  D[f]=v;
+  if(f==='nps'||f==='nps2'||f==='sub'){fixDraft();}
+  if(commit){renderFiche();}else{updResult();}
+  return true;
+}
+document.addEventListener('change',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.f){if(t.tagName==='SELECT'){onField(e,true);}else{onField(e,false);}return;}
+  if(t.dataset&&t.dataset.q){
+    var line=t.closest('[data-id]');var it=S.items.filter(function(x){return x.id===line.dataset.id;})[0];
+    if(it){
+      var q=t.dataset.q,v=t.value;
+      if(q==='nps'||q==='nps2'||q==='cls')v=parseInt(v,10);
+      it[q]=v;
+      if(q==='cat'){it.sub=DEFSUB[v]||'';}
+      fixItem(it);save();
+      if(t.tagName==='SELECT')line.outerHTML=lineHTML(it);else refreshLine(line,it);
+      updTotals();
+    }
+    return;
+  }
+  /* paramètres */
+  var id=t.id;
+  if(id==='matK'){S.matK=t.value;if(t.value!=='perso')S.mat=sub(MATS,t.value)[2];}
+  else if(id==='mat'){S.mat=Math.max(100,num(t.value)||7850);S.matK='perso';}
+  else if(id==='fluK'){S.fluK=t.value;if(t.value!=='perso')S.rho=sub(FLUIDS,t.value)[2];}
+  else if(id==='rho'){S.rho=Math.max(0,num(t.value));S.fluK='perso';}
+  else if(id==='insOn'){S.insOn=t.checked;}
+  else if(id==='insT'){S.insT=Math.max(0,num(t.value));}
+  else if(id==='insRho'){S.insRho=Math.max(0,num(t.value));}
+  else return;
+  save();render();
+});
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.dataset&&t.dataset.f&&t.tagName==='INPUT'){onField(e,false);return;}
+  if(t.dataset&&t.dataset.q&&t.tagName==='INPUT'){
+    var line=t.closest('[data-id]');var it=S.items.filter(function(x){return x.id===line.dataset.id;})[0];
+    if(it){it[t.dataset.q]=t.value;save();refreshLine(line,it);updTotals();}
+  }
+});
+$('settings').addEventListener('toggle',function(){S.open=this.open;save();});
+
+$('file').addEventListener('change',function(){
+  var f=this.files&&this.files[0],inp=this;if(!f)return;
+  if(f.size>5*1024*1024){toast('Fichier trop volumineux (5 Mo maximum).');inp.value='';return;}
+  var rd=new FileReader();
+  rd.onload=function(){
+    var r=importText(f.name,String(rd.result||''));
+    inp.value='';
+    if(r.error){toast(r.error);return;}
+    S.imp=r;S.tab='liste';render();window.scrollTo(0,0);
+  };
+  rd.onerror=function(){inp.value='';toast('Lecture du fichier impossible.');};
+  rd.readAsText(f,'utf-8');
+});
+load();
+/* matériau personnalisé : conserver la liste déroulante cohérente */
+MATS.push(['perso','Personnalisé',S.mat]);FLUIDS.push(['perso','Personnalisé',num(S.rho)]);
+render();
+})();
+</script>
+</body>
+</html>
