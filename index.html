@@ -3,16 +3,18 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="Calcul du poids des tuyauteries : tubes, raccords, brides et vannes, avec liste par isométrique et spool, import et export CSV.">
+<meta name="description" content="Calcul du poids et de la surface de peinture des tuyauteries : tubes, raccords, raccords forgés, brides, boulonnerie et vannes, avec liste par isométrique et spool, import et export CSV.">
 <meta name="author" content="Kamel Nasralli">
 <meta name="theme-color" content="#0a6a78">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Poids tuyauterie">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="icon" type="image/svg+xml" href="icons/favicon.svg">
+<link rel="icon" type="image/png" sizes="192x192" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMAAAADACAIAAADdvvtQAAAb3klEQVR4nO2deZhcVZn/v+85d6mluzqdhZCFrJ0EQiIhQAKIArIFRBkWRVEBAWcEBocfoqIizg/GZZyfjo7yKMr2EEB2ZF+CBISwShKykYTsK+lO70tV3XvPeX9/3O5KdVUnQ1KprtvxfB59nlB969bpup9+z3t2Slx1AwyGfUVUugCGgY0RyFASRiBDSRiBDCVhBDKUhBHIUBJGIENJGIEMJWEEMpSEEchQEkYgQ0kYgQwlYQQylIQRyFASRiBDSRiBDCVhBDKUhBHIUBJGIENJGIEMJWEEMpSEEchQEkYgQ0kYgQwlYQQylIQRyFASRiBDSRiBDCVhBDKUhFXpAhwIEACiSpeiD5i53B9hBCoVQaQ0K6VAQNmf195AcKTUZXbICFQSRNTleQnHqU0mmZmiFIc080etbXHbLmupjED7jhCUzXqzxo25/dIvjqypASE6+mhmZtz39sLvPPSkbVvlq8uMQPsOAX6g/v2cMw4feXCly9I33zrlhEffW/La6rVV8ZjSuhwfYQTad5gBIRKOrZm11lIIAIrZCv+hteivGi0ML4Io0Fr2fKhmJqLqmFvWVNoIVCqKWRAxUZhqWEQtXemaeEwKwdxPjbPwQ1q70jWJeP6LgkiVOYk2/UClkjNEM2vm7z36zOTv/3Tmzb9auHELEcrdCGJmZm7s7Drnd3dOvuEnNzz2TFiM4uKVCSPQ/kFpFkT3vb3wF48/1xmoxes3f/3uB9O+T2XujAnrqR889uyTb73XqfV/Pv7cfW8vFERKlSXjKcYItH9gMID6tg4Acce2XaehvTNQuvwNewKwvaUNlpVwHHB3GfqtQ8oItH+QJJj58hNmnTxjWmNzqyT6xQVnV8dcpcvbORR2Xt5y7pyxBw1taGw6+chpl58wi5ml6Kf83STR+wciADQoEX/p2//y6qq1o2sHTRo+lBnlfpBCEANHjB7595uuW7Zl+6cmT5SCwuS9H8YxYAQqndxzIgIzBNHJh9YB0Mz904wnQDMPrUqedGgdgPymH5dfIiNQqcRsW2kdqO6mD4M1M4EEkQbvrnt6H55sn1Uhd/8fCjpUtvsDCVqzY0lbiLImREagfYeIoPW8FauPnTA27EWMFgL17R1LtmxzHLt8vQlGoH1HaZ2Ix372zEubmprHDRnMQEGdxcy2lEnXKXwnUXv9Dj/dRUJ+nAYTMwsha0aMJCnRW4XOrOcrRUWfy4DW+tGFS7c0tcRdxwgUXUiI2195E8UjTUKgKz3z8EMf/ubX8vMhrbUQ4rz7/vz+W++gqqqPNxZ+ACEIRCr19ztvrUlW5cb8w3t+4Q9zFy5fiUS8z/tI14mV0x4YgfYL1clEcX4ihWiXcnRtzYRhQ4rfMnro4OW1g+JVVfljnITudnn+AyciPwiG1dQcNuLgmOsW3qe2Zkl1VXUy3sdYKaOgV7ocGIH2A30OdDMj0NpXipmLI5AfqECpQKn892qGZhBB5ulIRIFSvlJpz3MdpyAC+UoFWgdKl2mw/X/FCFR2wlHWXJpCPcOuxcQtxC3yFHcFu7lP2N1E3aEqCvPXotd2+IfEEvA8/uoUa/lF7i+Od7wA/dWTXCpGoMigMSSGoUPE6KoB4g4AU4VFBM2QNr2yVd/8qre8kaVAv4xD7AeMQJFAM6SF17fp1zcqSHLsaK3v2ANGoMjAiFuwHNIMvzItqn3BCBQh0grIAgLOwHksA6ekBzREUArjU1RXQ/VdWN6kJQ2MWsy0wiKBJAQ+f2mSfPGLsZtnW4GK5lLpPjACRQZCq4emVl2frnRJ9gZThUWCQMNxaO7K4JE1ylPsWNADogIzAkWKdIBOnwvGwiKOEShCSAEbYAyY8AMjUKTwFFgBAo6sdFE+NiaJjgRhK+wLdXL+Be5NswZSK8xEoEhABK0xIUUnjRetWdYcud2qdoeJQBEiq6Cy6PQrXY69wQgUIcL210CZCRRiBDKUhBHIUBJGIENJGIEMJWEEihDMUDyQuqFhBIoUroR0kbQrXY69wQgUCZghBNa18Svr9cIGLQbIbDKYnuiIoBiWTQ+vUQ+tUuFYmFmVYdhrHAGSwIAajTdVmKEkTASKEJ420zkM+0Q4neP8iXLeee4Pjx5I0zmMQJFAELTCtCHi1MPlyaOl1hE6+GfPmCosEiiGtGneJoWXeHkjF+1kF12MQJEgXBu/YLtesMmsjTfsG2ZtvKFEzNp4wz4Sro2fkKK6Gtph1sYb9pbcqowXLnB/PKBWZRiBIoSnoT2k+9phM7IYgSIEAcJMqjf8Q2EEMpSEEagyDIgW1sfBCFRedpfPWHt5PFQUNqXvEyNQeQmKjrAIz75o7ewkIYrjEHNfzhH5QdA/R1juLUagcsI8pCoJ7BoZDY9Kae/qWr15K9l2zgnNgKCRSSKB7V0MzbmIQ0QcBKOHDY27bu6klehgBCoXRIDW00YdjOIDLolEcRVGGBqjlgx/2MLIi0MEsO+PHjY05jjFQajiQckMZZQLZpAQNfFY8Y8sIQoCiWY4Fq59zfvuG5QO2HEpyK/6iAKl+vyUvc2l9jtGoLLBzEAYgXK2aGZJtHzDxuaWFtuy8iMKAZ0B2jzusy+x+Nw4Isr6wbaWVtlXLtVvmCqsLBBRNlBjDxo6efgw5J2lGhrzyuKlXkdnwTm9iuFruFahPUQEpQ8fNwZ5GjEzAe2Z7ObmFqu3iP2MEagsCCLP844YPXJETUoXZb5Nbe3Is4cApTHIpamDKZ3hAoEYAOGoyXX5L4YmrdxR39jRaUthBDrQIAKYT5wygQGdt8pLCsHMry9dAXtX2BAEVnzkUHpkjnvdUXbBaXNKazsenz5hHIpOhVZa60ovITMC7X+IKOurITWpr8yeSYDs0UFrTURrtm5b/OEaOxbrfVoqnT1eHjZKzD5YaJXXBCMKfP+gIUMmjByBou7EQFV+5qJJovc/UlBnZ/bLs48cnqpWmncJxCyAJxe8lW5rSwwalGtY5Q4La37Ve2mzlnJX41wQad+vGzWiOh4PT+sNXw+D1+LN2xAEQsS0qlgcMgLtf7RmkvT1448BAHBuPCOsgF78+yJImZ+1MGAJPLxaPawYFuWfc0BEUKpu1Agi0nkRSwgC8Pa6jRCish3URqD9jBSiM505YfLE4yeO08xyV8xgIqpvbnlv1YcyFitslhOSLhiki/cHYj5y0kTk9RkysyBq7Oh8bc16x3HKfTL8nil7DiSIpBCCaHf/k0W9agMaZibCz847y+rdOAoToD8983xjfb2bN4gBQBCyAToz8HWhPYHWVjx+7NRDkZdBh8asrm+ob213LFnZMbLyRiAi6vI8rfSepvhq7TiOXekvYr9gSdnW3vGTL3zuk3Xjldb54UcI0djW9ttHn5SJRC59JsBTGFNN//dY+96VwRvbdZD3HQghsl1ds6dPm1E3MbxDz90AYMPOZq0UEVV2DWIZBRJEmax3zPgxP/jsKalYDCi0qOeLaLrx8Wd3dnRZA9yh0J5Tpx/2/bNOybcHgNLakvL3Tzy7Y9v2RO2u9FkKsMcnHyIvmiyPGkafecxr9ji3HkMQsed/+ohpUohAKUt2b7kQfo3zV64Fc8Vjd7kEIiKlOeY4915xUd1BQ/d06ZSJUoqL/3ivYyfUgBVICPJ8f1hN6lcXfh4A5U3KCDOhhpaW3z36hJXsHX4CDE6KKw+3FOPWJaqhQyfiu0bBfKWcquQlc05F775sKUR7JvvSB6ttx1EHcD9QoPWgqvjwVLXSOlBKaa209pXyAhVoHf6nFwRK64nDhkBUsju1RIQg1pzJen+69MLpo0ZorUVeV2CY/Vx765927Ki380bUBSFQmDNWjK+hxjTP36rIolxLSwrhd6U/c/TMqWPH5DfgwwTojbUb1tfvjDmVHMQIKWMVRoDWHCglRfdEFs1s51Xk4R+VFMILBtRKlt6E5c96/l1XXHTOjMMDpS2ZV3kpZUn56N8W3P/087FUteqpvAgINAbF6fKpMmHTC5vUmmYubsB/7rhZ6OlA6oEAPPT399E9QnLgRqAQ2hV7IYg+3LFz/so1mjk/+Ru4rTBbys5MtiYem3f9lZcef4zSvezRzEKIhtbWa359qxVz0bvl5fs4abSYNlh4in/zfqB0r4ehmMl1Zk+dgsL6iz5qbX9i8TLXdStef6Hf+oEUsyXo3rcWfuPuBzOZ7MnTDn3sqktq4rFKB+B9JxzVam3vOGTo4L9cc9nMMaMLYg8DWmspxbd+8/vt23fEa1L54cdXGJGi7xxpxS26fUWwaIeOOcj1J0sh0u0dpx0/e0bdxPz6S2m2JL288sPGlrZUVbJ4vmz/009jYWHe991HnlbMQ2pr5i9edsfr7xCR4sp/BXuLIBKC2rvSac//4rFHvfOj/zNzzOigd+xBT+X103sffODp5xKDdtkDQAgEHl84SU4fIpqz/D/vBwWhRDPbjv2ji79cMNdHCNLM9729SFR0DlA+/RSBmNmSYlh1cvvOprRlATgoVYXerZWII4jCqrYjkyWiEyaNv/a0E88/6hMANHPBzEBfKVvK15cuv+Wu+9yaGpU36ikIGR+zD5FfmiSlwO+XBRuaOR5D7hJLyq7Wtq99/qxPfWKaUkr2tN611iTEuoad81d+6LquikD4QX8KFLftuy698PK7H9za1PKv5575ldkzNe8aaCTqeT6RgQiE7jRVM3d5ng4UBB128PDvnHny1z85C4DSOuxPz3+jHyjbki8vev/M674PKYmooK1EjHFVNLqaluzUf1waWBbyZdDMEOLys05n7tV1xoAAHnz3/XQ6k6pORmEoHv0mkCBixsyxoxfedF1rOjMoEQ9fDzt+mJkD5QeqssM6vSB4fgBmaA0i27Y+MWrEpOHDvnbcUWdMO9SRUjNz3lBXCDMrrW1Lzntv0Vdu/rkCbCl7DYISmGHbeHCVemOHHhpDcxZuXuNLSplubbvo7DknHjG9uC+7ob3j1vkLnGikzyH9N5hKBM0siAYl4vmTHADYUtZWJ5MxNzoCac2Thg9NOM60kcM/ccjIqQcPnzF2lJWXzEpBBT3rYX+PJeUdz75wxU/+n3Qd23EK7MkEEARbIuZiSwdvbu9lDxEFnjds2NBfX/2NghU8Yfr853cWb6vfmaqpjkj4QT+PxguiMODk7An/wmZPGLv25z+MVP3FQG1PmMwRph1CCFk06z0calBa/+Se+398xz1OIi6EKLQnwzNGyPo0b2vTMYccEf5R7bpJOPh187VXDxs0KD/7YWYhKFD67jfetdwI/Zmh/6dzEIqGxABLiOKnVXEYYObwaQkQCZJFa2hyF1hSLl677sr/+s1bi5bEalJhGz53mSD4AT49Rs493VnXxpe+6G3rZCF62SOFyHR2zjryiCs+e4bKa7qjZzDk9gVvL1q3sboqGZH0OSQq84Eq3iVfTJjWi91k9systZZSSiIAD83/29W//O3Opubk4Fq/qGOdAK0xNkUHxYmBIXHa3MEyvysV0FrblnXbt6+xpAxrw/BHYb2/o639x08870Ys/CA6AkWsBbZbGGCtNbMlpZQynfVeXbzkP+65f8HS5dKy4qnqAnsEgQDFcB3MXRoAWNfKC7erWIx6hR9LdjU1X3/ZxTPqJhaM5Id9BDc98cJHTS3RaXzliIpAkSVM2sI2FwBLynBZcmtn18Mvv/JfDzy6estWKBVLJplZ9V4/Gnb5gOE60IxYnOauUBAosMeSsqut/YRZR//8G5eE/QK5HymtLSHeXLvhzr+9VZVMRM0eRESg8M+60qXoGyEEiGTPQ1VKLVy95rWly+945vkVH6xGIuG6riAqyEsEAYxMhs+ZbFXZuG95EEoTd8JepV73T6czQwfX3vOD6wWJ/MZX+O9Oz/u3B/6CMEhHrP5CRAQigCq9xnt3KK3bOjpXbdn61/cWNbV3zHt34bL1GziThesmBtcqrZk5fxpTuM9hOgAYVx1p//AYa7BLzLh/pYrnjXaFCCGU7w+uTj7/y5+NH3Gw7it3vv7hp95dvT5VU7275fGVpcIChRni4jXrrvvtHxzXjVQqHQaAj5qatjc0NnZ06I5OCAHXcV1XxmJa6+InKgUChWyAukH0o1nW2eOkJeiVbeqDJm1JFMTYMKL46cyfbr7xqMl1+XMOAYSZ0F8/+PAPL71enaqKpj2ouEDMDKLG1rb5r72BZBI6Ul8TAQxpCUvaUsrBtQC01pq5+HGGQx7pDLsOfe9o67Kp1ogE+ZrvXBH86C2/I4uYU1hzsdaZrvQdN33v3BOOK7AnXA29o639srsfdN0+dnWJDpGowixLyuqqWCKho5cJMZgZ3Jc0OYiQDWAJnD5Ofv1w67NjBQPztqjblgQvbtZSoKDyEkIEQRBkMnfc+N3Lzjy9wB70tLz+ee4jm+obU9VRzJ1zREKgcAhJaR1BgXaHJABQ3D017Ojh4pojrLPGCUdQwHznCvWjN/y0j5gLRi97LCmz2WzScf7nphsuOePUYnvCV+58/Z2nFi2rqoq0PYiIQNEnbBflNNAMz2OALBuCAIGdaT71EAHGk+uC3y5R7+zQtkAihqD307csq6utfUhtzfO//NnRUybtzp773l54+V0PJGMuR36+VIQEIsDaY1NM6V2PkAApAEb+QipZOL7ZC+ZekSC8OH8laPc9i97FQKDB4VsAzUg5OG2C9alR4s4ValG9jjvY0MLfft2vT/PLGxQExWwwF9kjZVdz81HTpt7x/euPmDi+L3u0JeXCTVuvmvtIzLHDWeR7+kYiQIQE8jWC7J6+L2FTzjBfI5thEGx3lzNpb48nZgty7O5/MpDOMjRgkWN3xxZfI1tcAEEAauKQhA4fCLuVJf3mRHt4LT23SS38CMxwXTywSgFwXaKiUkghQNTV3HLF+Z//729dWRWLhSvF8q8JZ8Qu3LR1zq9uy/iB49gDokKPhEAEQGNcis6fYHt9HVTDDEfi4TVqYxvbEr7C2BR9aZLVmuW5q1Q6gCQEGl+cIiekKKMKN/nSjJjEujZ+dI2yBBQjbuGKGdaQGL2yVb+5TTsWPIVxKfpCnVVQgJSDiSkxYxi918CXvujFbQDwFJbs1GvX8foWtqxw2BUxu/uz8uUhIiFEuqMTvn/Vly+49dqr0dNEzy9hvj3NXem460RqxHQPREIgQUCAuhr6+Ym29vrcIRDCwaIGva6J4xYyAepq6Kcn2U2t/Mha3eGzLaAUrpxunTReqGx3hptDMaSLV9brh1YpR8LTiFt082x76BBxy6v+6xuV5VA623cBQiGkwMZ2hZ6dNDoDPv85rz3NkJSb0FMc+ywpg0ClO9pOm33MN889+7xPnxCOksq+5r8ORHsQEYHCCRM7uvjxlSqt+pjor4G4xI6u7ikQQqC+i59cqeq72FMQBAaEwMtbVEuWOwMUHLuugKSFhQ1aCDAgCJ7CY2vV6Hpe1qiFhGKIogKEVzZneH0br2zWG9pgy12upAPEXdLoe3RBCqGZu1panUT819dd828X/BN6VvkU/OJaa1vK9zZuOfO//zjg7EFEBNIMWFjWxOc94+3hMilhWQgYloVlTXzOkx4ItgVJ0AxL4pZ3gj2tsyM4EpohCZ0B/8vLPhgkYdsU6O579lGAcOyKqOAkSkmF4xIAwuiitU53dErHvvhzc64+/5xZh04Jd6IrCDyamQApxF0L3r3ugb90ef6AswcRESjEIkh7TxdwXnphEWwH6F1xxP633ya/wRWmLIX3LCoAhXvFc+EgaIE8Isx1PI/TaXJjn5wx/aZLv3r6MTPRV8aTe1Fpfe2fH//dvL/F4jHHsQacPYiUQLzHJlTxxcV1x17NNC++uM97dv9gNwgiEgRGOpNBNjtyxIjPfXbOJXNOPe7wwwAopYkKAw8DSmlLio/a2r9829xXVqyurkpq5opvl7lvREigAQHlViARKa0z2Sx8HySmThx/4Wc+/c1zzj6odhB6prrKom4lpbUkYUnx5rqNX/rDPZsamyM4R2yviIpAuadS6YIUkpveFS7vCrT2PQ9+AN9HLDZ94vjJh4y6+IxT5sw62rFt9EQdIYTs/bswQ7OWQvhK/edzL//02b/6SqUS8QFtDyIiEDNzEPhBEMGuM+370AxmKAUpY8nE6JEjDhtzyMy68SfOOOLkmUfkaiillBCiOOp0RyMhJImXVqy+/uGn3t+wOZ6Ix2w7CovbSyQSAtmWVTuoxo3HI5UHEKBZTxo9KuE6tanU9HFjp40bc+i4MWMPHp5w3dxl3Wt9iKQs6D3o2V9BCEnUnsne8vS8Xz4/n4lS1UmldPSHKT4OFRYo/PM9duqhax+8Jwq73fSGmLm2uqr4B+GsoLCXubiFhfyoI8T21rabn3rxxWWr1jU0JmOuEGKgV1v5RCICWVL2+ZyiADOYNXefb9Kdp4k+jvsCekIOgFzUmfvWe//x1Ivbm5pt161OxMNZK/38K5SVSAiESK4LCwkXh+35mtwSRKsnIG1rabvl6e6oY9tWqrpKaT7A1AmJikARbH/tGWYwONebHC5BzAbBi8tXPfn+iheWfrC5odGOudWJuGY+kOqsAqIiUMQJdeGeOBlu6ULoXreqtH5n/aYnFi9/dukHSzdvg9ZOzE2lDtiok08kBGLm6OxXkg9Rd2gMdcmf59Hl+Ts7OuevXPPskhWr63cu27o98DxhO9WJOAHqgI46+URCICKyZKSrsLTvN7R3rq3fuWL7jnUNjcu3fbR+Z3NDe0dzewcAYcm44yQcR/OBH3IK6FeBwkyTQIzurZnCdWEbG5vvXvCuY8noRKFwUdimxub1DY3Skmvrdza0dzZ3dkEpMENKaUlbyupkAj2/VxDVdkBZ6VeBaNcaYQr3iQ7XhX1Y3/Dv9z+GeCxyS3eJwrMpLUtaUlbFXQFCT7OL//HiTTH9tUciQEBjZ9eNjz/74UcNV5/yqXOPnJbrinUsy6qprorSDmXd9Ez2CHXRmnW0ujorT/9tshkwX3b3g08ueBeJ+F9XrJ7/vX89acpET2sZ/lTp4EDp3f+Hoh/3iU5nXl21tnpI7UGpatJ63orViHD/oeFj0k8CKa2r47ETp0xsb2yub2tnIU6bOhkDsP/QUEA/VWFh+nznpRfeWFMd5kAnTZmomaURaIDTXwIBAIYkE7//6gXhK+HZKwP3gDBDSNkF6nU8cfeepgTknUYbsTkchr2ivAJpZte2GFCaQ2F6kp7uVd9KsxSwhYhcD5Dh41GuJJqZHUs2tLTd/trbBFiy74ObHUv6St326puCTEI9IKHEVTeU7+7M7Ct93MSxVa7L4IKzecJXtre2vb95ayJi+9sZPiZlP/bbta3XVq/bQw0lpEhGb/9sw8ekP5Loqpi7h+opd1qAYSDSH814zWxy5AOViO7ObBgoGIEMJWEEMpSEEchQEkYgQ0kYgQwlYQQylIQRyFASRiBDSRiBDCVhBDKUhBHIUBJGIENJGIEMJWEEMpSEEchQEkYgQ0kYgQwlYQQylIQRyFASRiBDSRiBDCVhBDKUhBHIUBJGIENJGIEMJWEEMpSEEchQEkYgQ0n8fz4K5+MOCgohAAAAAElFTkSuQmCC">
 <link rel="apple-touch-icon" sizes="180x180" href="icons/apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="data:image/png;base64,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">
 <link rel="manifest" href="manifest.webmanifest">
 <title>Calcul Poids Tuyauterie</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -181,6 +183,8 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 .paths dd.plain{font-family:var(--f-body);font-size:13px}
 .imp{margin-top:14px;border:1px solid var(--tube);background:var(--tube-bg);border-radius:6px;padding:12px 14px;font-size:14px}
 .imp ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--warn)}
+.totals .sf{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
+.totals .tot .sf{color:var(--bg);opacity:.8}
 .foot{margin-top:22px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);
   padding:10px 16px;border-radius:5px;font-size:14px;z-index:20;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -193,7 +197,7 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 <div class="wrap">
   <header class="title-block">
     <h1>Calcul poids tuyauterie</h1>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.0.0 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.3.1 · Kamel Nasralli</div>
   </header>
   <nav class="tabs" role="tablist" id="tabs"></nav>
 
@@ -201,7 +205,7 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire imposé remplace toujours le calcul.<br><b>Créé par Kamel Nasralli</b> · Version 1.0.0 · Format de fichier 1 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.3.1 · Format de fichier 4 · Licence MIT</p>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" hidden>
@@ -241,7 +245,7 @@ var RED_H=[38,38,51,51,64,76,89,89,102,127,140,152,178,203,330,356,381,508,508];
 var CAP_E=[25,25,38,38,38,38,38,51,64,76,89,102,127,152,165,178,203,229,267];
 var FLG={ /* kg, bride à collerette (WN) à face plate / RF, valeurs indicatives */
  150:[0.9,1.0,1.4,1.8,2.3,3.2,4.5,5.4,7.7,8.6,11.3,18.1,26.3,40.4,52,65,77,91,125],
- 300:[1.4,1.8,2.3,3.1,3.9,5.0,6.9,8.6,13.0,15.5,20.8,32.0,48,68,90,115,135,160,225],
+ 300:[1.4,1.8,2.3,3.1,3.9,5.0,6.9,8.6,13.0,15.5,20.8,32.0,48,64.02,90,115,135,160,225],
  600:[1.8,2.3,3.2,4.1,5.5,7.0,9.5,12.5,20.0,28,38,63,95,135,170,215,260,320,450],
  900:[3.6,4.1,5.2,6.4,8.6,13,16,16,27,40,54,95,150,215,290,380,490,590,830],
  1500:[3.6,4.1,5.2,6.4,8.6,13,16,24,38,60,95,150,245,380,520,690,900,1100,1650]
@@ -254,18 +258,142 @@ var VCLASS={150:1,300:1.5,600:2.6,900:4.2,1500:6.5};
 var ELB=[['90lr','Coude 90° GR (R=1,5D)',1.5,90],['45lr','Coude 45° GR (R=1,5D)',1.5,45],['90sr','Coude 90° PR (R=1D)',1,90],['90_3d','Coude 90° 3D',3,90],['180','Retour 180° GR',1.5,180]];
 var MATS=[['cs','Acier carbone',7850],['s304','Inox 304 / 304L',7900],['s316','Inox 316 / 316L',8000],['dup','Duplex 2205',7800],['inc','Inconel 625',8440],['cu','Cuivre',8940],['ti','Titane',4510],['al','Aluminium',2700]];
 var FLUIDS=[['eau','Eau (épreuve)',1000],['mer','Eau de mer',1025],['gaz','Gazole',850],['brut','Pétrole brut',870],['gly','Glycol',1110],['air','Vide / gaz',0]];
-var CATS=[['tube','Tube'],['coude','Coude'],['te','Té'],['red','Réduction'],['fond','Fond'],['bride','Bride'],['vanne','Vanne'],['libre','Pièce libre']];
-var DEFSUB={coude:'90lr',te:'egal',red:'conc',bride:'WN',vanne:'gate'};
+var CATS=[['tube','Tube'],['coude','Coude'],['te','Té'],['red','Réduction'],['fond','Fond'],['bride','Bride'],['vanne','Vanne'],['forge','Forgé B16.11'],['boulon','Boulonnerie'],['libre','Pièce libre']];
+var DEFSUB={coude:'90lr',te:'egal',red:'conc',bride:'WN',vanne:'gate',forge:'sw90'};
+
+/* surface de peinture : diamètres extérieurs de bride (mm, ASME B16.5) et longueurs face à face de vanne (mm, classe 150), valeurs indicatives */
+var FLG_OD={
+ 150:[89,98,108,117,127,152,178,190,229,254,279,343,406,483,533,597,635,698,813],
+ 300:[95,117,124,133,156,165,190,210,254,279,318,381,444,521,584,648,711,775,914],
+ 600:[95,118,124,133,156,165,190,210,273,330,356,419,508,559,603,686,743,813,940],
+ 900:[121,130,149,159,178,216,244,241,292,349,381,470,546,610,641,705,787,857,1041],
+ 1500:[121,130,149,159,178,216,244,267,311,375,394,483,584,673,749,826,914,984,1168]
+};
+var VALVE_FF=[108,117,127,140,165,178,190,203,229,254,267,292,330,356,381,406,432,457,508];
+var VALVE_KS={gate:3.2,globe:3.0,check:2.2,ball:2.4,bfly:1.6};
+var VALVE_FFC={150:1,300:1.1,600:1.3,900:1.5,1500:1.7};
+/* ASME B16.11 : raccords forgés à souder (SW) et filetés, NPS 1/2 à 4 (dimensions en mm) */
+var FORGE_TYPES=[['sw90','Coude 90° à souder (SW)'],['sw45','Coude 45° à souder (SW)'],['swte','Té à souder (SW)'],['swcap','Fond à souder (SW)'],['th90','Coude 90° fileté'],['th45','Coude 45° fileté'],['thte','Té fileté']];
+function forgeRatings(t){return String(t||'').indexOf('sw')===0?[3000,6000]:[2000,3000,6000];}
+var SWD={
+ 3000:{B:[21.825,27.175,33.925,42.675,48.775,61.225,74.0,89.975,115.625],J:[10,13,13,13,13,16,16,16,19],D:[15.8,20.95,26.65,35.05,40.9,52.6,62.7,78.0,102.25],
+  C:[4.375,4.575,5.35,5.675,5.95,6.5,8.2,8.9,10.025],G:[3.75,3.90,4.55,4.85,5.10,5.55,7.00,7.60,8.55],A90:[15.5,19.5,22,27,32,38,41.5,57.5,66.5],A45:[11.5,12.5,14,17,21,25,29,31.5,41.5]},
+ 6000:{B:[21.825,27.175,33.925,42.675,48.775,61.225],J:[10,13,13,13,13,16],D:[11.75,15.55,20.7,29.45,33.95,42.85],
+  C:[5.575,6.5,7.425,7.425,8.35,10.2],G:[4.80,5.55,6.35,6.35,7.15,8.75],A90:[19.5,22.5,27,32,38,41],A45:[12.5,14.5,17,21,25,29]}
+};
+var SWCAP={3000:[0.07,0.13,0.21,0.37,0.60,0.99,1.50,2.30,4.00],6000:[0.15,0.27,0.45,0.67,0.89,1.75,2.66,4.33,7.91]};
+var THD={
+ 2000:{A:[28,33,38,44,51,60,76,86,106],C:[22,25,28,33,35,43,52,64,79],D:[33,38,46,56,62,75,92,109,146]},
+ 3000:{A:[33,38,44,51,60,64,83,95,114],C:[25,28,33,35,43,44,52,64,79],D:[38,46,56,62,75,84,102,121,152]},
+ 6000:{A:[38,44,51,60,64,83],C:[28,33,35,43,44,52],D:[46,56,62,75,84,102]}
+};
+var BOLT={ /* ASME B16.5 : nombre de goujons, diamètre (in), longueur de goujon (in), face à ressaut */
+ 150:{n:[4,4,4,4,4,4,4,4,8,8,8,8,12,12,12,16,16,20,20],d:[.5,.5,.5,.5,.5,.625,.625,.625,.625,.75,.75,.75,.875,.875,1,1,1.125,1.125,1.25],L:[3.5,3.75,3.75,4,4,4.25,4.5,4.5,4.5,5,5,5.25,5.5,5.5,6.25,6.5,7,7.25,8]},
+ 300:{n:[4,4,4,4,4,8,8,8,8,8,12,12,16,16,20,20,24,24,24],d:[.5,.625,.625,.625,.75,.625,.75,.75,.75,.75,.75,.875,1,1.125,1.125,1.25,1.25,1.25,1.5],L:[3.75,4.25,4.5,4.5,5,5,5.25,5.5,5.75,6,6.25,6.75,7.5,7.75,8.25,8.5,9.25,9.75,11]},
+ 600:{n:[4,4,4,4,4,8,8,8,8,8,12,12,16,20,20,20,20,24,24],d:[.5,.625,.625,.625,.75,.625,.75,.75,.875,1,1,1.125,1.25,1.375,1.375,1.5,1.625,1.625,1.875],L:[3.75,4.25,4.5,4.75,5.25,5.25,5.5,5.75,6.5,7.25,7.5,8.5,9.5,10,10.75,11.5,12.5,13,15]},
+ 900:{n:[4,4,4,4,4,8,8,8,8,8,12,12,16,20,20,20,20,20,20],d:[.75,.75,.875,.875,1,.875,1,.875,1.125,1.25,1.125,1.375,1.375,1.5,1.625,1.875,2,2,2.5],L:[5,5.25,5.75,6,6.5,6.75,7.25,7,8.5,9.75,9,11,11.5,12.5,13.5,15,16.5,17.5,21]},
+ 1500:{n:[4,4,4,4,4,8,8,8,8,8,12,12,12,16,16,16,16,16,16],d:[.75,.75,.875,1,1,.875,1,1.125,1.25,1.5,1.375,1.625,1.875,2,2.25,2.5,2.75,3,3.5],L:[5.5,5.75,6.5,7,7.25,7.5,8.25,9,10.75,12.5,11.5,13.5,15.5,16.5,18.5,20.5,22.5,24.5,29]}
+};
+var RHO_ST=7.85e-6; /* kg/mm³ */
+function fracIn(d){var w=Math.floor(d+1e-9),f=Math.round((d-w)*8),m={0:'',1:'1/8',2:'1/4',3:'3/8',4:'1/2',5:'5/8',6:'3/4',7:'7/8'};return (w>0?w:'')+(w>0&&f?' ':'')+(m[f]||'')+'"';}
+/* épaisseur minimale de bride à collerette (mm, ASME B16.5). Classes 150 et 300 : ressaut de 1,5 mm compris. */
+var FLG_TF={
+ 150:[11.2,12.7,14.3,15.9,17.5,19.1,22.3,23.9,23.9,23.9,25.4,28.6,30.2,31.8,35.1,36.6,39.7,42.9,47.7],
+ 300:[14.3,15.9,17.5,19.1,20.7,22.3,25.4,28.6,31.8,35.1,36.6,41.1,47.7,50.8,53.8,57.2,60.4,63.5,69.9],
+ 600:[14.3,15.9,17.5,20.7,22.3,25.4,28.6,31.8,38.1,44.5,47.7,55.6,63.5,66.7,69.9,76.2,82.6,88.9,101.6]
+};
+/* longueur de goujon : 2 × épaisseur de bride + 2,5 × diamètre, arrondie à 5 mm.
+   Calée sur Pipedata : 12" classe 300, goujon 1+1/8" = 170 mm. Classes 600 : ressauts de 6,4 mm ajoutés. */
+function studLen(ix,cls){
+  var tf=FLG_TF[cls];
+  if(!tf)return BOLT[cls].L[ix]*25.4;
+  var d=BOLT[cls].d[ix]*25.4,ex=cls===600?tf[ix]+6.4:tf[ix]-1.5;
+  return Math.round((2*ex+2.5*d)/5)*5;
+}
+var BOLT_REF={'300|13':21.77}; /* jeu de goujons et écrous d'un joint, valeur Pipedata (kg) */
+function boltSet(ix,cls){
+  var t=BOLT[cls]||BOLT[150],n=t.n[ix],din=t.d[ix],d=din*25.4,L=studLen(ix,cls),P=Math.PI/4;
+  var stud=P*d*d*L*RHO_ST,af=(1.5*din+0.125)*25.4,nut=(0.866*af*af-P*d*d)*d*RHO_ST;
+  var ref=BOLT_REF[cls+'|'+ix];
+  return {n:n,din:din,L:L,w:ref!=null?ref:n*(stud+2*nut),ref:ref!=null};
+}
+function swArmV(r,i){var ob=r.D[i]+2*r.G[i],os=r.B[i]+2*r.C[i],P=Math.PI/4;return {body:P*(ob*ob-r.D[i]*r.D[i]),sock:P*(os*os-r.B[i]*r.B[i]),ob:ob,os:os};}
+function swVol(r,i,type){
+  var a=swArmV(r,i),J=r.J[i];
+  if(type==='sw90')return 2*(a.body*r.A90[i]+a.sock*J);
+  if(type==='sw45')return 2*(a.body*r.A45[i]+a.sock*J);
+  return 3*(a.body*r.A90[i]+a.sock*J);
+}
+function thBore(i,rt){var k=rt===6000?'160':'STD';return NPS[i].od-2*WALL[k][i];}
+function thVol(r,i,type,rt){
+  var D=r.D[i],b=thBore(i,rt),P=Math.PI/4,ring=P*(D*D-b*b),ov=(D/2)*(D/2)*(D/2)-(b/2)*(b/2)*(b/2);
+  if(type==='th90')return ring*2*r.A[i]-4/3*ov;
+  if(type==='th45')return ring*2*r.C[i];
+  return ring*3*r.A[i]-8/3*ov;
+}
+/* calage sur les valeurs Pipedata : 1/2" cl.3000, coude SW 0,15 kg, coude fileté 0,44 kg */
+var K_SW=0.15/(swVol(SWD[3000],0,'sw90')*RHO_ST);
+var K_TH=0.44/(thVol(THD[3000],0,'th90',3000)*RHO_ST);
+function forgeCalc(it){
+  var ix=it.nps,rt=it.rt,t=it.sub,P=Math.PI,sw=String(t).indexOf('sw')===0,w=0,sf=0;
+  var bad={w:0,s:0,err:'Raccord non disponible dans cette taille et cette classe (ASME B16.11).'};
+  if(sw){
+    var r=SWD[rt];
+    if(t==='swcap'){var cw=SWCAP[rt]&&SWCAP[rt][ix];if(cw==null||!SWD[3000])return bad;var rr=r&&r.B[ix]!=null?r:SWD[3000],a0=swArmV(rr,ix);return {w:cw,s:(P*a0.os*(rr.J[ix]+6)+P/4*a0.os*a0.os)/1e6,err:''};}
+    if(!r||r.B[ix]==null)return bad;
+    var kc=t==='sw90'?K_SW:(K_SW+1)/2,v=swVol(r,ix,t)*kc,a=swArmV(r,ix),A=t==='sw45'?r.A45[ix]:r.A90[ix],arms=t==='swte'?3:2;
+    w=v*RHO_ST;sf=arms*(P*a.ob*A+P*a.os*r.J[ix])*(t==='swte'?1.05:1.1)/1e6;
+  }else{
+    var q=THD[rt];if(!q||q.A[ix]==null)return bad;
+    w=thVol(q,ix,t,rt)*K_TH*RHO_ST;
+    var L=t==='th45'?q.C[ix]:q.A[ix],arm=t==='thte'?3:2;sf=arm*P*q.D[ix]*L*0.92/1e6;
+  }
+  return {w:w,s:sf,err:''};
+}
+var ENDS=[['none','Libre (aucun)'],['bride','Bride'],['coude','Coude'],['fond','Fond (cap)']];
+var ELBEND=ELB.filter(function(x){return x[3]<180;}).map(function(x){return [x[0],x[1]];});
+var FLG_LEN={ /* mm, longueur totale d'une bride à collerette avec face (ASME B16.5), valeurs indicatives */
+ 150:[48,52,56,57,62,64,70,70,76,89,89,102,102,114,127,140,152,159,168],
+ 300:[51,57,62,65,68,70,76,78,84,97,98,111,117,130,143,146,159,162,168],
+ 600:[60,67,73,79,83,86,92,95,102,114,117,133,152,156,165,178,184,190,203],
+ 900:[60,70,73,79,83,86,98,105,117,130,140,162,184,200,213,235,248,260,292],
+ 1500:[60,70,73,79,83,92,105,124,137,156,172,203,235,260,285,310,335,360,400]
+};
+/* encombrement d'une extrémité de tube (mm) : ce que le raccord occupe sur la cote mesurée */
+function endDim(it,k){
+  var t=it[k],ix=it.nps;
+  if(t==='bride')return FLG_LEN[it.cls]?FLG_LEN[it.cls][ix]:0;
+  if(t==='coude'){var e=sub(ELB,it[k+'s']);return e[2]*NPS[ix].v*25.4*Math.tan(e[3]*Math.PI/360);}
+  if(t==='fond')return CAP_E[ix];
+  return 0;
+}
+function encTotal(it){var o=num(it.encO);return o>0?o:endDim(it,'e1')+endDim(it,'e2');}
+function encText(it){
+  if(it.cat!=='tube')return '';
+  var c=calc(it);if(!(c.enc>0))return '';
+  return 'Encombrement des extrémités − '+fmt(c.enc*1000,0)+' mm : tube net '+fmt(c.net)+' m par pièce';
+}
+function endFields(o,a){
+  var h='';
+  [['e1','Extrémité 1'],['e2','Extrémité 2']].forEach(function(x){
+    var k=x[0];
+    h+='<label class="f">'+x[1]+'<select '+a+'="'+k+'">'+opts(ENDS,o[k])+'</select></label>';
+    if(o[k]==='coude')h+='<label class="f">Coude, extrémité '+k.slice(1)+'<select '+a+'="'+k+'s">'+opts(ELBEND,o[k+'s'])+'</select></label>';
+  });
+  if(o.e1==='bride'||o.e2==='bride')h+='<label class="f">Classe des brides<select '+a+'="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===o.cls?' selected':'')+'># '+k+'</option>';}).join('')+'</select></label>';
+  if(o.e1!=='none'||o.e2!=='none')h+='<label class="f">Encombrement imposé (mm)<input '+a.replace('data-f','data-f').replace('data-q','data-q')+'="encO" inputmode="decimal" placeholder="auto" value="'+esc(o.encO)+'"></label>';
+  return h;
+}
 
 /* ---------- État ---------- */
 var KEY='cpt.poids.v2';
-var APP_VERSION='1.0.0',FILE_VERSION=1,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var APP_VERSION='1.3.1',FILE_VERSION=4,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
-function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:''};}
+function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',rt:3000};}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 function load(){
-  try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.items){Object.keys(o).forEach(function(k){if(k in S&&k!=='tab'&&k!=='edit')S[k]=o[k];});return;}}}catch(e){}
+  try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.items){Object.keys(o).forEach(function(k){if(k in S&&k!=='tab'&&k!=='edit')S[k]=o[k];});S.items.forEach(fixItem);return;}}}catch(e){}
   S.items=[
     {id:uid(),cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:3,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'coude',sub:'90lr',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
@@ -274,6 +402,7 @@ function load(){
     {id:uid(),cat:'te',sub:'egal',nps:10,sch:'40',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'vanne',sub:'gate',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''}
   ];
+  S.items.forEach(fixItem);
   S.seed=true;
 }
 function save(){try{localStorage.setItem(KEY,JSON.stringify({mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,items:S.items,seed:S.seed,open:S.open}));}catch(e){}}
@@ -308,25 +437,34 @@ function descr(it){
     case 'fond':return 'Fond bombé '+n+' '+sc;
     case 'bride':return 'Bride '+sub(FTYPES,it.sub)[0]+' cl.'+it.cls+' '+n;
     case 'vanne':return sub(VTYPES,it.sub)[1]+' cl.'+it.cls+' '+n;
+    case 'forge':return sub(FORGE_TYPES,it.sub)[1]+' '+n+' '+it.rt+'#';
+    case 'boulon':var bs=boltSet(it.nps,it.cls);return 'Boulonnerie '+n+' cl.'+it.cls+' · '+bs.n+' goujons '+fracIn(bs.din)+' × '+fmt(bs.L,0)+' mm';
     default:return it.name||'Pièce libre';
   }
 }
+function flgSurf(ix,cls){
+  var D=(FLG_OD[cls]||FLG_OD[150])[ix],L=(FLG_LEN[cls]||FLG_LEN[150])[ix],od=NPS[ix].od,t=.45*L,P=Math.PI;
+  return (P/4*(D*D-od*od)+P*D*t+P*od*(L-t))/1e6; /* une face, la tranche et le col */
+}
+function valveSurf(ix,cls,type){return (VALVE_KS[type]||3)*Math.PI*NPS[ix].od/1000*(VALVE_FF[ix]*(VALVE_FFC[cls]||1))/1000;}
 function calc(it){
-  var o={kind:'acc',unit:0,uLabel:'kg',mult:1,metal:0,content:0,insul:0,warn:'',leq:0,auto:0,P:null};
+  var o={surf:0,usurf:0,kind:'acc',unit:0,uLabel:'kg',mult:1,metal:0,content:0,insul:0,warn:'',leq:0,auto:0,P:null};
   var rho=num(S.rho),mf=S.mat/7850,ix=it.nps,qty=Math.max(0,num(it.qty));
-  var uM=0,uC=0,uI=0,uL=0;
+  var uM=0,uC=0,uI=0,uL=0,uS=0;
   function seg(i,len,k){
     var p=props(i,it.sch),fb=false;
     if(!p){p=props(i,'STD');fb=true;}
     if(!p)return;
     if(fb)o.warn='Schedule '+it.sch+' indisponible en '+NPS[i].l+' : SCH STD utilisé pour ce tronçon.';
-    uM+=p.wm*len*(k||1);uC+=p.ai*len*rho;uI+=p.ins*len;uL+=len;
+    uM+=p.wm*len*(k||1);uS+=p.surf*len*(k||1);uC+=p.ai*len*rho;uI+=p.ins*len;uL+=len;
   }
   if(it.cat==='tube'){
-    o.kind='tube';o.uLabel='kg/m';o.mult=num(it.len)*qty;
+    o.kind='tube';o.uLabel='kg/m';
+    var Lm=num(it.len),encm=encTotal(it)/1000;o.enc=encm;o.net=Math.max(0,Lm-encm);o.mult=o.net*qty;
+    if(encm>0&&Lm>0&&encm>Lm)o.warn='Encombrement des extrémités ('+fmt(encm*1000,0)+' mm) supérieur à la longueur mesurée.';
     var p=props(ix,it.sch);
     if(!p){o.warn='Schedule '+it.sch+' indisponible en '+NPS[ix].l+'.';}
-    else{o.P=p;uM=p.wm;uC=p.ai*rho;uI=p.ins;uL=1;}
+    else{o.P=p;uM=p.wm;uS=p.surf;uC=p.ai*rho;uI=p.ins;uL=1;}
   }else{
     o.mult=qty;
     if(it.cat==='coude'){var e=sub(ELB,it.sub);seg(ix,e[3]*Math.PI/180*e[2]*NPS[ix].v*25.4/1000);}
@@ -337,23 +475,26 @@ function calc(it){
     else if(it.cat==='red'){var H=RED_H[ix]/1000;seg(ix,H/2);seg(it.nps2,H/2);}
     else if(it.cat==='fond'){seg(ix,CAP_E[ix]/1000,1.5);}
     else if(it.cat==='bride'){
-      o.kind='brd';uM=FLG[it.cls][ix]*sub(FTYPES,it.sub)[2]*mf;
+      o.kind='brd';uM=FLG[it.cls][ix]*sub(FTYPES,it.sub)[2]*mf;uS=flgSurf(ix,it.cls);
     }
-    else if(it.cat==='vanne'){uM=VALVE_BASE[ix]*sub(VTYPES,it.sub)[2]*VCLASS[it.cls]*mf;}
+    else if(it.cat==='vanne'){uM=VALVE_BASE[ix]*sub(VTYPES,it.sub)[2]*VCLASS[it.cls]*mf;uS=valveSurf(ix,it.cls,it.sub);}
+    else if(it.cat==='forge'){var fg=forgeCalc(it);uM=fg.w*mf;uS=fg.s;if(fg.err)o.warn=fg.err;}
+    else if(it.cat==='boulon'){uM=boltSet(ix,it.cls).w;}
     else {uM=num(it.w);}
-    if(it.cat!=='tube'&&it.cat!=='libre'&&it.cat!=='bride'&&it.cat!=='vanne')o.P=props(ix,it.sch);
+    if(['tube','libre','bride','vanne','forge','boulon'].indexOf(it.cat)<0)o.P=props(ix,it.sch);
   }
   o.auto=uM;
   var ov=num(it.over);
   o.unit=ov>0?ov:uM;
   o.metal=o.unit*o.mult;o.content=uC*o.mult;o.insul=uI*o.mult;o.leq=uL*o.mult;
   if(it.cat==='libre'){o.unit=num(it.w);o.metal=o.unit*o.mult;}
+  var ovs=num(it.overS);o.usurf=ovs>0?ovs:uS;o.surf=o.usurf*o.mult;
   return o;
 }
 function sumItems(list){
-  var T={tube:0,acc:0,brd:0,len:0,content:0,insul:0,n:0};
-  list.forEach(function(it){var c=calc(it);T[c.kind]+=c.metal;T.content+=c.content;T.insul+=c.insul;if(it.cat==='tube')T.len+=c.mult;T.n++;});
-  T.total=T.tube+T.acc+T.brd;T.service=T.total+T.content+T.insul;return T;
+  var T={tube:0,acc:0,brd:0,stube:0,sacc:0,sbrd:0,len:0,content:0,insul:0,n:0},SK={tube:'stube',acc:'sacc',brd:'sbrd'};
+  list.forEach(function(it){var c=calc(it);T[c.kind]+=c.metal;T[SK[c.kind]]+=c.surf;T.content+=c.content;T.insul+=c.insul;if(it.cat==='tube')T.len+=c.mult;T.n++;});
+  T.total=T.tube+T.acc+T.brd;T.stotal=T.stube+T.sacc+T.sbrd;T.service=T.total+T.content+T.insul;return T;
 }
 
 /* ---------- Rendu ---------- */
@@ -390,20 +531,23 @@ function formHTML(){
   if(c==='red')h+='<label class="f full">Type de réduction<select data-f="sub"><option value="conc"'+(d.sub==='conc'?' selected':'')+'>Concentrique</option><option value="exc"'+(d.sub==='exc'?' selected':'')+'>Excentrique</option></select></label>';
   if(c==='bride')h+='<label class="f full">Type de bride<select data-f="sub">'+opts(FTYPES,d.sub,function(x){return [x[0],x[1]];})+'</select></label>';
   if(c==='vanne')h+='<label class="f full">Type de vanne<select data-f="sub">'+opts(VTYPES,d.sub,function(x){return [x[0],x[1]];})+'</select></label>';
+  if(c==='forge')h+='<label class="f full">Type de raccord forgé<select data-f="sub">'+opts(FORGE_TYPES,d.sub)+'</select></label>';
   if(c==='libre'){
     h+='<label class="f full">Désignation<input data-f="name" type="text" placeholder="ex. Filtre en Y, support, joint" value="'+esc(d.name)+'"></label>';
     h+='<label class="f">Poids unitaire (kg)<input data-f="w" inputmode="decimal" value="'+esc(d.w)+'"></label>';
   }else{
-    h+='<label class="f">'+(c==='te'&&d.sub==='reduit'||c==='red'?'NPS principal':'NPS')+'<select data-f="nps">'+npsOpts(d.nps)+'</select></label>';
+    h+='<label class="f">'+(c==='te'&&d.sub==='reduit'||c==='red'?'NPS principal':'NPS')+'<select data-f="nps">'+npsOpts(d.nps,c==='forge'?9:undefined)+'</select></label>';
     if((c==='te'&&d.sub==='reduit')||c==='red')h+='<label class="f">NPS réduit<select data-f="nps2">'+npsOpts(d.nps2,d.nps)+'</select></label>';
-    if(c==='bride'||c==='vanne')h+='<label class="f">Classe<select data-f="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===d.cls?' selected':'')+'>Classe '+k+'</option>';}).join('')+'</select></label>';
-    if(c!=='bride'&&c!=='vanne')h+='<label class="f">Schedule<select data-f="sch">'+schOpts(d.nps,d.sch)+'</select></label>';
+    if(c==='forge')h+='<label class="f">Classe forgée<select data-f="rt">'+forgeRatings(d.sub).map(function(k){return '<option value="'+k+'"'+(k===d.rt?' selected':'')+'>'+k+'#</option>';}).join('')+'</select></label>';
+    if(c==='bride'||c==='vanne'||c==='boulon')h+='<label class="f">Classe<select data-f="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===d.cls?' selected':'')+'>Classe '+k+'</option>';}).join('')+'</select></label>';
+    if(['bride','vanne','forge','boulon'].indexOf(c)<0)h+='<label class="f">Schedule<select data-f="sch">'+schOpts(d.nps,d.sch)+'</select></label>';
   }
-  if(c==='tube')h+='<label class="f">Longueur (m)<input data-f="len" inputmode="decimal" placeholder="0" value="'+esc(d.len)+'"></label>';
+  if(c==='tube'){h+='<label class="f">Longueur mesurée (m)<input data-f="len" inputmode="decimal" placeholder="0" value="'+esc(d.len)+'"></label>'+endFields(d,'data-f');}
   h+='<label class="f">Quantité<input data-f="qty" inputmode="numeric" value="'+esc(d.qty)+'"></label>';
   h+='<div class="isof"><label class="f">Isométrique (ISO)<input data-f="iso" type="text" autocomplete="off" placeholder="ex. ISO-001" value="'+esc(d.iso)+'"></label><div class="chips"></div></div>';
   h+='<label class="f">N° spool<input data-f="spool" type="text" placeholder="ex. 1" value="'+esc(d.spool)+'"></label>';
   if(c!=='libre')h+='<label class="f">Poids unitaire imposé ('+(c==='tube'?'kg/m':'kg')+')<input data-f="over" inputmode="decimal" placeholder="auto" value="'+esc(d.over)+'"><span class="hint">Laissez vide pour le calcul automatique.</span></label>';
+  h+='<label class="f">Surface imposée ('+(c==='tube'?'m²/m':'m²')+')<input data-f="overS" inputmode="decimal" placeholder="auto" value="'+esc(d.overS)+'"></label>';
   h+='</div>';
   return h;
 }
@@ -418,11 +562,12 @@ function resultHTML(){
   var tagc=c.kind;
   var total=c.metal;
   h+='<div><div class="lbl"><span class="tag '+tagc+'">'+(c.kind==='tube'?'Tube':c.kind==='brd'?'Bride':'Accessoire')+'</span> '+esc(descr(d))+'</div>';
-  h+='<div class="big" style="margin-top:8px">'+fmt(total)+'<small>kg</small></div></div>';
+  h+='<div class="big" style="margin-top:8px">'+fmt(total)+'<small>kg</small></div><div class="lbl" style="margin-top:12px">Surface de peinture</div><div class="mono" style="font-size:24px;margin-top:2px">'+fmt(c.surf)+' m²</div></div>';
   h+='<dl class="kv"><dt>Poids unitaire</dt><dd>'+fmt(c.unit)+' '+c.uLabel+(num(d.over)>0?' (imposé)':'')+'</dd>'+
-     '<dt>'+(d.cat==='tube'?'Longueur totale':'Quantité')+'</dt><dd>'+(d.cat==='tube'?fmt(c.mult)+' m':fmt(c.mult,0))+'</dd>'+
+     (d.cat==='tube'?'<dt>Longueur mesurée</dt><dd>'+fmt(num(d.len))+' m</dd>'+(c.enc>0?'<dt>Encombrement extrémités</dt><dd>− '+fmt(c.enc*1000,0)+' mm</dd>':'')+'<dt>Tube net × quantité</dt><dd>'+fmt(c.mult)+' m</dd>':'<dt>Quantité</dt><dd>'+fmt(c.mult,0)+'</dd>')+
      (c.content>0?'<dt>Contenu</dt><dd>'+fmt(c.content)+' kg</dd>':'')+
      (c.insul>0?'<dt>Isolation</dt><dd>'+fmt(c.insul)+' kg</dd>':'')+
+     '<dt>Surface unitaire</dt><dd>'+fmt(c.usurf,3)+(d.cat==='tube'?' m²/m':' m²')+(num(d.overS)>0?' (imposée)':'')+'</dd>'+
      '</dl>';
   if(c.warn)h+='<div class="warn">'+esc(c.warn)+'</div>';
   var p=c.P;
@@ -430,8 +575,10 @@ function resultHTML(){
     h+='<div class="sect-row">'+sectionSVG(p)+'<dl class="kv" style="flex:1;min-width:0"><dt>Ø extérieur</dt><dd>'+fmt(p.od,1)+' mm</dd><dt>Épaisseur</dt><dd>'+fmt(p.t,2)+' mm</dd><dt>Ø intérieur</dt><dd>'+fmt(p.id,1)+' mm</dd></dl></div>';
     h+='<dl class="kv"><dt>Section métal</dt><dd>'+fmt(p.asec,2)+' cm²</dd><dt>Volume intérieur</dt><dd>'+fmt(p.ai*1000,2)+' L/m</dd><dt>Surface extérieure</dt><dd>'+fmt(p.surf,3)+' m²/m</dd>'+(p.ins>0?'<dt>Isolation</dt><dd>'+fmt(p.ins,2)+' kg/m</dd>':'')+'</dl>';
   }
-  if(d.cat==='bride'||d.cat==='vanne')h+='<p class="note" style="margin:0">Valeur indicative de catalogue (±10 %). Utilisez le poids imposé pour une valeur fabricant.</p>';
-  if(d.cat==='coude'||d.cat==='te'||d.cat==='red'||d.cat==='fond')h+='<p class="note" style="margin:0">Raccord soudé à bout, calculé d\'après les longueurs ASME B16.9.</p>';
+  if(d.cat==='forge')h+='<p class="note" style="margin:0">Poids estimé d\'après les dimensions ASME B16.11 et calé sur Pipedata (1/2" cl.3000 : coude SW 0,15 kg, coude fileté 0,44 kg). Précision ±10 %. Les fonds SW viennent d\'un catalogue fabricant.</p>';
+  if(d.cat==='boulon')h+='<p class="note" style="margin:0">Goujons et 2 écrous par trou. Longueur du goujon = 2 × épaisseur de bride + 2,5 × diamètre, arrondie à 5 mm (calé sur Pipedata : 12" cl.300 = 170 mm, 21,77 kg). La quantité est le nombre de joints (paires de brides). Classes 900 et 1500 : longueurs de table, précision ±15 %.</p>';
+  if(d.cat==='bride'||d.cat==='vanne')h+='<p class="note" style="margin:0">Poids indicatif de catalogue (±10 %) et surface de peinture estimée (±20 %). Utilisez le poids ou la surface imposés pour une valeur fabricant.</p>';
+  if(d.cat==='coude'||d.cat==='te'||d.cat==='red'||d.cat==='fond')h+='<p class="note" style="margin:0">Raccord soudé à bout, calculé d\'après les longueurs ASME B16.9. Surface de peinture : surface extérieure, fond estimé (±20 %).</p>';
   var edit=S.edit;
   h+='<div class="actions"><button class="btn primary" data-act="add">'+(edit?'Mettre à jour la ligne':'Ajouter à la liste')+'</button>'+(edit?'<button class="btn" data-act="cancel">Annuler</button>':'')+'</div>';
   return h;
@@ -458,15 +605,14 @@ function isoTotals(){
 function totalsHTML(T){
   var I=isoTotals(),multi=I.length>1;
   var lab=multi?'Total général':(I.length===1&&I[0].iso!=='Sans ISO'?'Total · '+esc(I[0].iso):'Total');
-  var h='<div class="totals"><div class="t1"><div class="lbl">Tubes</div><div class="v">'+fmt(T.tube)+' <small>kg</small></div></div>'+
-   '<div class="t2"><div class="lbl">Accessoires</div><div class="v">'+fmt(T.acc)+' <small>kg</small></div></div>'+
-   '<div class="t3"><div class="lbl">Brides</div><div class="v">'+fmt(T.brd)+' <small>kg</small></div></div>'+
-   '<div class="tot"><div class="lbl">'+lab+'</div><div class="v">'+fmt(T.total)+' <small>kg</small></div></div></div>'+
-   '<div class="strip"><span>Tube posé <b>'+fmt(T.len)+' m</b></span></div>';
+  function box(cls,l,kg,m2){return '<div class="'+cls+'"><div class="lbl">'+l+'</div><div class="v">'+fmt(kg)+' <small>kg</small></div><div class="sf">'+fmt(m2)+' m² peinture</div></div>';}
+  var h='<div class="totals">'+box('t1','Tubes',T.tube,T.stube)+box('t2','Accessoires',T.acc,T.sacc)+box('t3','Brides',T.brd,T.sbrd)+box('tot',lab,T.total,T.stotal)+'</div>'+
+   '<div class="strip"><span>Tube posé <b>'+fmt(T.len)+' m</b></span><span>Surface de peinture <b>'+fmt(T.stotal)+' m²</b></span></div>';
   if(multi){
     h+='<div class="isos">'+I.map(function(g){
       return '<div class="isobox"><div class="lbl">'+esc(g.iso)+'</div><div class="v">'+fmt(g.total)+' <small>kg</small></div>'+
-        '<div class="sub">Tubes '+fmt(g.tube)+' · Acc. '+fmt(g.acc)+' · Brides '+fmt(g.brd)+'</div></div>';
+        '<div class="sub">Tubes '+fmt(g.tube)+' · Acc. '+fmt(g.acc)+' · Brides '+fmt(g.brd)+'</div>'+
+        '<div class="sub">Peinture '+fmt(g.stotal)+' m²</div></div>';
     }).join('')+'</div>';
   }
   return h;
@@ -478,6 +624,7 @@ var SUBOPTS={
   bride:FTYPES.map(function(x){return [x[0],x[1]];}),
   vanne:VTYPES.map(function(x){return [x[0],x[1]];})
 };
+SUBOPTS.forge=FORGE_TYPES;
 function lineHTML(it){
   var c=calc(it),cat=it.cat,h='';
   var kl=c.kind==='tube'?'Tube':c.kind==='brd'?'Bride':'Accessoire';
@@ -491,17 +638,20 @@ function lineHTML(it){
     h+='<label class="f">Désignation<input data-q="name" type="text" placeholder="ex. Filtre en Y" value="'+esc(it.name)+'"></label>';
     h+='<label class="f">Poids unitaire (kg)<input data-q="w" inputmode="decimal" value="'+esc(it.w)+'"></label>';
   }else{
-    h+='<label class="f">NPS<select data-q="nps">'+npsOpts(it.nps)+'</select></label>';
+    h+='<label class="f">NPS<select data-q="nps">'+npsOpts(it.nps,cat==='forge'?9:undefined)+'</select></label>';
     if((cat==='te'&&it.sub==='reduit')||cat==='red')h+='<label class="f">NPS réduit<select data-q="nps2">'+npsOpts(it.nps2,it.nps)+'</select></label>';
-    if(cat==='bride'||cat==='vanne')h+='<label class="f">Classe<select data-q="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===it.cls?' selected':'')+'># '+k+'</option>';}).join('')+'</select></label>';
+    if(cat==='bride'||cat==='vanne'||cat==='boulon')h+='<label class="f">Classe<select data-q="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===it.cls?' selected':'')+'># '+k+'</option>';}).join('')+'</select></label>';
+    else if(cat==='forge')h+='<label class="f">Classe forgée<select data-q="rt">'+forgeRatings(it.sub).map(function(k){return '<option value="'+k+'"'+(k===it.rt?' selected':'')+'>'+k+'#</option>';}).join('')+'</select></label>';
     else h+='<label class="f">Schedule<select data-q="sch">'+schOpts(it.nps,it.sch)+'</select></label>';
   }
-  if(cat==='tube')h+='<label class="f">Longueur (m)<input data-q="len" inputmode="decimal" value="'+esc(it.len)+'"></label>';
+  if(cat==='tube')h+='<label class="f">Longueur mesurée (m)<input data-q="len" inputmode="decimal" value="'+esc(it.len)+'"></label>'+endFields(it,'data-q');
   h+='<label class="f">Quantité<input data-q="qty" inputmode="numeric" value="'+esc(it.qty)+'"></label>';
   if(cat!=='libre')h+='<label class="f">Poids imposé ('+(cat==='tube'?'kg/m':'kg')+')<input data-q="over" inputmode="decimal" placeholder="auto" value="'+esc(it.over)+'"></label>';
+  h+='<label class="f">Surface imposée ('+(cat==='tube'?'m²/m':'m²')+')<input data-q="overS" inputmode="decimal" placeholder="auto" value="'+esc(it.overS)+'"></label>';
   h+='</div>';
+  h+='<div class="note" data-enc'+(encText(it)?'':' hidden')+'>'+esc(encText(it))+'</div>';
   h+='<div class="warn" data-warn'+(c.warn?'':' hidden')+'>'+esc(c.warn)+'</div>';
-  h+='<div class="lf"><span>Poids unit. : <b class="u">'+fmt(c.unit)+' '+c.uLabel+'</b></span><span>Total : <b class="t">'+fmt(c.metal)+' kg</b></span></div>';
+  h+='<div class="lf"><span>Poids unit. : <b class="u">'+fmt(c.unit)+' '+c.uLabel+'</b></span><span>Total : <b class="t">'+fmt(c.metal)+' kg</b></span><span>Peinture : <b class="s">'+fmt(c.surf)+' m²</b></span></div>';
   h+='<div class="actions" style="justify-content:flex-end"><button class="btn sm" data-act="dup">Dupliquer</button><button class="btn sm danger" data-act="del">Supprimer</button></div></article>';
   return h;
 }
@@ -510,7 +660,9 @@ function refreshLine(el,it){
   el.querySelector('.name').textContent=descr(it);
   el.querySelector('.u').textContent=fmt(c.unit)+' '+c.uLabel;
   el.querySelector('.t').textContent=fmt(c.metal)+' kg';
+  el.querySelector('.s').textContent=fmt(c.surf)+' m²';
   var w=el.querySelector('[data-warn]');w.textContent=c.warn;w.hidden=!c.warn;
+  var en=el.querySelector('[data-enc]');if(en){var tx=encText(it);en.textContent=tx;en.hidden=!tx;}
 }
 function updTotals(){var el=$('tot');if(el)el.innerHTML=totalsHTML(sumItems(S.items));}
 function renderListe(){
@@ -539,9 +691,9 @@ function renderSpool(){
     var tot=g.total||1;
     h+='<section class="spool"><header><h3>'+esc(g.iso)+' <span class="spn">Spool '+esc(g.sp)+'</span></h3><span class="num">'+fmt(g.total)+' kg</span></header><div class="inner">'+
      '<div class="bar" aria-hidden="true"><i class="b1" style="width:'+(g.tube/tot*100).toFixed(1)+'%"></i><i class="b2" style="width:'+(g.acc/tot*100).toFixed(1)+'%"></i><i class="b3" style="width:'+(g.brd/tot*100).toFixed(1)+'%"></i></div>'+
-     '<dl class="kv"><dt>Tubes ('+fmt(g.len)+' m)</dt><dd>'+fmt(g.tube)+' kg</dd><dt>Accessoires</dt><dd>'+fmt(g.acc)+' kg</dd><dt>Brides</dt><dd>'+fmt(g.brd)+' kg</dd></dl>'+
-     '<details><summary>'+g.items.length+' ligne'+(g.items.length>1?'s':'')+'</summary><div class="tbl-wrap"><table><thead><tr><th>Désignation</th><th>Qté</th><th>kg</th></tr></thead><tbody>'+
-     g.items.map(function(it){var c=calc(it);return '<tr><td>'+esc(descr(it))+(it.cat==='tube'?' · '+fmt(num(it.len))+' m':'')+'</td><td class="n">'+fmt(num(it.qty),0)+'</td><td class="n">'+fmt(c.metal)+'</td></tr>';}).join('')+
+     '<dl class="kv"><dt>Tubes ('+fmt(g.len)+' m)</dt><dd>'+fmt(g.tube)+' kg</dd><dt>Accessoires</dt><dd>'+fmt(g.acc)+' kg</dd><dt>Brides</dt><dd>'+fmt(g.brd)+' kg</dd><dt>Surface de peinture</dt><dd>'+fmt(g.stotal)+' m²</dd></dl>'+
+     '<details><summary>'+g.items.length+' ligne'+(g.items.length>1?'s':'')+'</summary><div class="tbl-wrap"><table><thead><tr><th>Désignation</th><th>Qté</th><th>kg</th><th>m²</th></tr></thead><tbody>'+
+     g.items.map(function(it){var c=calc(it);return '<tr><td>'+esc(descr(it))+(it.cat==='tube'?' · '+fmt(c.net)+' m net':'')+'</td><td class="n">'+fmt(num(it.qty),0)+'</td><td class="n">'+fmt(c.metal)+'</td><td class="n">'+fmt(c.surf)+'</td></tr>';}).join('')+
      '</tbody></table></div></details></div></section>';
   });
   h+='</div>';
@@ -558,17 +710,19 @@ function toast(m){var t=$('toast');t.textContent=m;t.className='on';clearTimeout
 function csvCell(v){var s=String(v==null?'':v);return /[;"\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
 function csvNum(n,d){return (isFinite(n)?n:0).toFixed(d===undefined?2:d).replace('.',',');}
 function csvLines(){
-  var r=[['ISO','Spool','Désignation','Classe','NPS','Schedule','Longueur (m)','Quantité','Poids unitaire','Unité','Poids total (kg)','Catégorie (code)','Type (code)','NPS réduit','Poids imposé','Désignation libre','Poids libre (kg)']];
-  S.items.forEach(function(it){var c=calc(it);var sc=(it.cat==='bride'||it.cat==='vanne'||it.cat==='libre')?'':it.sch;
-    r.push([it.iso,it.spool,descr(it),(it.cat==='bride'||it.cat==='vanne')?it.cls:'',it.cat==='libre'?'':NPS[it.nps].l,sc,it.cat==='tube'?csvNum(num(it.len)):'',csvNum(num(it.qty),0),csvNum(c.unit),c.uLabel,csvNum(c.metal),
-      it.cat,it.sub||'',((it.cat==='te'&&it.sub==='reduit')||it.cat==='red')?NPS[it.nps2].l:'',num(it.over)>0?csvNum(num(it.over),3):'',it.cat==='libre'?it.name:'',it.cat==='libre'?csvNum(num(it.w),3):'']);});
-  var T=sumItems(S.items);r.push(['TOTAL','','','','','','','','','',csvNum(T.total),'','','','','','']);
+  var r=[['ISO','Spool','Désignation','Classe','NPS','Schedule','Longueur mesurée (m)','Longueur nette (m)','Quantité','Poids unitaire','Unité','Poids total (kg)','Surface peinture (m²)','Catégorie (code)','Type (code)','NPS réduit','Poids imposé','Désignation libre','Poids libre (kg)','Ext. 1 (code)','Ext. 1 type (code)','Ext. 2 (code)','Ext. 2 type (code)','Encombrement imposé (mm)','Surface imposée (m²)','Classe forgée (code)']];
+  S.items.forEach(function(it){var c=calc(it);var sc=(it.cat==='bride'||it.cat==='vanne'||it.cat==='libre'||it.cat==='forge'||it.cat==='boulon')?'':it.sch;
+    var tb=it.cat==='tube',hasB=tb&&(it.e1==='bride'||it.e2==='bride');
+    r.push([it.iso,it.spool,descr(it),(it.cat==='bride'||it.cat==='vanne'||it.cat==='boulon'||hasB)?it.cls:'',it.cat==='libre'?'':NPS[it.nps].l,sc,tb?csvNum(num(it.len)):'',tb?csvNum(c.net,3):'',csvNum(num(it.qty),0),csvNum(c.unit),c.uLabel,csvNum(c.metal),csvNum(c.surf),
+      it.cat,it.sub||'',((it.cat==='te'&&it.sub==='reduit')||it.cat==='red')?NPS[it.nps2].l:'',num(it.over)>0?csvNum(num(it.over),3):'',it.cat==='libre'?it.name:'',it.cat==='libre'?csvNum(num(it.w),3):'',
+      tb?it.e1:'',tb&&it.e1==='coude'?it.e1s:'',tb?it.e2:'',tb&&it.e2==='coude'?it.e2s:'',tb&&num(it.encO)>0?csvNum(num(it.encO),1):'',num(it.overS)>0?csvNum(num(it.overS),4):'',it.cat==='forge'?it.rt:'']);});
+  var T=sumItems(S.items);r.push(['TOTAL','','','','','','','','','','',csvNum(T.total),csvNum(T.stotal),'','','','','','','','','','','','','']);
   return r;
 }
 function csvSpools(){
-  var r=[['ISO','Spool','Lignes','Tubes (m)','Tubes (kg)','Accessoires (kg)','Brides (kg)','Total (kg)']];
-  groupSpools().forEach(function(g){r.push([g.iso,g.sp,g.items.length,csvNum(g.len),csvNum(g.tube),csvNum(g.acc),csvNum(g.brd),csvNum(g.total)]);});
-  var T=sumItems(S.items);r.push(['TOTAL','',S.items.length,csvNum(T.len),csvNum(T.tube),csvNum(T.acc),csvNum(T.brd),csvNum(T.total)]);
+  var r=[['ISO','Spool','Lignes','Tubes (m)','Tubes (kg)','Accessoires (kg)','Brides (kg)','Total (kg)','Surface peinture (m²)']];
+  groupSpools().forEach(function(g){r.push([g.iso,g.sp,g.items.length,csvNum(g.len),csvNum(g.tube),csvNum(g.acc),csvNum(g.brd),csvNum(g.total),csvNum(g.stotal)]);});
+  var T=sumItems(S.items);r.push(['TOTAL','',S.items.length,csvNum(T.len),csvNum(T.tube),csvNum(T.acc),csvNum(T.brd),csvNum(T.total),csvNum(T.stotal)]);
   return r;
 }
 function p2(n){return (n<10?'0':'')+n;}
@@ -630,7 +784,7 @@ function npsIndex(v){
   var n=num(s);for(i=0;i<NPS.length;i++)if(Math.abs(NPS[i].v-n)<1e-6)return i;
   return -1;
 }
-var CATLAB={tube:'tube',coude:'coude',te:'te',reduction:'red',red:'red',fond:'fond',bride:'bride',vanne:'vanne','piece libre':'libre',libre:'libre'};
+var CATLAB={forge:'forge','forge b16.11':'forge','raccord forge':'forge',boulon:'boulon',boulonnerie:'boulon',tube:'tube',coude:'coude',te:'te',reduction:'red',red:'red',fond:'fond',bride:'bride',vanne:'vanne','piece libre':'libre',libre:'libre'};
 function cleanItem(o,warn,ln){
   var cat=CATLAB[norm(o.cat)];
   if(!cat){warn.push('Ligne '+ln+' ignorée : catégorie inconnue.');return null;}
@@ -647,6 +801,13 @@ function cleanItem(o,warn,ln){
   var cl=parseInt(String(o.cls).replace(/\D/g,''),10);it.cls=CLASSES.indexOf(cl)>=0?cl:150;
   it.len=String(o.len==null?'':o.len);it.qty=o.qty===''||o.qty==null?1:num(o.qty);
   it.iso=String(o.iso||'');it.spool=String(o.spool||'');
+  ['e1','e2'].forEach(function(k){
+    var v=norm(o[k]);it[k]=ENDS.some(function(x){return x[0]===v;})?v:'none';
+    var sv=String(o[k+'s']||'');it[k+'s']=ELBEND.some(function(x){return x[0]===sv;})?sv:'90lr';
+  });
+  it.encO=num(o.encO)>0?String(o.encO):'';
+  var rtv=parseInt(String(o.rt).replace(/\D/g,''),10);it.rt=[2000,3000,6000].indexOf(rtv)>=0?rtv:3000;
+  it.overS=num(o.overS)>0?String(o.overS):'';
   it.over=num(o.over)>0?String(o.over):'';it.name=String(o.name||'');it.w=String(o.w==null?'':o.w);
   fixItem(it);
   if(cat==='tube'&&!(num(it.len)>0))warn.push('Ligne '+ln+' : longueur de tube manquante.');
@@ -671,12 +832,15 @@ function importText(name,text){
       sub:col(function(x){return x.indexOf('type')===0;}),nps:col(function(x){return x==='nps';}),nps2:col(function(x){return x.indexOf('nps reduit')===0;}),
       sch:col(function(x){return x==='schedule';}),cls:col(function(x){return x==='classe';}),len:col(function(x){return x.indexOf('longueur')===0;}),
       qty:col(function(x){return x.indexOf('quantite')===0;}),over:col(function(x){return x.indexOf('poids impose')===0;}),
-      name:col(function(x){return x.indexOf('designation libre')===0;}),w:col(function(x){return x.indexOf('poids libre')===0;})};
+      name:col(function(x){return x.indexOf('designation libre')===0;}),w:col(function(x){return x.indexOf('poids libre')===0;}),
+      e1:col(function(x){return x==='ext. 1 (code)';}),e1s:col(function(x){return x==='ext. 1 type (code)';}),
+      e2:col(function(x){return x==='ext. 2 (code)';}),e2s:col(function(x){return x==='ext. 2 type (code)';}),
+      encO:col(function(x){return x.indexOf('encombrement impose')===0;}),overS:col(function(x){return x.indexOf('surface imposee')===0;}),rt:col(function(x){return x.indexOf('classe forgee')===0;})};
     if(ci.cat<0)return {error:'Format non reconnu. Importez un CSV exporté par cette application (colonne « Catégorie (code) » requise).'};
     for(var r=1;r<rows.length;r++){
       var row=rows[r];if(norm(row[0])==='total'&&!String(row[ci.cat]||'').trim())continue;
       function g(k){return ci[k]>=0?(row[ci[k]]||''):'';}
-      var it=cleanItem({iso:g('iso'),spool:g('spool'),cat:g('cat'),sub:g('sub'),nps:g('nps'),nps2:g('nps2'),sch:g('sch'),cls:g('cls'),len:g('len'),qty:g('qty'),over:g('over'),name:g('name'),w:g('w')},warn,r+1);
+      var it=cleanItem({iso:g('iso'),spool:g('spool'),cat:g('cat'),sub:g('sub'),nps:g('nps'),nps2:g('nps2'),sch:g('sch'),cls:g('cls'),len:g('len'),qty:g('qty'),over:g('over'),name:g('name'),w:g('w'),e1:g('e1'),e1s:g('e1s'),e2:g('e2'),e2s:g('e2s'),encO:g('encO'),overS:g('overS'),rt:g('rt')},warn,r+1);
       if(it)items.push(it);
     }
   }
@@ -709,6 +873,8 @@ function ioHTML(){
 function clean(d){var o={};Object.keys(d).forEach(function(k){o[k]=d[k];});return o;}
 function fixItem(d){
   if(!avail(d.nps,d.sch))d.sch='STD';
+  if(!d.e1)d.e1='none';if(!d.e2)d.e2='none';if(!d.e1s)d.e1s='90lr';if(!d.e2s)d.e2s='90lr';if(d.encO==null)d.encO='';if(d.overS==null)d.overS='';if(d.rt==null)d.rt=3000;
+  if(d.cat==='forge'){if(d.nps>8)d.nps=8;if(forgeRatings(d.sub).indexOf(d.rt)<0)d.rt=3000;}
   if(d.nps2>=d.nps)d.nps2=Math.max(0,d.nps-1);
   if(DEFSUB[d.cat]&&!d.sub)d.sub=DEFSUB[d.cat];
 }
@@ -789,9 +955,9 @@ document.addEventListener('keydown',function(e){
 function onField(e,commit){
   var t=e.target,f=t.dataset.f;if(!f)return false;
   var v=t.value;
-  if(f==='nps'||f==='nps2'||f==='cls')v=parseInt(v,10);
+  if(f==='nps'||f==='nps2'||f==='cls'||f==='rt')v=parseInt(v,10);
   D[f]=v;
-  if(f==='nps'||f==='nps2'||f==='sub'){fixDraft();}
+  if(f==='nps'||f==='nps2'||f==='sub'||f==='cat'){fixDraft();}
   if(commit){renderFiche();}else{updResult();}
   return true;
 }
@@ -802,7 +968,7 @@ document.addEventListener('change',function(e){
     var line=t.closest('[data-id]');var it=S.items.filter(function(x){return x.id===line.dataset.id;})[0];
     if(it){
       var q=t.dataset.q,v=t.value;
-      if(q==='nps'||q==='nps2'||q==='cls')v=parseInt(v,10);
+      if(q==='nps'||q==='nps2'||q==='cls'||q==='rt')v=parseInt(v,10);
       it[q]=v;
       if(q==='cat'){it.sub=DEFSUB[v]||'';}
       fixItem(it);save();
@@ -852,5 +1018,6 @@ MATS.push(['perso','Personnalisé',S.mat]);FLUIDS.push(['perso','Personnalisé',
 render();
 })();
 </script>
+<script>if('serviceWorker' in navigator&&location.protocol.indexOf('http')===0){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 </body>
 </html>
