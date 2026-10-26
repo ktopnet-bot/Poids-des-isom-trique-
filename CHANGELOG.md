@@ -2,6 +2,21 @@
 
 Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
 
+## 1.7.0 - 2026-10-26
+
+- Fiche de calcul : bloc « Encombrement et schéma » pour chaque catégorie, avec un schéma côté et les dimensions : coudes (R, A, O), tés (C, M), réductions (H), fonds (E), brides (Ø, longueur Y, épaisseur, boulons), vannes (face à face L), raccords forgés B16.11 (A, J, L), boulonnerie et piquages.
+- Tube : schéma de la longueur mesurée, des encombrements d'extrémité et du tube net.
+- Les dimensions sont indicatives ; la hauteur de vanne et la hauteur de piquage dépendent du fabricant et ne sont pas incluses.
+
+## 1.6.0 - 2026-10-26
+
+- Gestion de plusieurs projets : chaque projet garde ses lignes et ses paramètres (créer, renommer, dupliquer, supprimer, ouvrir).
+- Les données de la version 1.5 sont reprises automatiquement dans « Projet 1 ».
+- Corbeille : les 5 derniers projets supprimés peuvent être restaurés.
+- Sauvegarde d'un projet ou de tous les projets (.json) ; import d'un fichier comme nouveau projet.
+- Le nom du projet figure dans les noms de fichiers exportés.
+- Demande de stockage persistant au navigateur.
+
 ## 1.5.0 - 2026-10-26
 
 - Export « Récap Excel (.xlsx) » : feuilles Récap (ISO, spool, poids, surface de peinture), Par ISO et Détail, avec totaux en formules.

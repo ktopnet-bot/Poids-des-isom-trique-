@@ -185,6 +185,29 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 .imp ul{margin:6px 0 0;padding-left:18px;font-size:13px;color:var(--warn)}
 .totals .sf{font-family:var(--f-mono);font-size:12px;color:var(--muted);margin-top:3px;overflow-wrap:anywhere}
 .totals .tot .sf{color:var(--bg);opacity:.8}
+.projbar{display:flex;gap:8px;align-items:center;margin-top:10px}
+.projbar select{flex:1;min-width:0;font-size:16px;font-weight:600;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:8px 10px;min-height:42px;color:var(--ink)}
+.projpanel{margin-top:8px;border:1px solid var(--line);border-radius:6px;background:var(--panel);padding:12px;display:grid;gap:10px;min-width:0}
+.projpanel .newrow{display:flex;gap:8px;flex-wrap:wrap}
+.projpanel .newrow input{flex:1;min-width:140px;font-size:15px;background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:8px 10px;min-height:42px;color:var(--ink)}
+.pcard{border:1px solid var(--line);border-left:5px solid var(--line);border-radius:5px;background:var(--panel2);padding:10px 12px;display:grid;gap:6px;min-width:0}
+.pcard.cur{border-left-color:var(--tube);background:var(--tube-bg)}
+.pcard .pname{font-weight:600;display:flex;gap:8px;align-items:center;flex-wrap:wrap;overflow-wrap:anywhere}
+.pcard .psub{font-family:var(--f-mono);font-size:12px;color:var(--muted)}
+.pcard .psub.bad{color:var(--warn)}
+.pcard .rn{display:flex;gap:6px;flex-wrap:wrap}
+.pcard .rn input{flex:1;min-width:120px;font-size:15px;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:6px 10px;min-height:38px;color:var(--ink)}
+.projpanel .safe{font-size:12.5px;color:var(--muted);margin:0}
+.dm{width:100%;height:auto;display:block;background:var(--panel);border:1px solid var(--line);border-radius:5px}
+.dm text{font-family:var(--f-mono);font-size:9px;fill:var(--ink)}
+.dm path{stroke:var(--muted);stroke-width:.8;fill:none}
+.dm .pb2{fill:var(--tube-bg);stroke:var(--tube);stroke-width:1.5}
+.dm .fl2{fill:var(--flg-bg);stroke:var(--flg);stroke-width:1.5}
+.dm .fi2{fill:var(--fit-bg);stroke:var(--fit);stroke-width:1.2}
+.dm .pa{stroke:var(--tube);stroke-width:16;fill:none}
+.dm .pb{stroke:var(--tube-bg);stroke-width:13;fill:none}
+.dm .ax{stroke:var(--muted);stroke-dasharray:5 3 1 3;stroke-width:.7}
+.dm .ex{stroke-dasharray:2 2;stroke-width:.6}
 .foot{margin-top:22px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);
   padding:10px 16px;border-radius:5px;font-size:14px;z-index:20;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -197,15 +220,16 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 <div class="wrap">
   <header class="title-block">
     <h1>Calcul poids tuyauterie</h1>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.5.0 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.7.0 · Kamel Nasralli</div>
   </header>
+  <div id="projbar"></div>
   <nav class="tabs" role="tablist" id="tabs"></nav>
 
   <details class="settings" id="settings"></details>
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.5.0 · Format de fichier 5 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.7.0 · Format de fichier 6 · Licence MIT</p>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" hidden>
@@ -425,26 +449,131 @@ function endFields(o,a){
 }
 
 /* ---------- État ---------- */
-var KEY='cpt.poids.v2';
-var APP_VERSION='1.5.0',FILE_VERSION=5,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var KEY='cpt.poids.v2'; /* ancien stockage à un seul projet, lu une fois pour la migration */
+var APP_VERSION='1.7.0',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
 function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',rt:3000};}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
-function load(){
-  try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);if(o&&o.items){Object.keys(o).forEach(function(k){if(k in S&&k!=='tab'&&k!=='edit')S[k]=o[k];});S.items.forEach(fixItem);return;}}}catch(e){}
-  S.items=[
+/* ---------- Projets : chaque projet garde ses lignes et ses paramètres dans le navigateur ---------- */
+var KEY3='cpt.poids.v3';
+var PR={cur:null,list:[],trash:[]};
+function defData(){return {mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:false,open:true};}
+function exampleItems(){return [
     {id:uid(),cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:3,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'coude',sub:'90lr',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'bride',sub:'WN',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'tube',sub:'',nps:10,sch:'40',nps2:5,cls:150,len:'12',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'te',sub:'egal',nps:10,sch:'40',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'vanne',sub:'gate',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''}
-  ];
-  S.items.forEach(fixItem);
-  S.seed=true;
+  ];}
+function snap(){return {mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,items:S.items,seed:S.seed,open:S.open};}
+function applyData(d){var k,df=defData();for(k in df)S[k]=(d&&d[k]!=null)?d[k]:df[k];if(!Array.isArray(S.items))S.items=[];S.items.forEach(fixItem);}
+function curProj(){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===PR.cur)return PR.list[i];return null;}
+function findProj(id){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===id)return PR.list[i];return null;}
+function persist(){
+  try{localStorage.setItem(KEY3,JSON.stringify({v:3,cur:PR.cur,list:PR.list,trash:PR.trash}));return true;}
+  catch(e){if(!persist.warned){persist.warned=true;toast('Enregistrement impossible : espace du navigateur plein ou bloqué.');}return false;}
 }
-function save(){try{localStorage.setItem(KEY,JSON.stringify({mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,items:S.items,seed:S.seed,open:S.open}));}catch(e){}}
+function save(){var p=curProj();if(p){p.data=snap();p.updated=new Date().toISOString();}persist();}
+function uniqName(n,except){
+  n=String(n||'').trim().slice(0,40)||('Projet '+(PR.list.length+1));var b=n,i=2;
+  while(PR.list.some(function(p){return p.id!==except&&p.name.toLowerCase()===n.toLowerCase();}))n=b+' ('+(i++)+')';
+  return n;
+}
+function mkProj(name,data){var now=new Date().toISOString();return {id:uid(),name:uniqName(name),created:now,updated:now,backup:null,data:data||defData()};}
+function applyProject(id){var p=findProj(id)||PR.list[0];PR.cur=p.id;applyData(p.data);S.edit=null;S.imp=null;S.renId=null;D=blank();}
+function load(){
+  var ok=false;
+  try{var r=localStorage.getItem(KEY3);if(r){var o=JSON.parse(r);if(o&&Array.isArray(o.list)&&o.list.length){PR.list=o.list;PR.cur=o.cur;PR.trash=Array.isArray(o.trash)?o.trash:[];ok=true;}}}catch(e){}
+  if(!ok){
+    var old=null;try{var r2=localStorage.getItem('cpt.poids.v2');if(r2){var o2=JSON.parse(r2);if(o2&&Array.isArray(o2.items))old=o2;}}catch(e){}
+    var d=defData();
+    if(old){Object.keys(d).forEach(function(k){if(old[k]!=null)d[k]=old[k];});}
+    else{d.items=exampleItems();d.seed=true;}
+    var now=new Date().toISOString();
+    PR.list=[{id:uid(),name:'Projet 1',created:now,updated:now,backup:null,data:d}];PR.cur=PR.list[0].id;PR.trash=[];
+  }
+  PR.list.forEach(function(p){if(!p.data)p.data=defData();if(!Array.isArray(p.data.items))p.data.items=[];p.data.items.forEach(fixItem);});
+  applyProject(PR.cur);persist();
+  try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
+}
+function newProject(name){save();var p=mkProj(name);PR.list.push(p);applyProject(p.id);S.tab='liste';S.projOpen=false;persist();render();window.scrollTo(0,0);toast('Projet créé : '+p.name);}
+function switchProject(id){if(id===PR.cur)return;save();applyProject(id);persist();render();toast('Projet ouvert : '+curProj().name);}
+function renameProject(id,name){var p=findProj(id),n=String(name||'').trim().slice(0,40);S.renId=null;if(p&&n){p.name=uniqName(n,id);p.updated=new Date().toISOString();persist();}render();}
+function dupProject(id){
+  save();var src=findProj(id);if(!src)return;
+  var cp=JSON.parse(JSON.stringify(src.data));cp.seed=false;cp.items.forEach(function(it){it.id=uid();});
+  var p=mkProj(src.name+' (copie)',cp);PR.list.push(p);persist();render();toast('Projet dupliqué : '+p.name);
+}
+function deleteProject(id){
+  save();var p=findProj(id);if(!p)return;
+  PR.trash.unshift({deletedAt:new Date().toISOString(),proj:p});PR.trash=PR.trash.slice(0,5);
+  PR.list=PR.list.filter(function(x){return x.id!==id;});
+  if(!PR.list.length)PR.list.push(mkProj('Projet 1'));
+  S.delArm=null;if(id===PR.cur)applyProject(PR.list[0].id);
+  persist();render();toast('Projet supprimé. Vous pouvez le restaurer ci-dessous.');
+}
+function restoreProject(id){
+  var k=-1;PR.trash.forEach(function(t,i){if(t.proj.id===id)k=i;});if(k<0)return;
+  var p=PR.trash.splice(k,1)[0].proj;p.name=uniqName(p.name);PR.list.push(p);persist();render();toast('Projet restauré : '+p.name);
+}
+function dataFrom(st,items){
+  var d=defData();d.items=items;
+  if(st){
+    if(MATS.some(function(m){return m[0]===st.matK;}))d.matK=st.matK;if(num(st.mat)>0)d.mat=num(st.mat);
+    if(FLUIDS.some(function(m){return m[0]===st.fluK;}))d.fluK=st.fluK;if(st.rho!=null&&num(st.rho)>=0)d.rho=num(st.rho);
+    d.insOn=!!st.insOn;if(st.insT!=null)d.insT=num(st.insT);if(st.insRho!=null)d.insRho=num(st.insRho);
+  }
+  return d;
+}
+function projectObj(p){
+  var d=p.id===PR.cur?snap():p.data;
+  return {name:p.name,settings:{matK:d.matK,mat:d.mat,fluK:d.fluK,rho:d.rho,insOn:d.insOn,insT:d.insT,insRho:d.insRho},
+    items:d.items.map(function(it){var c=clean(it);delete c.id;return c;})};
+}
+function exportProject(p){
+  if(!p)return;var po=projectObj(p);
+  var o={app:APP_NAME,author:AUTHOR,appVersion:APP_VERSION,fileVersion:FILE_VERSION,exportedAt:new Date().toISOString(),project:{name:p.name},settings:po.settings,items:po.items};
+  exportFile(fileNames(p.name).json,JSON.stringify(o,null,2),'application/json',false,false,function(){p.backup=new Date().toISOString();persist();renderProjBar();});
+}
+function exportAll(){
+  save();
+  var o={app:APP_NAME,author:AUTHOR,appVersion:APP_VERSION,fileVersion:FILE_VERSION,type:'all',exportedAt:new Date().toISOString(),projects:PR.list.map(projectObj)};
+  exportFile(fileNames().all,JSON.stringify(o,null,2),'application/json',false,false,function(){var t=new Date().toISOString();PR.list.forEach(function(p){p.backup=t;});persist();renderProjBar();});
+}
+function fdate(iso){if(!iso)return '';var d=new Date(iso);return p2(d.getDate())+'/'+p2(d.getMonth()+1)+' '+p2(d.getHours())+':'+p2(d.getMinutes());}
+function totalsFor(p){
+  if(p.id===PR.cur)return sumItems(S.items);
+  var sv={mat:S.mat,rho:S.rho,insOn:S.insOn,insT:S.insT,insRho:S.insRho},d=p.data,T;
+  S.mat=d.mat!=null?d.mat:7850;S.rho=d.rho!=null?d.rho:1000;S.insOn=!!d.insOn;S.insT=d.insT!=null?d.insT:50;S.insRho=d.insRho!=null?d.insRho:100;
+  try{T=sumItems(d.items);}finally{S.mat=sv.mat;S.rho=sv.rho;S.insOn=sv.insOn;S.insT=sv.insT;S.insRho=sv.insRho;}
+  return T;
+}
+function renderProjBar(){
+  var el=$('projbar');if(!el)return;
+  var h='<div class="projbar"><label class="lbl" for="pj">Projet</label><select id="pj">'+PR.list.map(function(p){return '<option value="'+esc(p.id)+'"'+(p.id===PR.cur?' selected':'')+'>'+esc(p.name)+'</option>';}).join('')+'</select><button class="btn sm" data-act="pj-toggle" aria-expanded="'+(!!S.projOpen)+'">'+(S.projOpen?'Fermer':'Gérer')+'</button></div>';
+  if(S.projOpen){
+    h+='<div class="projpanel"><div class="newrow"><input id="pjnew" type="text" maxlength="40" placeholder="Nom du nouveau projet" autocomplete="off"><button class="btn primary" data-act="pj-new">Créer le projet</button></div>';
+    PR.list.forEach(function(p){
+      var T=totalsFor(p),n=(p.id===PR.cur?S.items:p.data.items).length,cur=p.id===PR.cur,never=!p.backup&&n>0&&!(p.data.seed&&!cur)&&!(cur&&S.seed);
+      h+='<div class="pcard'+(cur?' cur':'')+'" data-pid="'+esc(p.id)+'">';
+      if(S.renId===p.id)h+='<div class="rn"><input data-pjname type="text" maxlength="40" value="'+esc(p.name)+'" autocomplete="off"><button class="btn sm primary" data-act="pj-rename-ok">OK</button><button class="btn sm" data-act="pj-rename-cancel">Annuler</button></div>';
+      else h+='<div class="pname">'+esc(p.name)+(cur?'<span class="tag tube">ouvert</span>':'')+'</div>';
+      h+='<div class="psub">'+n+' ligne'+(n>1?'s':'')+' · '+fmt(T.total)+' kg · '+fmt(T.stotal)+' m² · modifié '+fdate(p.updated)+'</div>';
+      h+='<div class="psub'+(never?' bad':'')+'">'+(p.backup?'Sauvegarde fichier : '+fdate(p.backup):(n>0?'Jamais sauvegardé en fichier':'Projet vide'))+'</div>';
+      h+='<div class="actions">'+(cur?'':'<button class="btn sm primary" data-act="pj-open">Ouvrir</button>')+'<button class="btn sm" data-act="pj-rename">Renommer</button><button class="btn sm" data-act="pj-dup">Dupliquer</button><button class="btn sm" data-act="pj-export">Sauvegarde .json</button><button class="btn sm danger'+(S.delArm===p.id?' armed':'')+'" data-act="pj-del">'+(S.delArm===p.id?'Confirmer la suppression':'Supprimer')+'</button></div></div>';
+    });
+    h+='<div class="actions"><button class="btn" data-act="pj-exportall">Sauvegarder tous les projets (.json)</button><button class="btn" data-act="pj-import">Importer une sauvegarde</button></div>';
+    h+='<p class="safe">Les projets sont enregistrés dans ce navigateur, sur cet appareil. Vider les données du navigateur ou désinstaller l\'application les efface : exportez une sauvegarde de temps en temps et gardez le fichier dans « Fichiers » ou sur votre ordinateur. Le fichier choisi pour l\'import s\'affiche dans l\'onglet Liste.</p>';
+    if(PR.trash.length){
+      h+='<div class="lbl">Supprimés récemment</div>';
+      PR.trash.forEach(function(t){h+='<div class="pcard" data-pid="'+esc(t.proj.id)+'"><div class="pname">'+esc(t.proj.name)+'</div><div class="psub">'+t.proj.data.items.length+' ligne(s) · supprimé '+fdate(t.deletedAt)+'</div><div class="actions"><button class="btn sm" data-act="pj-restore">Restaurer</button></div></div>';});
+    }
+    h+='</div>';
+  }
+  el.innerHTML=h;
+}
 
 /* ---------- Calcul ---------- */
 function num(s){if(typeof s==='number')return isFinite(s)?s:0;var v=parseFloat(String(s||'').replace(',','.'));return isFinite(v)?v:0;}
@@ -596,6 +725,128 @@ function formHTML(){
 }
 function isoNames(){var s={};S.items.forEach(function(i){if(i.iso)s[i.iso]=1;});return Object.keys(s);}
 
+/* ---------- Encombrement et schémas (fiche de calcul) ---------- */
+function mmf(v){return fmt(v,v>=100?0:1);}
+function hd(x1,x2,y,t){return '<path d="M'+x1+' '+(y-4)+'V'+(y+4)+'M'+x2+' '+(y-4)+'V'+(y+4)+'M'+x1+' '+y+'H'+x2+'"/><text x="'+(x1+x2)/2+'" y="'+(y+11)+'" text-anchor="middle">'+t+'</text>';}
+function vd(x,y1,y2,t,left){return '<path d="M'+(x-4)+' '+y1+'H'+(x+4)+'M'+(x-4)+' '+y2+'H'+(x+4)+'M'+x+' '+y1+'V'+y2+'"/><text x="'+(x+(left?-7:7))+'" y="'+((y1+y2)/2+3)+'" text-anchor="'+(left?'end':'start')+'">'+t+'</text>';}
+function ex(d){return '<path class="ex" d="'+d+'"/>';}
+function tx(x,y,t,a){return '<text x="'+x+'" y="'+y+'" text-anchor="'+(a||'middle')+'">'+t+'</text>';}
+function pipeArc(d){return '<path d="'+d+'" fill="none" class="pa"/><path d="'+d+'" fill="none" class="pb"/>';}
+function svgBox(inner,h,lab){return '<svg class="dm" viewBox="0 0 240 '+h+'" role="img" aria-label="'+esc(lab)+'">'+inner+'</svg>';}
+function dimsOf(it){
+  var ix=it.nps,od=NPS[ix]?NPS[ix].od:0,rows=[],svg='',h=130,note='',c=it.cat;
+  if(c==='coude'){
+    var e=sub(ELB,it.sub),R=e[2]*NPS[ix].v*25.4,ang=e[3];
+    rows.push(['Rayon R',mmf(R)+' mm']);
+    if(ang===90){
+      rows.push(['A, centre à l\'extrémité',mmf(R)+' mm']);
+      svg=pipeArc('M40 90A60 60 0 0 0 100 30')+'<path class="ax" d="M20 90H120M100 10V110"/>'+hd(40,100,108,'A = '+mmf(R))+vd(122,30,90,'A = '+mmf(R))+ex('M40 90V112M100 90V112')+tx(104,86,'I','start');
+    }else if(ang===45){
+      var A=R*Math.tan(Math.PI/8);rows.push(['A, centre à l\'extrémité',mmf(A)+' mm']);
+      svg=pipeArc('M40 90A60 60 0 0 0 82.4 47.6')+'<path class="ax" d="M20 90H120"/>'+hd(40,64.9,108,'A = '+mmf(A))+ex('M40 90V112M64.9 90V112')+tx(150,50,'45°','start');
+    }else{
+      rows.push(['O, entraxe',mmf(2*R)+' mm']);
+      svg=pipeArc('M40 30H100A30 30 0 0 1 100 90H40')+vd(150,30,90,'O = '+mmf(2*R))+ex('M100 30H152M100 90H152');
+    }
+    svg=svgBox(svg,130,'Schéma du coude');
+  }
+  else if(c==='te'){
+    var C=TEE_C[ix],M=it.sub==='reduit'?(C+TEE_C[it.nps2])/2:C,bw=it.sub==='reduit'?6:9;
+    rows.push(['C, axe de branche à l\'extrémité du corps',mmf(C)+' mm']);rows.push(['M, axe du corps à l\'extrémité de branche',mmf(M)+' mm']);
+    svg='<path class="pb2" d="M30 81H'+(120-bw)+'V20H'+(120+bw)+'V81H210V99H30Z"/>'+'<path class="ax" d="M20 90H220M120 10V108"/>'+hd(30,120,112,'C = '+mmf(C))+hd(120,210,112,'C = '+mmf(C))+vd(70,20,90,'M = '+mmf(M),true)+ex('M'+(120-bw)+' 20H62M30 90H62');
+    svg=svgBox(svg,130,'Schéma du té');
+  }
+  else if(c==='red'){
+    var H=RED_H[ix],o2=NPS[it.nps2].od;
+    rows.push(['H, longueur',mmf(H)+' mm']);rows.push(['Ø extérieur gros',fmt(od,1)+' mm']);rows.push(['Ø extérieur petit',fmt(o2,1)+' mm']);
+    var sm=Math.max(10,22*o2/od);
+    svg=(it.sub==='exc'?'<path class="pb2" d="M30 48L210 '+(92-2*sm)+'V92H30Z"/>':'<path class="pb2" d="M30 48L210 '+(70-sm)+'V'+(70+sm)+'L30 92Z"/>')+'<path class="ax" d="M20 70H220"/>'+hd(30,210,108,'H = '+mmf(H))+tx(30,40,'Ø '+fmt(od,1),'start')+tx(210,40,'Ø '+fmt(o2,1),'end');
+    svg=svgBox(svg,125,'Schéma de la réduction');
+  }
+  else if(c==='fond'){
+    var E=CAP_E[ix];rows.push(['E, longueur du fond',mmf(E)+' mm']);rows.push(['Ø extérieur',fmt(od,1)+' mm']);
+    svg='<path class="pb2" d="M40 48H130Q205 48 205 70Q205 92 130 92H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,205,108,'E = '+mmf(E))+tx(40,40,'Ø '+fmt(od,1),'start');
+    svg=svgBox(svg,125,'Schéma du fond');
+  }
+  else if(c==='bride'){
+    var cl=it.cls,D=FLG_OD[cl][ix],Y=FLG_LEN[cl][ix],tf=FLG_TF[cl]?FLG_TF[cl][ix]:null,bs=boltSet(ix,cl);
+    rows.push(['Ø extérieur de bride',mmf(D)+' mm']);rows.push(['Longueur hors tout Y',mmf(Y)+' mm']);if(tf)rows.push(['Épaisseur de bride',fmt(tf,1)+' mm']);
+    rows.push(['Ø extérieur du tube',fmt(od,1)+' mm']);rows.push(['Boulons',bs.n+' × '+fracIn(bs.din)+', goujon '+fmt(bs.L,0)+' mm']);
+    note='Valeurs de bride à collerette (WN). Les autres types ont une longueur hors tout plus courte.';
+    svg='<path class="pb2" d="M30 52H180V88H30Z"/><path class="fl2" d="M70 14H92V126H70Z"/><path class="fl2" d="M92 40L128 52V88L92 100Z"/>'+'<path class="ax" d="M20 70H200"/>'+hd(70,128,138,'Y = '+mmf(Y))+vd(196,14,126,'Ø '+mmf(D),false)+ex('M92 14H198M92 126H198');
+    svg=svgBox(svg,150,'Schéma de la bride');
+  }
+  else if(c==='vanne'){
+    var Lv=VALVE_FF[ix]*(VALVE_FFC[it.cls]||1);
+    rows.push(['L, face à face',mmf(Lv)+' mm']);rows.push(['Ø extérieur de bride',mmf(FLG_OD[it.cls][ix])+' mm']);
+    note='Dimension face à face indicative. La hauteur avec volant dépend du fabricant : utilisez la fiche du fournisseur.';
+    var bf=it.sub==='bfly';
+    svg='<path class="pb2" d="M30 60H60V80H30Z"/><path class="pb2" d="M180 60H210V80H180Z"/><path class="fl2" d="M60 46H70V94H60ZM170 46H180V94H170Z" style="fill:var(--flg-bg)"/>'+
+      '<path class="pb2" d="M70 56H170V84H70Z"/>'+(it.sub==='check'?'':'<path class="pb2" d="M110 26H130V56H110Z"/><path d="M120 12V26M96 12H144" fill="none" stroke="var(--ink)" stroke-width="2"/>')+
+      '<path class="ax" d="M20 70H220"/>'+hd(60,180,112,'L = '+mmf(Lv))+ex('M60 94V114M180 94V114');
+    svg=svgBox(svg,130,'Schéma de la vanne');
+  }
+  else if(c==='forge'){
+    var t=it.sub,rt=it.rt,sw=t.indexOf('sw')===0,r=sw?SWD[rt]:THD[rt];
+    if(!r||(sw&&r.B[ix]==null)||(!sw&&r.A[ix]==null))return '';
+    if(t==='sw90'||t==='sw45'){
+      var Aa=t==='sw90'?r.A90[ix]:r.A45[ix],J=r.J[ix];
+      rows.push(['A, centre au fond du manchon',mmf(Aa)+' mm']);rows.push(['J, profondeur d\'emboîtement',mmf(J)+' mm']);rows.push(['Centre à l\'extrémité (A + J)',mmf(Aa+J)+' mm']);
+      svg=t==='sw90'?pipeArc('M40 90A20 20 0 0 0 60 70')+'<path class="pa" d="M40 90H25M60 70V55"/><path class="pb" d="M40 90H25M60 70V55"/>'+'<path class="ax" d="M20 90H120M80 10V110"/>':'';
+      if(t==='sw90'){svg='<path class="pb2" d="M20 82H62V30H78V98H20Z" transform="translate(0 0)"/><path class="ax" d="M12 90H120M70 20V110"/>'+hd(20,70,108,'A + J = '+mmf(Aa+J))+vd(100,30,90,'A + J = '+mmf(Aa+J))+ex('M20 90V112M70 30H102');}
+      else{svg='<path class="pb2" d="M20 82H85L120 47L108 35L75 66H20Z"/><path class="ax" d="M12 74H140"/>'+hd(20,75,108,'A + J = '+mmf(Aa+J))+ex('M20 74V112M75 74V112');}
+    }else if(t==='swte'){
+      var At=r.A90[ix],Jt=r.J[ix];rows.push(['A, centre au fond du manchon',mmf(At)+' mm']);rows.push(['J, profondeur d\'emboîtement',mmf(Jt)+' mm']);rows.push(['Centre à l\'extrémité (A + J)',mmf(At+Jt)+' mm']);
+      svg='<path class="pb2" d="M30 81H111V20H129V81H210V99H30Z"/><path class="ax" d="M20 90H220M120 10V108"/>'+hd(30,120,112,'A+J = '+mmf(At+Jt))+hd(120,210,112,'A+J = '+mmf(At+Jt));
+    }else if(t==='swcap'){
+      var Bc=r.B&&r.B[ix]!=null?r:SWD[3000];rows.push(['J, profondeur d\'emboîtement',mmf(Bc.J[ix])+' mm']);rows.push(['Ø extérieur',mmf(Bc.B[ix]+2*Bc.C[ix])+' mm']);
+      svg='<path class="pb2" d="M40 48H170Q205 48 205 70Q205 92 170 92H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,120,108,'J = '+mmf(Bc.J[ix]));
+      note='Hauteur hors tout du fond : selon fabricant.';
+    }else if(t==='swhc'||t==='swcpl'){
+      var Lc=t==='swhc'?SW_F[ix]:2*r.J[ix]+SW_E[ix];rows.push(['Longueur hors tout',mmf(Lc)+' mm']);rows.push(['Ø extérieur',mmf(r.B[ix]+2*r.C[ix])+' mm']);
+      svg='<path class="pb2" d="M'+(t==='swhc'?'40':'40')+' 50H200V90H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,200,108,'L = '+mmf(Lc));
+    }else if(t==='thhc'||t==='thcpl'){
+      var Lt=t==='thhc'?TH_A[ix]/2:TH_A[ix];rows.push(['Longueur hors tout',mmf(Lt)+' mm']);rows.push(['Ø extérieur',mmf(TH_D[rt][ix])+' mm']);
+      svg='<path class="pb2" d="M40 50H200V90H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,200,108,'L = '+mmf(Lt));
+    }else if(t==='th90'||t==='th45'||t==='thte'){
+      var Ar=t==='th45'?r.C[ix]:r.A[ix];rows.push(['A, centre à l\'extrémité',mmf(Ar)+' mm']);rows.push(['Ø extérieur',mmf(r.D[ix])+' mm']);
+      if(t==='th90')svg='<path class="pb2" d="M20 82H62V30H78V98H20Z"/><path class="ax" d="M12 90H120M70 20V110"/>'+hd(20,70,108,'A = '+mmf(Ar))+vd(100,30,90,'A = '+mmf(Ar));
+      else if(t==='thte')svg='<path class="pb2" d="M30 81H111V20H129V81H210V99H30Z"/><path class="ax" d="M20 90H220M120 10V108"/>'+hd(30,120,112,'A = '+mmf(Ar))+hd(120,210,112,'A = '+mmf(Ar));
+      else svg='<path class="pb2" d="M20 82H85L120 47L108 35L75 66H20Z"/><path class="ax" d="M12 74H140"/>'+hd(20,75,108,'C = '+mmf(Ar));
+    }
+    svg=svgBox(svg,130,'Schéma du raccord forgé');
+  }
+  else if(c==='olet'){
+    rows.push(['Ø extérieur de la ligne',fmt(od,1)+' mm']);
+    note='La hauteur du piquage (côte sur côte) n\'est pas intégrée : prenez-la dans la fiche du fabricant (MSS SP-97).';
+    svg='<path class="pb2" d="M20 70H220V110H20Z"/><path class="pb2" d="M96 70V40Q96 30 106 30H134Q144 30 144 40V70Z" style="fill:var(--fit-bg);stroke:var(--fit)"/><path class="ax" d="M120 10V120"/>'+tx(120,24,'piquage','middle');
+    svg=svgBox(svg,125,'Schéma du piquage');
+  }
+  else if(c==='boulon'){
+    var b=boltSet(ix,it.cls),tf2=FLG_TF[it.cls]?FLG_TF[it.cls][ix]:null;
+    rows.push(['Nombre de goujons',String(b.n)]);rows.push(['Diamètre',fracIn(b.din)]);rows.push(['Longueur de goujon',fmt(b.L,0)+' mm']);if(tf2)rows.push(['Épaisseur de bride',fmt(tf2,1)+' mm']);rows.push(['Écrous',String(2*b.n)]);
+    svg='<path class="pb2" d="M40 62H200V78H40Z"/><path class="fl2" d="M40 54H56V86H40ZM184 54H200V86H184Z" style="fill:var(--fit-bg);stroke:var(--fit)"/>'+hd(40,200,108,'L = '+fmt(b.L,0));
+    svg=svgBox(svg,125,'Schéma du goujon et des écrous');
+  }
+  else if(c==='tube'){
+    var cc=calc(it),Lm=num(it.len)*1000;if(!(Lm>0))return '';
+    var e1=endDim(it,'e1'),e2=endDim(it,'e2'),en=encTotal(it);
+    rows.push(['Longueur mesurée',mmf(Lm)+' mm']);
+    if(it.e1!=='none')rows.push(['Extrémité 1 : '+sub(ENDS,it.e1)[1].toLowerCase(),'− '+mmf(e1)+' mm']);
+    if(it.e2!=='none')rows.push(['Extrémité 2 : '+sub(ENDS,it.e2)[1].toLowerCase(),'− '+mmf(e2)+' mm']);
+    if(num(it.encO)>0)rows.push(['Encombrement imposé','− '+mmf(num(it.encO))+' mm']);
+    rows.push(['Tube net',mmf(Math.max(0,Lm-en))+' mm']);
+    var wA=en>0&&Lm>0?Math.min(70,Math.max(14,e1/Lm*180)):0,wB=en>0&&Lm>0?Math.min(70,Math.max(14,e2/Lm*180)):0;
+    if(!(e1>0))wA=0;if(!(e2>0))wB=0;
+    svg='<path class="pb2" d="M30 54H210V86H30Z"/>'+(wA?'<path class="fi2" d="M30 54H'+(30+wA)+'V86H30Z"/>':'')+(wB?'<path class="fi2" d="M'+(210-wB)+' 54H210V86H'+(210-wB)+'Z"/>':'')+'<path class="ax" d="M20 70H220"/>'+hd(30,210,28,'L = '+mmf(Lm))+(wA?hd(30,30+wA,108,mmf(e1)):'')+(wB?hd(210-wB,210,108,mmf(e2)):'')+hd(30+wA,210-wB,124,'net = '+mmf(Math.max(0,Lm-en)));
+    svg=svgBox(svg,146,'Schéma du tube et des encombrements d\'extrémité');
+  }
+  else return '';
+  var h='<div class="lbl">Encombrement et schéma</div>'+svg;
+  if(rows.length)h+='<dl class="kv">'+rows.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>';}).join('')+'</dl>';
+  if(note)h+='<p class="note" style="margin:0">'+note+'</p>';
+  return h;
+}
 function sectionSVG(p){
   var r=44,ri=r*p.id/p.od;
   return '<svg viewBox="0 0 100 100" role="img" aria-label="Coupe du tube à l\'échelle"><circle cx="50" cy="50" r="'+r+'" fill="var(--tube)"/><circle cx="50" cy="50" r="'+ri.toFixed(2)+'" fill="var(--panel2)"/><circle cx="50" cy="50" r="'+r+'" fill="none" stroke="var(--ink)" stroke-width="1"/><circle cx="50" cy="50" r="'+ri.toFixed(2)+'" fill="none" stroke="var(--ink)" stroke-width="1"/></svg>';
@@ -613,6 +864,7 @@ function resultHTML(){
      '<dt>Surface unitaire</dt><dd>'+fmt(c.usurf,3)+(d.cat==='tube'?' m²/m':' m²')+(num(d.overS)>0?' (imposée)':'')+'</dd>'+
      '</dl>';
   if(c.warn)h+='<div class="warn">'+esc(c.warn)+'</div>';
+  h+=dimsOf(d);
   var p=c.P;
   if(p){
     h+='<div class="sect-row">'+sectionSVG(p)+'<dl class="kv" style="flex:1;min-width:0"><dt>Ø extérieur</dt><dd>'+fmt(p.od,1)+' mm</dd><dt>Épaisseur</dt><dd>'+fmt(p.t,2)+' mm</dd><dt>Ø intérieur</dt><dd>'+fmt(p.id,1)+' mm</dd></dl></div>';
@@ -746,7 +998,7 @@ function renderSpool(){
   $('view').innerHTML=h;
 }
 function render(){
-  renderTabs();renderSettings();$('settings').hidden=S.tab!=='fiche';
+  renderProjBar();renderTabs();renderSettings();$('settings').hidden=S.tab!=='fiche';
   if(S.tab==='fiche')renderFiche();else if(S.tab==='liste')renderListe();else renderSpool();
 }
 
@@ -773,13 +1025,17 @@ function csvSpools(){
 }
 function p2(n){return (n<10?'0':'')+n;}
 function stamp(){var d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());}
-function fileNames(){var d=stamp();return {csv:'poids-tuyauterie-liste_'+d+'.csv',spool:'poids-tuyauterie-spools_'+d+'.csv',json:'poids-tuyauterie-projet_'+d+'.json',xlsx:'poids-tuyauterie-recap_'+d+'.xlsx'};}
+function slug(n){return String(n||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,30);}
+function fileNames(pn){
+  var d=stamp(),cp=curProj(),sl=slug(pn!=null?pn:(cp?cp.name:'')),q=sl?'_'+sl:'';
+  return {csv:'poids-tuyauterie-liste'+q+'_'+d+'.csv',spool:'poids-tuyauterie-spools'+q+'_'+d+'.csv',json:'poids-tuyauterie-projet'+q+'_'+d+'.json',xlsx:'poids-tuyauterie-recap'+q+'_'+d+'.xlsx',all:'poids-tuyauterie-tous-projets_'+d+'.json'};
+}
 function anchorDownload(name,data,mime){
   var b=new Blob([data],{type:mime}),u=URL.createObjectURL(b),a=document.createElement('a');
   a.href=u;a.download=name;document.body.appendChild(a);a.click();
   setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800);
 }
-function exportFile(name,text,mime,bom,isBin){
+function exportFile(name,text,mime,bom,isBin,ok){
   var data=isBin?text:(bom?'﻿':'')+text;
   var viewer=!!(window.claude&&window.claude.use);
   Promise.resolve(viewer?window.claude.use('downloads'):null).then(function(dl){
@@ -788,6 +1044,7 @@ function exportFile(name,text,mime,bom,isBin){
     throw {code:'unavailable'};
   }).then(function(){
     var d=new Date();S.last={name:name,t:p2(d.getHours())+':'+p2(d.getMinutes())};
+    if(typeof ok==='function')ok();
     toast('Fichier prêt : '+name);if(S.tab==='liste')renderListe();
   }).catch(function(e){
     if(e&&e.code==='declined')return;
@@ -879,12 +1136,7 @@ function buildXlsx(){
 }
 function exportXlsx(){exportFile(fileNames().xlsx,new Blob([buildXlsx()],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',false,true);}
 function exportCSV(rows,name){exportFile(name,rows.map(function(r){return r.map(csvCell).join(';');}).join('\r\n'),'text/csv;charset=utf-8',true);}
-function exportJSON(){
-  var o={app:APP_NAME,author:AUTHOR,appVersion:APP_VERSION,fileVersion:FILE_VERSION,exportedAt:new Date().toISOString(),
-    settings:{matK:S.matK,mat:S.mat,fluK:S.fluK,rho:S.rho,insOn:S.insOn,insT:S.insT,insRho:S.insRho},
-    items:S.items.map(function(it){var c=clean(it);delete c.id;return c;})};
-  exportFile(fileNames().json,JSON.stringify(o,null,2),'application/json',false);
-}
+function exportJSON(){exportProject(curProj());}
 /* ---------- Import ---------- */
 function norm(s){return String(s==null?'':s).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim();}
 function parseCSV(text){
@@ -944,14 +1196,21 @@ function cleanItem(o,warn,ln){
   return it;
 }
 function importText(name,text){
-  var items=[],warn=[],settings=null;
+  var items=[],warn=[],settings=null,pname='';
   var t=text.replace(/^﻿/,'').trim();
   if(/\.json$/i.test(name)||t.charAt(0)==='{'){
     var o;try{o=JSON.parse(t);}catch(e){return {error:'Fichier JSON illisible.'};}
+    if(o&&o.type==='all'&&Array.isArray(o.projects)){
+      var pw=[];if(o.fileVersion>FILE_VERSION)pw.push('Fichier créé par une version plus récente ('+o.appVersion+') : certaines données peuvent être ignorées.');
+      var pl=o.projects.map(function(pr,k){var w=[],its=[];(pr.items||[]).forEach(function(r,i2){var it2=cleanItem(r,w,i2+1);if(it2)its.push(it2);});return {name:String(pr.name||('Projet importé '+(k+1))).slice(0,40),settings:pr.settings||null,items:its,warn:w};});
+      if(!pl.length)return {error:'Aucun projet dans ce fichier.'};
+      return {name:name,projects:pl,warn:pw};
+    }
     if(!o||!Array.isArray(o.items))return {error:'Ce fichier JSON n\'est pas une sauvegarde de cette application.'};
     if(o.fileVersion>FILE_VERSION)warn.push('Fichier créé par une version plus récente ('+o.appVersion+') : certaines données peuvent être ignorées.');
     o.items.forEach(function(r,i){var it=cleanItem(r,warn,i+1);if(it)items.push(it);});
     if(o.settings)settings=o.settings;
+    if(o.project&&o.project.name)pname=String(o.project.name).slice(0,40);
   }else{
     var rows=parseCSV(t);
     if(rows.length<2)return {error:'Fichier vide.'};
@@ -974,7 +1233,7 @@ function importText(name,text){
     }
   }
   if(!items.length)return {error:'Aucune ligne exploitable dans ce fichier.'};
-  return {name:name,items:items,warn:warn,settings:settings};
+  return {name:name,items:items,warn:warn,settings:settings,pname:pname};
 }
 function applySettings(o){
   if(!o)return;
@@ -986,10 +1245,14 @@ function applySettings(o){
 }
 function impHTML(){
   var m=S.imp;if(!m)return '';
+  if(m.projects){
+    return '<div class="imp"><b>'+esc(m.name)+'</b> : '+m.projects.length+' projet'+(m.projects.length>1?'s':'')+' trouvé'+(m.projects.length>1?'s':'')+'.<ul style="color:inherit">'+m.projects.map(function(pr){return '<li>'+esc(pr.name)+' : '+pr.items.length+' ligne(s)</li>';}).join('')+'</ul>'+
+      '<div class="actions" style="margin-top:8px"><button class="btn primary sm" data-act="imp-allproj">Ajouter ces projets</button><button class="btn sm" data-act="imp-cancel">Annuler</button></div></div>';
+  }
   var n=m.items.length;
   return '<div class="imp"><b>'+esc(m.name)+'</b> : '+n+' ligne'+(n>1?'s':'')+' trouvée'+(n>1?'s':'')+'.'+
     (m.warn.length?'<ul>'+m.warn.slice(0,5).map(function(w){return '<li>'+esc(w)+'</li>';}).join('')+(m.warn.length>5?'<li>et '+(m.warn.length-5)+' autre(s) remarque(s)</li>':'')+'</ul>':'')+
-    '<div class="actions" style="margin-top:8px"><button class="btn primary sm" data-act="imp-add">Ajouter à la liste</button><button class="btn sm" data-act="imp-replace">Remplacer la liste</button><button class="btn sm" data-act="imp-cancel">Annuler</button></div></div>';
+    '<div class="actions" style="margin-top:8px"><button class="btn primary sm" data-act="imp-add">Ajouter à la liste</button><button class="btn sm" data-act="imp-replace">Remplacer la liste</button><button class="btn sm" data-act="imp-newproj">Nouveau projet</button><button class="btn sm" data-act="imp-cancel">Annuler</button></div></div>';
 }
 function ioHTML(){
   var f=fileNames();
@@ -1056,6 +1319,33 @@ document.addEventListener('click',function(e){
   if(a==='xlsx'){if(!S.items.length){toast('La liste est vide.');return;}exportXlsx();return;}
   if(a==='csv2'){if(!S.items.length){toast('La liste est vide.');return;}exportCSV(csvSpools(),fileNames().spool);return;}
   if(a==='json'){if(!S.items.length){toast('La liste est vide.');return;}exportJSON();return;}
+  var pc=e.target.closest('[data-pid]'),pid=pc&&pc.dataset.pid;
+  if(a==='pj-toggle'){S.projOpen=!S.projOpen;renderProjBar();return;}
+  if(a==='pj-new'){var pin=$('pjnew');newProject(pin?pin.value:'');return;}
+  if(a==='pj-open'){switchProject(pid);return;}
+  if(a==='pj-rename'){S.renId=pid;renderProjBar();var rn=document.querySelector('[data-pjname]');if(rn){rn.focus();rn.select();}return;}
+  if(a==='pj-rename-ok'){var ri=pc&&pc.querySelector('[data-pjname]');renameProject(pid,ri?ri.value:'');return;}
+  if(a==='pj-rename-cancel'){S.renId=null;renderProjBar();return;}
+  if(a==='pj-dup'){dupProject(pid);return;}
+  if(a==='pj-export'){exportProject(findProj(pid));return;}
+  if(a==='pj-del'){
+    if(S.delArm===pid){deleteProject(pid);}
+    else{S.delArm=pid;renderProjBar();setTimeout(function(){if(S.delArm===pid){S.delArm=null;renderProjBar();}},4000);}
+    return;
+  }
+  if(a==='pj-restore'){restoreProject(pid);return;}
+  if(a==='pj-exportall'){exportAll();return;}
+  if(a==='pj-import'){$('file').click();return;}
+  if(a==='imp-newproj'){
+    var mm=S.imp;if(!mm||!mm.items)return;save();
+    var np=mkProj(mm.pname||String(mm.name).replace(/\.[^.]+$/,''),dataFrom(mm.settings,mm.items));
+    PR.list.push(np);applyProject(np.id);S.imp=null;S.tab='liste';save();render();toast('Nouveau projet : '+np.name);return;
+  }
+  if(a==='imp-allproj'){
+    var ma=S.imp;if(!ma||!ma.projects)return;save();
+    ma.projects.forEach(function(pr){PR.list.push(mkProj(pr.name,dataFrom(pr.settings,pr.items)));});
+    S.imp=null;S.projOpen=true;persist();render();toast(ma.projects.length+' projet(s) ajouté(s)');return;
+  }
   if(a==='import'){$('file').click();return;}
   if(a==='imp-cancel'){S.imp=null;renderListe();return;}
   if(a==='imp-add'||a==='imp-replace'){
@@ -1083,6 +1373,8 @@ document.addEventListener('click',function(e){
   inp.blur();
 });
 document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&e.target&&e.target.dataset&&e.target.dataset.pjname!==undefined){var c0=e.target.closest('[data-pid]');if(c0)renameProject(c0.dataset.pid,e.target.value);return;}
+  if(e.key==='Enter'&&e.target&&e.target.id==='pjnew'){newProject(e.target.value);return;}
   if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('tr.pick')){e.preventDefault();D.sch=e.target.dataset.sch;renderFiche();}
 });
 
@@ -1098,6 +1390,7 @@ function onField(e,commit){
 }
 document.addEventListener('change',function(e){
   var t=e.target;
+  if(t.id==='pj'){switchProject(t.value);return;}
   if(t.dataset&&t.dataset.f){if(t.tagName==='SELECT'){onField(e,true);}else{onField(e,false);}return;}
   if(t.dataset&&t.dataset.q){
     var line=t.closest('[data-id]');var it=S.items.filter(function(x){return x.id===line.dataset.id;})[0];
