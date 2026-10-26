@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" fill="#0a6a78"/>
+  <g transform="translate(-28.9 -42.1) scale(1.1)">
+    <!-- coude 90° à brides -->
+    <path d="M130 360H250A100 100 0 0 0 350 260V150" fill="none" stroke="#ffffff" stroke-width="76"/>
+    <path d="M118 360H250A100 100 0 0 0 350 260V138" fill="none" stroke="#06444d" stroke-width="40"/>
+    <!-- brides -->
+    <rect x="104" y="296" width="30" height="128" rx="4" fill="#ffffff"/>
+    <rect x="286" y="118" width="128" height="30" rx="4" fill="#ffffff"/>
+    <g fill="#0a6a78">
+      <circle cx="119" cy="312" r="5"/><circle cx="119" cy="408" r="5"/>
+      <circle cx="302" cy="133" r="5"/><circle cx="398" cy="133" r="5"/>
+    </g>
+    <!-- axe du tube -->
+    <path d="M140 360H250A100 100 0 0 0 350 260V160" fill="none" stroke="#e3a255" stroke-width="6" stroke-dasharray="26 10 6 10"/>
+  </g>
+</svg>
