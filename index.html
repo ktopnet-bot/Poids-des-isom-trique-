@@ -197,7 +197,7 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 <div class="wrap">
   <header class="title-block">
     <h1>Calcul poids tuyauterie</h1>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.3.2 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.5.0 · Kamel Nasralli</div>
   </header>
   <nav class="tabs" role="tablist" id="tabs"></nav>
 
@@ -205,7 +205,7 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.3.2 · Format de fichier 4 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.5.0 · Format de fichier 5 · Licence MIT</p>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" hidden>
@@ -258,8 +258,8 @@ var VCLASS={150:1,300:1.5,600:2.6,900:4.2,1500:6.5};
 var ELB=[['90lr','Coude 90° GR (R=1,5D)',1.5,90],['45lr','Coude 45° GR (R=1,5D)',1.5,45],['90sr','Coude 90° PR (R=1D)',1,90],['90_3d','Coude 90° 3D',3,90],['180','Retour 180° GR',1.5,180]];
 var MATS=[['cs','Acier carbone',7850],['s304','Inox 304 / 304L',7900],['s316','Inox 316 / 316L',8000],['dup','Duplex 2205',7800],['inc','Inconel 625',8440],['cu','Cuivre',8940],['ti','Titane',4510],['al','Aluminium',2700]];
 var FLUIDS=[['eau','Eau (épreuve)',1000],['mer','Eau de mer',1025],['gaz','Gazole',850],['brut','Pétrole brut',870],['gly','Glycol',1110],['air','Vide / gaz',0]];
-var CATS=[['tube','Tube'],['coude','Coude'],['te','Té'],['red','Réduction'],['fond','Fond'],['bride','Bride'],['vanne','Vanne'],['forge','Forgé B16.11'],['boulon','Boulonnerie'],['libre','Pièce libre']];
-var DEFSUB={coude:'90lr',te:'egal',red:'conc',bride:'WN',vanne:'gate',forge:'sw90'};
+var CATS=[['tube','Tube'],['coude','Coude'],['te','Té'],['red','Réduction'],['fond','Fond'],['bride','Bride'],['vanne','Vanne'],['forge','Forgé B16.11'],['olet','Piquage (olet)'],['boulon','Boulonnerie'],['libre','Pièce libre']];
+var DEFSUB={coude:'90lr',te:'egal',red:'conc',bride:'WN',vanne:'gate',forge:'sw90',olet:'weld'};
 
 /* surface de peinture : diamètres extérieurs de bride (mm, ASME B16.5) et longueurs face à face de vanne (mm, classe 150), valeurs indicatives */
 var FLG_OD={
@@ -273,8 +273,36 @@ var VALVE_FF=[108,117,127,140,165,178,190,203,229,254,267,292,330,356,381,406,43
 var VALVE_KS={gate:3.2,globe:3.0,check:2.2,ball:2.4,bfly:1.6};
 var VALVE_FFC={150:1,300:1.1,600:1.3,900:1.5,1500:1.7};
 /* ASME B16.11 : raccords forgés à souder (SW) et filetés, NPS 1/2 à 4 (dimensions en mm) */
-var FORGE_TYPES=[['sw90','Coude 90° à souder (SW)'],['sw45','Coude 45° à souder (SW)'],['swte','Té à souder (SW)'],['swcap','Fond à souder (SW)'],['th90','Coude 90° fileté'],['th45','Coude 45° fileté'],['thte','Té fileté']];
-function forgeRatings(t){return String(t||'').indexOf('sw')===0?[3000,6000]:[2000,3000,6000];}
+var FORGE_TYPES=[['sw90','Coude 90° à souder (SW)'],['sw45','Coude 45° à souder (SW)'],['swte','Té à souder (SW)'],['swcap','Fond à souder (SW)'],['th90','Coude 90° fileté'],['th45','Coude 45° fileté'],['thte','Té fileté'],['swhc','Demi-manchon à souder (SW)'],['swcpl','Manchon à souder (SW)'],['thhc','Demi-manchon fileté'],['thcpl','Manchon fileté']];
+function forgeRatings(t){t=String(t||'');if(t.indexOf('sw')===0||t==='thhc'||t==='thcpl')return [3000,6000];return [2000,3000,6000];}
+var OLET_TYPES=[['weld','Weldolet (à souder)'],['sock','Sockolet (emboîtement)'],['thr','Threadolet (fileté)']];
+function ratingList(it){return it.cat==='olet'?[3000,6000]:forgeRatings(it.sub);}
+/* Demi-manchons et manchons ASME B16.11 : longueurs hors tout, mm (source : Wermac, tableaux B16.11) */
+var SW_F=[22.5,23.5,29,30,32,41,42.5,44.5,47.5],SW_E=[9.5,9.5,13,13,13,19,19,19,19];
+var TH_A=[48,51,60,67,79,86,92,108,121];
+var TH_D={3000:[28,35,44,57,64,76,92,108,140],6000:[38,44,57,64,76,92,108,127,159]};
+/* Piquages forgés MSS SP-97, côte sur côte (Bonney Forge). Poids en lb, tableaux publiés par ProjectMaterials. NPS 1/2 à 24, sans 3 1/2. */
+var LB=0.45359237;
+var WOL_LB={
+ STD:[0.15,0.25,0.4,0.7,0.8,1.5,2.25,3.75,6.7,8.5,14,28,39,65,70,92,125,175,280],
+ XS:[0.15,0.25,0.4,0.7,0.9,1.6,2.5,4.1,7.5,9.5,15,32,46,61,75,115,130,187,316],
+ XXS:[0.25,0.70,0.80,1.25,1.75,2.15,3.40,6.35,10.5,14.25,30.25]
+};
+(function(){for(var i=0;i<WOL_LB.XS.length;i++)WOL_LB.XS[i]=Math.max(WOL_LB.XS[i],WOL_LB.STD[i]);})(); /* une série XS ne peut pas être plus légère que la STD */
+/* Sockolets : moyenne de deux tableaux publiés (kg et lb), kg */
+var SOCK_KG={3000:[0.10,0.14,0.24,0.34,0.42,0.68,1.14,1.71,3.14,4.76,6.80],6000:[0.23,0.36,0.59,0.73,0.91,2.34]};
+function oletMax(it){return it.sub==='weld'?18:10;}
+function weldSchOpts(it){
+  var o=[['STD','SCH 40 / STD'],['XS','SCH 80 / XS']];if(it.nps<=10)o.push(['XXS','SCH 160 / XXS']);
+  return o.map(function(x){return '<option value="'+x[0]+'"'+(it.sch===x[0]?' selected':'')+'>'+x[1]+'</option>';}).join('');
+}
+function oletCalc(it){
+  var ix=it.nps,t=it.sub,w=null,bad={w:0,s:0,err:'Piquage non disponible dans cette taille ou cette classe.'};
+  if(t==='weld'){var arr=WOL_LB[it.sch==='XS'?'XS':(it.sch==='XXS'?'XXS':'STD')];if(arr[ix]==null)return bad;w=arr[ix]*LB;}
+  else{var a2=SOCK_KG[it.rt];if(!a2||a2[ix]==null)return bad;w=a2[ix];}
+  var V=w/7850,area=4*Math.PI*Math.pow(3*V/(4*Math.PI),2/3);
+  return {w:w,s:0.85*area,err:''};
+}
 var SWD={
  3000:{B:[21.825,27.175,33.925,42.675,48.775,61.225,74.0,89.975,115.625],J:[10,13,13,13,13,16,16,16,19],D:[15.8,20.95,26.65,35.05,40.9,52.6,62.7,78.0,102.25],
   C:[4.375,4.575,5.35,5.675,5.95,6.5,8.2,8.9,10.025],G:[3.75,3.90,4.55,4.85,5.10,5.55,7.00,7.60,8.55],A90:[15.5,19.5,22,27,32,38,41.5,57.5,66.5],A45:[11.5,12.5,14,17,21,25,29,31.5,41.5]},
@@ -337,6 +365,17 @@ var K_TH=0.44/(thVol(THD[3000],0,'th90',3000)*RHO_ST);
 function forgeCalc(it){
   var ix=it.nps,rt=it.rt,t=it.sub,P=Math.PI,sw=String(t).indexOf('sw')===0,w=0,sf=0;
   var bad={w:0,s:0,err:'Raccord non disponible dans cette taille et cette classe (ASME B16.11).'};
+  if(t==='swhc'||t==='swcpl'){
+    var rc=SWD[rt];if(!rc||rc.B[ix]==null||SW_F[ix]==null)return bad;
+    var Bc=rc.B[ix],Cc=rc.C[ix],Dc=rc.D[ix],Jc=rc.J[ix],osc=Bc+2*Cc,Pq=Math.PI/4,r1=Pq*(osc*osc-Bc*Bc),r2=Pq*(osc*osc-Dc*Dc);
+    var Lc=t==='swhc'?SW_F[ix]:2*Jc+SW_E[ix],vc=t==='swhc'?r1*Jc+r2*(Lc-Jc):r1*2*Jc+r2*SW_E[ix];
+    return {w:vc*K_SW*RHO_ST,s:Math.PI*osc*Lc/1e6,err:''};
+  }
+  if(t==='thhc'||t==='thcpl'){
+    var Dd=TH_D[rt];if(!Dd||Dd[ix]==null)return bad;
+    var bo=thBore(ix,rt),rg=Math.PI/4*(Dd[ix]*Dd[ix]-bo*bo),Lt=t==='thhc'?TH_A[ix]/2:TH_A[ix];
+    return {w:rg*Lt*K_TH*RHO_ST,s:Math.PI*Dd[ix]*Lt/1e6,err:''};
+  }
   if(sw){
     var r=SWD[rt];
     if(t==='swcap'){var cw=SWCAP[rt]&&SWCAP[rt][ix];if(cw==null||!SWD[3000])return bad;var rr=r&&r.B[ix]!=null?r:SWD[3000],a0=swArmV(rr,ix);return {w:cw,s:(P*a0.os*(rr.J[ix]+6)+P/4*a0.os*a0.os)/1e6,err:''};}
@@ -387,7 +426,7 @@ function endFields(o,a){
 
 /* ---------- État ---------- */
 var KEY='cpt.poids.v2';
-var APP_VERSION='1.3.2',FILE_VERSION=4,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var APP_VERSION='1.5.0',FILE_VERSION=5,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
 function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',rt:3000};}
@@ -438,6 +477,7 @@ function descr(it){
     case 'bride':return 'Bride '+sub(FTYPES,it.sub)[0]+' cl.'+it.cls+' '+n;
     case 'vanne':return sub(VTYPES,it.sub)[1]+' cl.'+it.cls+' '+n;
     case 'forge':return sub(FORGE_TYPES,it.sub)[1]+' '+n+' '+it.rt+'#';
+    case 'olet':return (it.sub==='weld'?'Weldolet '+n+' '+(it.sch==='XS'?'SCH XS':it.sch==='XXS'?'SCH XXS/160':'SCH STD'):sub(OLET_TYPES,it.sub)[1].split(' (')[0]+' '+n+' '+it.rt+'#');
     case 'boulon':var bs=boltSet(it.nps,it.cls);return 'Boulonnerie '+n+' cl.'+it.cls+' · '+bs.n+' goujons '+fracIn(bs.din)+' × '+fmt(bs.L,0)+' mm';
     default:return it.name||'Pièce libre';
   }
@@ -479,9 +519,10 @@ function calc(it){
     }
     else if(it.cat==='vanne'){uM=VALVE_BASE[ix]*sub(VTYPES,it.sub)[2]*VCLASS[it.cls]*mf;uS=valveSurf(ix,it.cls,it.sub);}
     else if(it.cat==='forge'){var fg=forgeCalc(it);uM=fg.w*mf;uS=fg.s;if(fg.err)o.warn=fg.err;}
+    else if(it.cat==='olet'){var ol=oletCalc(it);uM=ol.w*mf;uS=ol.s;if(ol.err)o.warn=ol.err;}
     else if(it.cat==='boulon'){uM=boltSet(ix,it.cls).w;}
     else {uM=num(it.w);}
-    if(['tube','libre','bride','vanne','forge','boulon'].indexOf(it.cat)<0)o.P=props(ix,it.sch);
+    if(['tube','libre','bride','vanne','forge','olet','boulon'].indexOf(it.cat)<0)o.P=props(ix,it.sch);
   }
   o.auto=uM;
   var ov=num(it.over);
@@ -532,15 +573,17 @@ function formHTML(){
   if(c==='bride')h+='<label class="f full">Type de bride<select data-f="sub">'+opts(FTYPES,d.sub,function(x){return [x[0],x[1]];})+'</select></label>';
   if(c==='vanne')h+='<label class="f full">Type de vanne<select data-f="sub">'+opts(VTYPES,d.sub,function(x){return [x[0],x[1]];})+'</select></label>';
   if(c==='forge')h+='<label class="f full">Type de raccord forgé<select data-f="sub">'+opts(FORGE_TYPES,d.sub)+'</select></label>';
+  if(c==='olet')h+='<label class="f full">Type de piquage<select data-f="sub">'+opts(OLET_TYPES,d.sub)+'</select></label>';
   if(c==='libre'){
     h+='<label class="f full">Désignation<input data-f="name" type="text" placeholder="ex. Filtre en Y, support, joint" value="'+esc(d.name)+'"></label>';
     h+='<label class="f">Poids unitaire (kg)<input data-f="w" inputmode="decimal" value="'+esc(d.w)+'"></label>';
   }else{
-    h+='<label class="f">'+(c==='te'&&d.sub==='reduit'||c==='red'?'NPS principal':'NPS')+'<select data-f="nps">'+npsOpts(d.nps,c==='forge'?9:undefined)+'</select></label>';
+    h+='<label class="f">'+(c==='te'&&d.sub==='reduit'||c==='red'?'NPS principal':'NPS')+'<select data-f="nps">'+npsOpts(d.nps,c==='forge'?9:(c==='olet'?oletMax(d)+1:undefined))+'</select></label>';
     if((c==='te'&&d.sub==='reduit')||c==='red')h+='<label class="f">NPS réduit<select data-f="nps2">'+npsOpts(d.nps2,d.nps)+'</select></label>';
-    if(c==='forge')h+='<label class="f">Classe forgée<select data-f="rt">'+forgeRatings(d.sub).map(function(k){return '<option value="'+k+'"'+(k===d.rt?' selected':'')+'>'+k+'#</option>';}).join('')+'</select></label>';
+    if(c==='olet'&&d.sub==='weld')h+='<label class="f">Schedule<select data-f="sch">'+weldSchOpts(d)+'</select></label>';
+    if(c==='forge'||(c==='olet'&&d.sub!=='weld'))h+='<label class="f">Classe forgée<select data-f="rt">'+ratingList(d).map(function(k){return '<option value="'+k+'"'+(k===d.rt?' selected':'')+'>'+k+'#</option>';}).join('')+'</select></label>';
     if(c==='bride'||c==='vanne'||c==='boulon')h+='<label class="f">Classe<select data-f="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===d.cls?' selected':'')+'>Classe '+k+'</option>';}).join('')+'</select></label>';
-    if(['bride','vanne','forge','boulon'].indexOf(c)<0)h+='<label class="f">Schedule<select data-f="sch">'+schOpts(d.nps,d.sch)+'</select></label>';
+    if(['bride','vanne','forge','olet','boulon'].indexOf(c)<0)h+='<label class="f">Schedule<select data-f="sch">'+schOpts(d.nps,d.sch)+'</select></label>';
   }
   if(c==='tube'){h+='<label class="f">Longueur mesurée (m)<input data-f="len" inputmode="decimal" placeholder="0" value="'+esc(d.len)+'"></label>'+endFields(d,'data-f');}
   h+='<label class="f">Quantité<input data-f="qty" inputmode="numeric" value="'+esc(d.qty)+'"></label>';
@@ -576,6 +619,8 @@ function resultHTML(){
     h+='<dl class="kv"><dt>Section métal</dt><dd>'+fmt(p.asec,2)+' cm²</dd><dt>Volume intérieur</dt><dd>'+fmt(p.ai*1000,2)+' L/m</dd><dt>Surface extérieure</dt><dd>'+fmt(p.surf,3)+' m²/m</dd>'+(p.ins>0?'<dt>Isolation</dt><dd>'+fmt(p.ins,2)+' kg/m</dd>':'')+'</dl>';
   }
   if(d.cat==='forge')h+='<p class="note" style="margin:0">Poids estimé d\'après les dimensions ASME B16.11 et calé sur Pipedata (1/2" cl.3000 : coude SW 0,15 kg, coude fileté 0,44 kg). Précision ±10 %. Les fonds SW viennent d\'un catalogue fabricant.</p>';
+  if(d.cat==='forge'&&['swhc','swcpl','thhc','thcpl'].indexOf(d.sub)>=0)h+='<p class="note" style="margin:0">Demi-manchons et manchons : dimensions ASME B16.11 (Wermac), poids calculé et calé comme les coudes. Précision ±25 %. Un catalogue (Alleima) donne des poids environ 1,9 fois plus élevés pour les mêmes dimensions : pour une valeur exacte, utilisez le poids imposé.</p>';
+  if(d.cat==='olet')h+='<p class="note" style="margin:0">'+(d.sub==='weld'?'Poids Bonney Forge (MSS SP-97), piquage de même taille que la ligne, publiés par ProjectMaterials. Précision ±25 % : un piquage réducteur sur une ligne plus grosse est un peu plus lourd.':(d.sub==='sock'?'Poids moyen de deux catalogues (Bonney Forge, kg et lb), classes 3000 (jusqu\'à 6") et 6000 (jusqu\'à 2" : au-delà, utilisez le poids imposé). Précision ±25 %.':'Threadolet estimé avec le poids du sockolet de même taille (même corps, alésage fileté). Précision ±25 %.'))+' Surface de peinture estimée à partir du poids.</p>';
   if(d.cat==='boulon')h+='<p class="note" style="margin:0">Goujons et 2 écrous par trou. Longueur du goujon = 2 × épaisseur de bride + 2,5 × diamètre, arrondie à 5 mm (calé sur Pipedata : 12" cl.300 = 170 mm, 21,77 kg). La quantité est le nombre de joints (paires de brides). Classes 900 et 1500 : longueurs de table, précision ±15 %.</p>';
   if(d.cat==='bride'||d.cat==='vanne')h+='<p class="note" style="margin:0">Poids indicatif de catalogue (±10 %) et surface de peinture estimée (±20 %). Utilisez le poids ou la surface imposés pour une valeur fabricant.</p>';
   if(d.cat==='coude'||d.cat==='te'||d.cat==='red'||d.cat==='fond')h+='<p class="note" style="margin:0">Raccord soudé à bout, calculé d\'après les longueurs ASME B16.9. Surface de peinture : surface extérieure, fond estimé (±20 %).</p>';
@@ -624,7 +669,7 @@ var SUBOPTS={
   bride:FTYPES.map(function(x){return [x[0],x[1]];}),
   vanne:VTYPES.map(function(x){return [x[0],x[1]];})
 };
-SUBOPTS.forge=FORGE_TYPES;
+SUBOPTS.forge=FORGE_TYPES;SUBOPTS.olet=OLET_TYPES;
 function lineHTML(it){
   var c=calc(it),cat=it.cat,h='';
   var kl=c.kind==='tube'?'Tube':c.kind==='brd'?'Bride':'Accessoire';
@@ -638,10 +683,11 @@ function lineHTML(it){
     h+='<label class="f">Désignation<input data-q="name" type="text" placeholder="ex. Filtre en Y" value="'+esc(it.name)+'"></label>';
     h+='<label class="f">Poids unitaire (kg)<input data-q="w" inputmode="decimal" value="'+esc(it.w)+'"></label>';
   }else{
-    h+='<label class="f">NPS<select data-q="nps">'+npsOpts(it.nps,cat==='forge'?9:undefined)+'</select></label>';
+    h+='<label class="f">NPS<select data-q="nps">'+npsOpts(it.nps,cat==='forge'?9:(cat==='olet'?oletMax(it)+1:undefined))+'</select></label>';
     if((cat==='te'&&it.sub==='reduit')||cat==='red')h+='<label class="f">NPS réduit<select data-q="nps2">'+npsOpts(it.nps2,it.nps)+'</select></label>';
     if(cat==='bride'||cat==='vanne'||cat==='boulon')h+='<label class="f">Classe<select data-q="cls">'+CLASSES.map(function(k){return '<option value="'+k+'"'+(k===it.cls?' selected':'')+'># '+k+'</option>';}).join('')+'</select></label>';
-    else if(cat==='forge')h+='<label class="f">Classe forgée<select data-q="rt">'+forgeRatings(it.sub).map(function(k){return '<option value="'+k+'"'+(k===it.rt?' selected':'')+'>'+k+'#</option>';}).join('')+'</select></label>';
+    else if(cat==='olet'&&it.sub==='weld')h+='<label class="f">Schedule<select data-q="sch">'+weldSchOpts(it)+'</select></label>';
+    else if(cat==='forge'||cat==='olet')h+='<label class="f">Classe forgée<select data-q="rt">'+ratingList(it).map(function(k){return '<option value="'+k+'"'+(k===it.rt?' selected':'')+'>'+k+'#</option>';}).join('')+'</select></label>';
     else h+='<label class="f">Schedule<select data-q="sch">'+schOpts(it.nps,it.sch)+'</select></label>';
   }
   if(cat==='tube')h+='<label class="f">Longueur mesurée (m)<input data-q="len" inputmode="decimal" value="'+esc(it.len)+'"></label>'+endFields(it,'data-q');
@@ -684,7 +730,7 @@ function groupSpools(){
 }
 function renderSpool(){
   var G=groupSpools(),T=sumItems(S.items);
-  var h='<div class="panel"><h2>Rapport par spool</h2><div class="actions"><button class="btn" data-act="csv2">Exporter CSV (spools)</button></div><p class="note" style="margin:8px 0 0">Fichier : <span class="mono">'+fileNames().spool+'</span>, enregistré dans le dossier « Téléchargements » de votre appareil.</p>';
+  var h='<div class="panel"><h2>Rapport par spool</h2><div class="actions"><button class="btn primary" data-act="xlsx">Récap Excel (.xlsx)</button><button class="btn" data-act="csv2">Exporter CSV (spools)</button></div><p class="note" style="margin:8px 0 0">Fichier : <span class="mono">'+fileNames().spool+'</span>, enregistré dans le dossier « Téléchargements » de votre appareil.</p>';
   h+='<div style="margin-top:14px">'+totalsHTML(T)+'</div>';
   if(!G.length)h+='<div class="stack"><div class="empty">Aucun spool. Ajoutez des pièces avec un nom d\'ISO et un numéro de spool.</div></div>';
   G.forEach(function(g){
@@ -711,11 +757,11 @@ function csvCell(v){var s=String(v==null?'':v);return /[;"\n]/.test(s)?'"'+s.rep
 function csvNum(n,d){return (isFinite(n)?n:0).toFixed(d===undefined?2:d).replace('.',',');}
 function csvLines(){
   var r=[['ISO','Spool','Désignation','Classe','NPS','Schedule','Longueur mesurée (m)','Longueur nette (m)','Quantité','Poids unitaire','Unité','Poids total (kg)','Surface peinture (m²)','Catégorie (code)','Type (code)','NPS réduit','Poids imposé','Désignation libre','Poids libre (kg)','Ext. 1 (code)','Ext. 1 type (code)','Ext. 2 (code)','Ext. 2 type (code)','Encombrement imposé (mm)','Surface imposée (m²)','Classe forgée (code)']];
-  S.items.forEach(function(it){var c=calc(it);var sc=(it.cat==='bride'||it.cat==='vanne'||it.cat==='libre'||it.cat==='forge'||it.cat==='boulon')?'':it.sch;
+  S.items.forEach(function(it){var c=calc(it);var sc=(it.cat==='bride'||it.cat==='vanne'||it.cat==='libre'||it.cat==='forge'||it.cat==='boulon'||(it.cat==='olet'&&it.sub!=='weld'))?'':it.sch;
     var tb=it.cat==='tube',hasB=tb&&(it.e1==='bride'||it.e2==='bride');
     r.push([it.iso,it.spool,descr(it),(it.cat==='bride'||it.cat==='vanne'||it.cat==='boulon'||hasB)?it.cls:'',it.cat==='libre'?'':NPS[it.nps].l,sc,tb?csvNum(num(it.len)):'',tb?csvNum(c.net,3):'',csvNum(num(it.qty),0),csvNum(c.unit),c.uLabel,csvNum(c.metal),csvNum(c.surf),
       it.cat,it.sub||'',((it.cat==='te'&&it.sub==='reduit')||it.cat==='red')?NPS[it.nps2].l:'',num(it.over)>0?csvNum(num(it.over),3):'',it.cat==='libre'?it.name:'',it.cat==='libre'?csvNum(num(it.w),3):'',
-      tb?it.e1:'',tb&&it.e1==='coude'?it.e1s:'',tb?it.e2:'',tb&&it.e2==='coude'?it.e2s:'',tb&&num(it.encO)>0?csvNum(num(it.encO),1):'',num(it.overS)>0?csvNum(num(it.overS),4):'',it.cat==='forge'?it.rt:'']);});
+      tb?it.e1:'',tb&&it.e1==='coude'?it.e1s:'',tb?it.e2:'',tb&&it.e2==='coude'?it.e2s:'',tb&&num(it.encO)>0?csvNum(num(it.encO),1):'',num(it.overS)>0?csvNum(num(it.overS),4):'',(it.cat==='forge'||(it.cat==='olet'&&it.sub!=='weld'))?it.rt:'']);});
   var T=sumItems(S.items);r.push(['TOTAL','','','','','','','','','','',csvNum(T.total),csvNum(T.stotal),'','','','','','','','','','','','','']);
   return r;
 }
@@ -727,14 +773,14 @@ function csvSpools(){
 }
 function p2(n){return (n<10?'0':'')+n;}
 function stamp(){var d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate());}
-function fileNames(){var d=stamp();return {csv:'poids-tuyauterie-liste_'+d+'.csv',spool:'poids-tuyauterie-spools_'+d+'.csv',json:'poids-tuyauterie-projet_'+d+'.json'};}
+function fileNames(){var d=stamp();return {csv:'poids-tuyauterie-liste_'+d+'.csv',spool:'poids-tuyauterie-spools_'+d+'.csv',json:'poids-tuyauterie-projet_'+d+'.json',xlsx:'poids-tuyauterie-recap_'+d+'.xlsx'};}
 function anchorDownload(name,data,mime){
   var b=new Blob([data],{type:mime}),u=URL.createObjectURL(b),a=document.createElement('a');
   a.href=u;a.download=name;document.body.appendChild(a);a.click();
   setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800);
 }
-function exportFile(name,text,mime,bom){
-  var data=(bom?'﻿':'')+text;
+function exportFile(name,text,mime,bom,isBin){
+  var data=isBin?text:(bom?'﻿':'')+text;
   var viewer=!!(window.claude&&window.claude.use);
   Promise.resolve(viewer?window.claude.use('downloads'):null).then(function(dl){
     if(dl)return dl.save({filename:name,data:data});
@@ -745,10 +791,93 @@ function exportFile(name,text,mime,bom){
     toast('Fichier prêt : '+name);if(S.tab==='liste')renderListe();
   }).catch(function(e){
     if(e&&e.code==='declined')return;
+    if(isBin){toast('Export indisponible dans cette vue');return;}
     try{navigator.clipboard.writeText(data).then(function(){toast('Téléchargement indisponible : contenu copié');},function(){toast('Export indisponible dans cette vue');});}
     catch(x){toast('Export indisponible dans cette vue');}
   });
 }
+/* ---------- Export Excel (.xlsx) sans bibliothèque : fichier zip non compressé ---------- */
+var CRC_T=(function(){var t=[],n,k,c;for(n=0;n<256;n++){c=n;for(k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}return t;})();
+function crc32(u){var c=0xFFFFFFFF,i;for(i=0;i<u.length;i++)c=CRC_T[(c^u[i])&255]^(c>>>8);return (c^0xFFFFFFFF)>>>0;}
+function zipStore(files){
+  var enc=new TextEncoder(),d=new Date(),dt=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate(),tm=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1);
+  var parts=[],cen=[],off=0;
+  function u16(v){return [v&255,(v>>>8)&255];}function u32(v){return [v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255];}
+  files.forEach(function(f){
+    var nm=enc.encode(f.name),dat=typeof f.data==='string'?enc.encode(f.data):f.data,crc=crc32(dat);
+    var lh=[].concat(u32(0x04034b50),u16(20),u16(0x0800),u16(0),u16(tm),u16(dt),u32(crc),u32(dat.length),u32(dat.length),u16(nm.length),u16(0));
+    parts.push(new Uint8Array(lh),nm,dat);
+    cen.push({nm:nm,crc:crc,len:dat.length,off:off});
+    off+=lh.length+nm.length+dat.length;
+  });
+  var cdStart=off,cdLen=0;
+  cen.forEach(function(c){
+    var h=[].concat(u32(0x02014b50),u16(20),u16(20),u16(0x0800),u16(0),u16(tm),u16(dt),u32(c.crc),u32(c.len),u32(c.len),u16(c.nm.length),u16(0),u16(0),u16(0),u16(0),u32(0),u32(c.off));
+    parts.push(new Uint8Array(h),c.nm);cdLen+=h.length+c.nm.length;
+  });
+  parts.push(new Uint8Array([].concat(u32(0x06054b50),u16(0),u16(0),u16(cen.length),u16(cen.length),u32(cdLen),u32(cdStart),u16(0))));
+  var tot=0;parts.forEach(function(x){tot+=x.length;});var out=new Uint8Array(tot),o=0;parts.forEach(function(x){out.set(x,o);o+=x.length;});return out;
+}
+function xe(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');}
+function colL(i){return String.fromCharCode(65+i);}
+/* sheet : {name, head:[..], rows:[[..]], widths:[..], numCols:[indices], total:{label, sumCols:[indices]}} */
+function sheetXml(sh){
+  var nR=sh.rows.length,last=nR+1,x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>';
+  sh.widths.forEach(function(w,i){x+='<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>';});
+  x+='</cols><sheetData><row r="1" ht="30" customHeight="1">';
+  sh.head.forEach(function(h,i){x+='<c r="'+colL(i)+'1" s="1" t="inlineStr"><is><t>'+xe(h)+'</t></is></c>';});
+  x+='</row>';
+  sh.rows.forEach(function(r,ri){
+    x+='<row r="'+(ri+2)+'">';
+    r.forEach(function(v,ci){
+      var ref=colL(ci)+(ri+2);
+      if(sh.numCols.indexOf(ci)>=0)x+='<c r="'+ref+'" s="2"><v>'+(isFinite(v)?Math.round(v*10000)/10000:0)+'</v></c>';
+      else x+='<c r="'+ref+'" t="inlineStr"><is><t>'+xe(v)+'</t></is></c>';
+    });
+    x+='</row>';
+  });
+  if(sh.total){
+    var tr=last+1;x+='<row r="'+tr+'">';
+    sh.head.forEach(function(h,i){
+      var ref=colL(i)+tr;
+      if(sh.total.sumCols.indexOf(i)>=0){
+        var sum=0;sh.rows.forEach(function(r){sum+=+r[i]||0;});
+        x+='<c r="'+ref+'" s="3"><f>SUM('+colL(i)+'2:'+colL(i)+last+')</f><v>'+Math.round(sum*10000)/10000+'</v></c>';
+      }else x+='<c r="'+ref+'" s="4" t="inlineStr"><is><t>'+(i===0?xe(sh.total.label):'')+'</t></is></c>';
+    });
+    x+='</row>';
+  }
+  x+='</sheetData>';
+  if(nR>0)x+='<autoFilter ref="A1:'+colL(sh.head.length-1)+last+'"/>';
+  return x+'</worksheet>';
+}
+function buildXlsx(){
+  var G=groupSpools(),I=isoTotals();
+  var sheets=[
+    {name:'Récap',head:['Isométrique (ISO)','Spool','Poids (kg)','Surface de peinture (m²)'],widths:[24,12,14,24],numCols:[2,3],total:{label:'TOTAL',sumCols:[2,3]},
+     rows:G.map(function(g){return [g.iso,g.sp,g.total,g.stotal];})},
+    {name:'Par ISO',head:['Isométrique (ISO)','Poids (kg)','Surface de peinture (m²)'],widths:[24,14,24],numCols:[1,2],total:{label:'TOTAL',sumCols:[1,2]},
+     rows:I.map(function(g){return [g.iso,g.total,g.stotal];})},
+    {name:'Détail',head:['Isométrique (ISO)','Spool','Désignation','Quantité','Poids (kg)','Surface de peinture (m²)'],widths:[24,12,46,10,14,24],numCols:[3,4,5],total:{label:'TOTAL',sumCols:[4,5]},
+     rows:S.items.map(function(it){var c=calc(it);return [it.iso||'Sans ISO',it.spool||'—',descr(it)+(it.cat==='tube'?' · '+fmt(c.net)+' m net':''),num(it.qty),c.metal,c.surf];})}
+  ];
+  var ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>';
+  var wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>';
+  var wr='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">';
+  var files=[];
+  sheets.forEach(function(sh,i){
+    ct+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
+    wb+='<sheet name="'+xe(sh.name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';
+    wr+='<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';
+    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:sheetXml(sh)});
+  });
+  ct+='</Types>';wb+='</sheets></workbook>';
+  wr+='<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
+  var styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.00"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0A6A78"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCF0F2"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="2" fillId="3" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="2" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+  files.unshift({name:'[Content_Types].xml',data:ct},{name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},{name:'xl/workbook.xml',data:wb},{name:'xl/_rels/workbook.xml.rels',data:wr},{name:'xl/styles.xml',data:styles});
+  return zipStore(files);
+}
+function exportXlsx(){exportFile(fileNames().xlsx,new Blob([buildXlsx()],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}),'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',false,true);}
 function exportCSV(rows,name){exportFile(name,rows.map(function(r){return r.map(csvCell).join(';');}).join('\r\n'),'text/csv;charset=utf-8',true);}
 function exportJSON(){
   var o={app:APP_NAME,author:AUTHOR,appVersion:APP_VERSION,fileVersion:FILE_VERSION,exportedAt:new Date().toISOString(),
@@ -784,7 +913,7 @@ function npsIndex(v){
   var n=num(s);for(i=0;i<NPS.length;i++)if(Math.abs(NPS[i].v-n)<1e-6)return i;
   return -1;
 }
-var CATLAB={forge:'forge','forge b16.11':'forge','raccord forge':'forge',boulon:'boulon',boulonnerie:'boulon',tube:'tube',coude:'coude',te:'te',reduction:'red',red:'red',fond:'fond',bride:'bride',vanne:'vanne','piece libre':'libre',libre:'libre'};
+var CATLAB={olet:'olet','piquage':'olet','piquage (olet)':'olet',weldolet:'olet',sockolet:'olet',forge:'forge','forge b16.11':'forge','raccord forge':'forge',boulon:'boulon',boulonnerie:'boulon',tube:'tube',coude:'coude',te:'te',reduction:'red',red:'red',fond:'fond',bride:'bride',vanne:'vanne','piece libre':'libre',libre:'libre'};
 function cleanItem(o,warn,ln){
   var cat=CATLAB[norm(o.cat)];
   if(!cat){warn.push('Ligne '+ln+' ignorée : catégorie inconnue.');return null;}
@@ -864,17 +993,22 @@ function impHTML(){
 }
 function ioHTML(){
   var f=fileNames();
-  return '<details class="io" open><summary>Import / Export</summary><div class="iobody"><div class="actions"><button class="btn" data-act="import">Importer un fichier</button><button class="btn" data-act="csv">Exporter CSV</button><button class="btn" data-act="json">Sauvegarde .json</button></div>'+
-    '<dl class="paths"><dt>Liste (CSV)</dt><dd>'+f.csv+'</dd><dt>Spools (CSV)</dt><dd>'+f.spool+'</dd><dt>Projet complet</dt><dd>'+f.json+'</dd>'+
+  return '<details class="io" open><summary>Import / Export</summary><div class="iobody"><div class="actions"><button class="btn" data-act="import">Importer un fichier</button><button class="btn" data-act="xlsx">Récap Excel (.xlsx)</button><button class="btn" data-act="csv">Exporter CSV</button><button class="btn" data-act="json">Sauvegarde .json</button></div>'+
+    '<dl class="paths"><dt>Récap (Excel)</dt><dd>'+f.xlsx+'</dd><dt>Liste (CSV)</dt><dd>'+f.csv+'</dd><dt>Spools (CSV)</dt><dd>'+f.spool+'</dd><dt>Projet complet</dt><dd>'+f.json+'</dd>'+
     '<dt>Enregistré dans</dt><dd class="plain">le dossier « Téléchargements » de votre appareil. Sur iPhone et iPad, choisissez « Enregistrer dans Fichiers ».</dd>'+
     (S.last?'<dt>Dernier export</dt><dd>'+esc(S.last.name)+' à '+S.last.t+'</dd>':'')+
     '<dt>Import accepté</dt><dd class="plain">CSV exporté par cette application (modifiable dans Excel) ou sauvegarde .json.</dd></dl></div></details>';
 }
 function clean(d){var o={};Object.keys(d).forEach(function(k){o[k]=d[k];});return o;}
 function fixItem(d){
-  if(!avail(d.nps,d.sch))d.sch='STD';
+  if(!avail(d.nps,d.sch)&&d.cat!=='olet')d.sch='STD';
   if(!d.e1)d.e1='none';if(!d.e2)d.e2='none';if(!d.e1s)d.e1s='90lr';if(!d.e2s)d.e2s='90lr';if(d.encO==null)d.encO='';if(d.overS==null)d.overS='';if(d.rt==null)d.rt=3000;
   if(d.cat==='forge'){if(d.nps>8)d.nps=8;if(forgeRatings(d.sub).indexOf(d.rt)<0)d.rt=3000;}
+  if(d.cat==='olet'){
+    if(d.sub==='weld'){var sm={'40':'STD','80':'XS','160':'XXS'};if(sm[d.sch])d.sch=sm[d.sch];if(['STD','XS','XXS'].indexOf(d.sch)<0)d.sch='STD';if(d.sch==='XXS'&&d.nps>10)d.sch='XS';}
+    else if([3000,6000].indexOf(d.rt)<0)d.rt=3000;
+    if(d.nps>oletMax(d))d.nps=oletMax(d);
+  }
   if(d.nps2>=d.nps)d.nps2=Math.max(0,d.nps-1);
   if(DEFSUB[d.cat]&&!d.sub)d.sub=DEFSUB[d.cat];
 }
@@ -919,6 +1053,7 @@ document.addEventListener('click',function(e){
     return;
   }
   if(a==='csv'){if(!S.items.length){toast('La liste est vide.');return;}exportCSV(csvLines(),fileNames().csv);return;}
+  if(a==='xlsx'){if(!S.items.length){toast('La liste est vide.');return;}exportXlsx();return;}
   if(a==='csv2'){if(!S.items.length){toast('La liste est vide.');return;}exportCSV(csvSpools(),fileNames().spool);return;}
   if(a==='json'){if(!S.items.length){toast('La liste est vide.');return;}exportJSON();return;}
   if(a==='import'){$('file').click();return;}

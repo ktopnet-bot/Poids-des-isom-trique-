@@ -2,6 +2,19 @@
 
 Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
 
+## 1.5.0 - 2026-10-26
+
+- Export « Récap Excel (.xlsx) » : feuilles Récap (ISO, spool, poids, surface de peinture), Par ISO et Détail, avec totaux en formules.
+- Génération du fichier Excel dans le navigateur, sans bibliothèque externe, donc utilisable hors connexion.
+
+## 1.4.0 - 2026-10-26
+
+- Nouvelle catégorie « Piquage (olet) » : weldolet (STD, XS, XXS), sockolet (3000#, 6000#) et threadolet, avec poids et surface de peinture.
+- Raccords forgés : demi-manchons et manchons, à souder et filetés (3000#, 6000#).
+- Une série XS de weldolet n'est jamais plus légère que la STD.
+- Le changement de schedule ou de classe ne modifie plus la taille choisie.
+- Format de fichier : version 5 (les versions 1 à 4 restent importables).
+
 ## 1.3.2 - 2026-10-26
 
 - Icône du raccourci : tous les fichiers sont à la racine du dépôt (plus de dossier `icons/`), car l'envoi par l'interface web de GitHub aplatit les dossiers et cassait les chemins du manifeste.

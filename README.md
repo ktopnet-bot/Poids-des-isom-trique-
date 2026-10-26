@@ -2,7 +2,7 @@
 
 Application web pour calculer le poids des tuyauteries : tubes, raccords, brides, vannes. Elle fonctionne dans le navigateur, sans serveur et sans installation. Les données restent sur l'appareil.
 
-**Créé par Kamel Nasralli** · Version 1.3.2 · Licence MIT
+**Créé par Kamel Nasralli** · Version 1.5.0 · Licence MIT
 
 ## Fonctionnalités
 
@@ -15,9 +15,10 @@ Application web pour calculer le poids des tuyauteries : tubes, raccords, brides
 - **Totaux** : tubes, accessoires, brides et total. Quand il y a plusieurs ISO, chaque ISO a sa propre case de total.
 - **Rapport par spool** : regroupement par ISO et par spool, avec le détail des lignes.
 - **Paramètres (dans la Fiche)** : matériau, masse volumique du contenu, isolation.
+- **Récap Excel** : bouton « Récap Excel (.xlsx) » dans Liste et Rapport par spool. Le fichier est généré dans le navigateur, sans bibliothèque ni connexion.
 - **Import et export** : CSV compatible Excel et sauvegarde complète en `.json`.
 
-Pièces gérées : tube, coude (90° GR/PR, 45°, 3D, retour 180°), té égal ou réduit, réduction concentrique ou excentrique, fond, bride (WN, SO, SW, TH, BL, LJ, classes 150 à 1500), vanne (opercule, soupape, clapet, boisseau sphérique, papillon) et pièce libre.
+Pièces gérées (liste non exhaustive) : demi-manchons et manchons forgés B16.11 (à souder et filetés), piquages forgés (weldolet, sockolet, threadolet), tube, coude (90° GR/PR, 45°, 3D, retour 180°), té égal ou réduit, réduction concentrique ou excentrique, fond, bride (WN, SO, SW, TH, BL, LJ, classes 150 à 1500), vanne (opercule, soupape, clapet, boisseau sphérique, papillon) et pièce libre.
 
 ## Utilisation
 
@@ -34,6 +35,7 @@ Les fichiers sont enregistrés dans le dossier **Téléchargements** de l'appare
 | Liste | `poids-tuyauterie-liste_AAAA-MM-JJ.csv` | Toutes les lignes, séparateur `;`, décimale `,`, encodage UTF-8 |
 | Spools | `poids-tuyauterie-spools_AAAA-MM-JJ.csv` | Totaux par ISO et spool |
 | Projet | `poids-tuyauterie-projet_AAAA-MM-JJ.json` | Lignes et paramètres, avec `fileVersion` |
+| Récap Excel | `poids-tuyauterie-recap_AAAA-MM-JJ.xlsx` | Trois feuilles : **Récap** (ISO, spool, poids en kg, surface de peinture en m², total), **Par ISO** (un total par isométrique) et **Détail** (une ligne par pièce). Totaux en formules `SUM`, filtres et en-tête figé. |
 
 Colonne ajoutée dans la version 1.3.0 : `Classe forgée (code)`. Codes de catégorie supplémentaires : `forge`, `boulon`.
 
@@ -52,7 +54,7 @@ Codes de catégorie : `tube`, `coude`, `te`, `red`, `fond`, `bride`, `vanne`, `l
 
 ### Version du format de fichier
 
-Le JSON contient `app`, `author`, `appVersion` et `fileVersion` (actuellement `4`). Les fichiers des versions 1 à 3 s'importent sans changement. Un fichier d'une version plus récente est importé avec un avertissement.
+Le JSON contient `app`, `author`, `appVersion` et `fileVersion` (actuellement `5`). Les fichiers des versions 1 à 4 s'importent sans changement. Un fichier d'une version plus récente est importé avec un avertissement.
 
 ## Icône et raccourci sur l'écran d'accueil
 
@@ -78,6 +80,25 @@ Tous les fichiers sont à la racine du dépôt, au même niveau que `index.html`
 3. **Désinstallez l'ancienne application** : appui long sur l'icône, puis « Désinstaller ». Ensuite, dans Chrome, ouvrez ⋮ → Infos sur le site → Effacer les données, rechargez la page, puis choisissez « Installer l'application ». Android garde l'icône de la première installation.
 4. Ouvrez la page par son adresse `https://` GitHub Pages. L'ouverture du fichier `index.html` depuis le téléphone ou depuis l'application Claude ne donne ni installation ni icône.
 5. Une copie de l'icône est aussi intégrée dans `index.html` : même si les fichiers PNG manquent, Chrome et Safari ont une icône pour un simple raccourci.
+
+## Piquages, demi-manchons et manchons (version 1.4.0)
+
+| Pièce | Origine des données | Précision |
+|---|---|---|
+| Weldolet STD, XS, XXS | Poids Bonney Forge (MSS SP-97), NPS 1/2 à 24 (XXS jusqu'à 6"), piquage de même taille que la ligne | ±25 % |
+| Sockolet 3000# / 6000# | Moyenne de deux tableaux publiés (kg et lb), 3000# jusqu'à 6", 6000# jusqu'à 2" | ±25 % |
+| Threadolet 3000# / 6000# | Estimé avec le poids du sockolet de même taille | ±25 % |
+| Demi-manchon et manchon à souder 3000# / 6000# | Dimensions ASME B16.11, poids calculé et calé comme les coudes SW (Pipedata) | ±25 % |
+| Demi-manchon et manchon filetés 3000# / 6000# | Dimensions ASME B16.11, poids calculé et calé comme les coudes filetés (Pipedata) | ±25 % |
+
+Points d'attention :
+
+- Un catalogue (Alleima) indique pour le demi-manchon SW 3000# des poids environ 1,9 fois plus élevés que le calcul fait avec ses propres dimensions (par exemple 0,15 kg au lieu de 0,08 kg en 1/2"). L'application suit le calage Pipedata. En cas de doute, utilisez le poids imposé.
+- Dans la source des weldolets, la série XS pèse parfois moins que la STD (12", par exemple) : l'application retient alors le poids de la STD.
+- Un piquage réducteur sur une ligne plus grosse est un peu plus lourd que le piquage de même taille.
+- La surface de peinture des piquages est estimée à partir du poids.
+
+Sources : [Wermac, dimensions B16.11](https://www.wermac.org/fittings/dim_sw_coupling.html), [Wermac, couplings filetés](https://www.wermac.org/fittings/dim_thd_couplings.html), [Wermac, weldolet](https://www.wermac.org/fittings/dimensions_weldolet_size-on-size_std-wt.html), [ProjectMaterials, poids des weldolets et sockolets](https://blog.projectmaterials.com/pipe-fittings/weldolet-size-weight/), [Hardhat Engineer, sockolet](https://hardhatengineer.com/sockolet-and-sockolet-dimensions), [Alleima, demi-manchons](https://www.alleima.com/cz/products/fittings-flanges/fittings/socket-weld-fittings-ansiasme/couplings-half/).
 
 ## Valeurs vérifiées avec Pipedata
 
@@ -110,7 +131,7 @@ Cette application est une aide au calcul. Elle ne remplace pas les données du f
 cd poids-tuyauterie
 git init
 git add .
-git commit -m "Version 1.3.2"
+git commit -m "Version 1.5.0"
 git branch -M main
 git remote add origin https://github.com/VOTRE-COMPTE/poids-tuyauterie.git
 git push -u origin main
