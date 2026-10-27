@@ -198,16 +198,19 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 .pcard .rn{display:flex;gap:6px;flex-wrap:wrap}
 .pcard .rn input{flex:1;min-width:120px;font-size:15px;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:6px 10px;min-height:38px;color:var(--ink)}
 .projpanel .safe{font-size:12.5px;color:var(--muted);margin:0}
-.dm{width:100%;height:auto;display:block;background:var(--panel);border:1px solid var(--line);border-radius:5px}
-.dm text{font-family:var(--f-mono);font-size:9px;fill:var(--ink)}
-.dm path{stroke:var(--muted);stroke-width:.8;fill:none}
-.dm .pb2{fill:var(--tube-bg);stroke:var(--tube);stroke-width:1.5}
-.dm .fl2{fill:var(--flg-bg);stroke:var(--flg);stroke-width:1.5}
-.dm .fi2{fill:var(--fit-bg);stroke:var(--fit);stroke-width:1.2}
-.dm .pa{stroke:var(--tube);stroke-width:16;fill:none}
-.dm .pb{stroke:var(--tube-bg);stroke-width:13;fill:none}
-.dm .ax{stroke:var(--muted);stroke-dasharray:5 3 1 3;stroke-width:.7}
-.dm .ex{stroke-dasharray:2 2;stroke-width:.6}
+.dm{width:100%;height:auto;display:block;background:var(--panel);border:1px solid var(--line);border-radius:5px;color:var(--ink)}
+.dm text{font-family:var(--f-body);font-size:11px;fill:var(--ink)}
+.dm .ln{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.dm .ht{fill:url(#hat);stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
+.dm .hf{fill:url(#hat);stroke:none}
+.dm .eo{fill-rule:evenodd}
+.dm .bk{fill:var(--fit-bg);stroke:var(--fit)}
+.dm .ut{fill:none;stroke:var(--ink);stroke-width:2.8;stroke-linejoin:round}
+.dm .pf{fill:var(--panel);stroke:none}
+.dm .hole{fill:var(--panel);stroke:none}
+.dm .dn{fill:none;stroke:var(--ink);stroke-width:.8;marker-start:url(#ar);marker-end:url(#ar)}
+.dm .ex{fill:none;stroke:var(--ink);stroke-width:.6}
+.dm .ax{fill:none;stroke:var(--muted);stroke-width:.7;stroke-dasharray:9 3 2 3}
 .foot{margin-top:22px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:10px}
 #toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(18px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);
   padding:10px 16px;border-radius:5px;font-size:14px;z-index:20;max-width:90vw;opacity:0;pointer-events:none;transition:opacity .2s}
@@ -220,7 +223,7 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 <div class="wrap">
   <header class="title-block">
     <h1>Calcul poids tuyauterie</h1>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.7.0 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.9.1 · Kamel Nasralli</div>
   </header>
   <div id="projbar"></div>
   <nav class="tabs" role="tablist" id="tabs"></nav>
@@ -229,7 +232,7 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.7.0 · Format de fichier 6 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.9.1 · Format de fichier 6 · Licence MIT</p>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" hidden>
@@ -277,7 +280,7 @@ var FLG={ /* kg, bride à collerette (WN) à face plate / RF, valeurs indicative
 var CLASSES=[150,300,600,900,1500];
 var FTYPES=[['WN','À collerette (WN)',1],['SO','À emboîtement glissant (SO)',.85],['SW','À souder (SW)',.9],['TH','Filetée (TH)',.82],['BL','Pleine (BL)',.9],['LJ','Collet battu (LJ)',.8]];
 var VALVE_BASE=[2.5,3,4.5,6,8,12,16,21,33,48,62,105,165,240,330,430,560,700,1050]; /* robinet-vanne cl.150 */
-var VTYPES=[['gate','Vanne à opercule',1],['globe','Vanne à soupape',1.1],['check','Clapet anti-retour',.8],['ball','Vanne à boisseau sphérique',.95],['bfly','Vanne papillon',.3]];
+var VTYPES=[['gate','Vanne à opercule',1],['globe','Vanne à soupape',1.1],['check','Clapet anti-retour',.8],['ball','Vanne à boisseau sphérique',.95],['bfly','Vanne papillon wafer',.3],['lug','Vanne papillon à oreilles',.3]];
 var VCLASS={150:1,300:1.5,600:2.6,900:4.2,1500:6.5};
 var ELB=[['90lr','Coude 90° GR (R=1,5D)',1.5,90],['45lr','Coude 45° GR (R=1,5D)',1.5,45],['90sr','Coude 90° PR (R=1D)',1,90],['90_3d','Coude 90° 3D',3,90],['180','Retour 180° GR',1.5,180]];
 var MATS=[['cs','Acier carbone',7850],['s304','Inox 304 / 304L',7900],['s316','Inox 316 / 316L',8000],['dup','Duplex 2205',7800],['inc','Inconel 625',8440],['cu','Cuivre',8940],['ti','Titane',4510],['al','Aluminium',2700]];
@@ -293,16 +296,20 @@ var FLG_OD={
  900:[121,130,149,159,178,216,244,241,292,349,381,470,546,610,641,705,787,857,1041],
  1500:[121,130,149,159,178,216,244,267,311,375,394,483,584,673,749,826,914,984,1168]
 };
-var VALVE_FF=[108,117,127,140,165,178,190,203,229,254,267,292,330,356,381,406,432,457,508];
-var VALVE_KS={gate:3.2,globe:3.0,check:2.2,ball:2.4,bfly:1.6};
-var VALVE_FFC={150:1,300:1.1,600:1.3,900:1.5,1500:1.7};
+var VALVE_FFT={ /* face à face, vanne à opercule à brides ASME B16.10 (mm) */
+ 150:[108,117,127,140,165,178,190,203,229,254,267,292,330,356,381,406,432,457,508],
+ 300:[140,152,165,178,190,216,241,283,305,381,403,419,457,502,762,838,914,991,1143],
+ 600:[165,190,216,229,241,292,330,356,432,508,559,660,787,838,889,991,1092,1194,1397],
+ 900:[216,229,254,279,305,368,419,381,457,559,610,737,838,965,1029,1130,1219,1321,1549],
+ 1500:[216,229,254,279,305,368,419,470,546,673,705,832,991,1130,1257,1384,1537,1664,1943]};
+var VALVE_KS={gate:3.2,globe:3.0,check:2.2,ball:2.4,bfly:1.6,lug:1.9};
 /* ASME B16.11 : raccords forgés à souder (SW) et filetés, NPS 1/2 à 4 (dimensions en mm) */
 var FORGE_TYPES=[['sw90','Coude 90° à souder (SW)'],['sw45','Coude 45° à souder (SW)'],['swte','Té à souder (SW)'],['swcap','Fond à souder (SW)'],['th90','Coude 90° fileté'],['th45','Coude 45° fileté'],['thte','Té fileté'],['swhc','Demi-manchon à souder (SW)'],['swcpl','Manchon à souder (SW)'],['thhc','Demi-manchon fileté'],['thcpl','Manchon fileté']];
 function forgeRatings(t){t=String(t||'');if(t.indexOf('sw')===0||t==='thhc'||t==='thcpl')return [3000,6000];return [2000,3000,6000];}
 var OLET_TYPES=[['weld','Weldolet (à souder)'],['sock','Sockolet (emboîtement)'],['thr','Threadolet (fileté)']];
 function ratingList(it){return it.cat==='olet'?[3000,6000]:forgeRatings(it.sub);}
 /* Demi-manchons et manchons ASME B16.11 : longueurs hors tout, mm (source : Wermac, tableaux B16.11) */
-var SW_F=[22.5,23.5,29,30,32,41,42.5,44.5,47.5],SW_E=[9.5,9.5,13,13,13,19,19,19,19];
+var SW_F=[22.5,24,28.5,30,32,41,43,44.5,48],SW_E=[9.5,9.5,12.5,12.5,12.5,19,19,19,19]; /* ASME B16.11-2021, tableau 6.1-2 */
 var TH_A=[48,51,60,67,79,86,92,108,121];
 var TH_D={3000:[28,35,44,57,64,76,92,108,140],6000:[38,44,57,64,76,92,108,127,159]};
 /* Piquages forgés MSS SP-97, côte sur côte (Bonney Forge). Poids en lb, tableaux publiés par ProjectMaterials. NPS 1/2 à 24, sans 3 1/2. */
@@ -327,18 +334,20 @@ function oletCalc(it){
   var V=w/7850,area=4*Math.PI*Math.pow(3*V/(4*Math.PI),2/3);
   return {w:w,s:0.85*area,err:''};
 }
-var SWD={
- 3000:{B:[21.825,27.175,33.925,42.675,48.775,61.225,74.0,89.975,115.625],J:[10,13,13,13,13,16,16,16,19],D:[15.8,20.95,26.65,35.05,40.9,52.6,62.7,78.0,102.25],
-  C:[4.375,4.575,5.35,5.675,5.95,6.5,8.2,8.9,10.025],G:[3.75,3.90,4.55,4.85,5.10,5.55,7.00,7.60,8.55],A90:[15.5,19.5,22,27,32,38,41.5,57.5,66.5],A45:[11.5,12.5,14,17,21,25,29,31.5,41.5]},
- 6000:{B:[21.825,27.175,33.925,42.675,48.775,61.225],J:[10,13,13,13,13,16],D:[11.75,15.55,20.7,29.45,33.95,42.85],
-  C:[5.575,6.5,7.425,7.425,8.35,10.2],G:[4.80,5.55,6.35,6.35,7.15,8.75],A90:[19.5,22.5,27,32,38,41],A45:[12.5,14.5,17,21,25,29]}
+var SWD={ /* ASME B16.11-2021 tableaux 6.1-1 et 6.1-2 : B max, D max, C moyen, G min, J, A, K (fond) */
+ 3000:{B:[22.2,27.6,34.3,43.1,49.2,61.7,74.4,90.3,115.7],J:[9.5,12.5,12.5,12.5,12.5,16,16,16,19],D:[16.6,21.7,27.4,35.8,41.6,53.3,64.2,79.4,103.8],
+  C:[4.67,4.90,5.69,6.07,6.35,6.93,8.76,9.52,10.69],G:[3.73,3.91,4.55,4.85,5.08,5.54,7.01,7.62,8.56],A90:[15.5,19,22.5,27,32,38,41,57,66.5],A45:[11,13,14,17.5,20.5,25.5,28.5,32,41],K:[6.4,6.4,9.6,9.6,11.2,12.7,15.7,19,22.4]},
+ 6000:{B:[22.2,27.6,34.3,43.1,49.2,61.7],J:[9.5,12.5,12.5,12.5,12.5,16],D:[12.5,16.3,21.5,30.2,34.7,43.6],
+  C:[5.97,6.96,7.92,7.92,8.92,10.92],G:[4.78,5.56,6.35,6.35,7.14,8.74],A90:[19,22.5,27,32,38,41],A45:[12.5,14,17.5,20.5,25.5,28.5],K:[7.9,7.9,11.2,11.2,12.7,15.7]}
 };
 var SWCAP={3000:[0.07,0.13,0.21,0.37,0.60,0.99,1.50,2.30,4.00],6000:[0.15,0.27,0.45,0.67,0.89,1.75,2.66,4.33,7.91]};
-var THD={
+var THD={ /* ASME B16.11-2021 tableau 6.1-3 : A, C, H (noté D ici) */
  2000:{A:[28,33,38,44,51,60,76,86,106],C:[22,25,28,33,35,43,52,64,79],D:[33,38,46,56,62,75,92,109,146]},
  3000:{A:[33,38,44,51,60,64,83,95,114],C:[25,28,33,35,43,44,52,64,79],D:[38,46,56,62,75,84,102,121,152]},
- 6000:{A:[38,44,51,60,64,83],C:[28,33,35,43,44,52],D:[46,56,62,75,84,102]}
+ 6000:{A:[38,44,51,60,64,83,95,106,114],C:[28,33,35,43,44,52,64,79,79],D:[46,56,62,75,84,102,121,146,152]}
 };
+var TH_G={2000:[3.18,3.18,3.68,3.89,4.01,4.27,5.61,5.99,6.55],3000:[4.09,4.32,4.98,5.28,5.56,7.14,7.65,8.84,11.18],6000:[8.15,8.53,9.93,10.59,11.07,12.09,15.29,16.64,18.67]};
+var TH_B=[10.9,12.7,14.7,17.0,17.8,19.0,23.6,25.9,27.7],TH_L2=[13.6,13.9,17.3,18.0,18.4,19.2,28.9,30.5,33.0];
 var BOLT={ /* ASME B16.5 : nombre de goujons, diamètre (in), longueur de goujon (in), face à ressaut */
  150:{n:[4,4,4,4,4,4,4,4,8,8,8,8,12,12,12,16,16,20,20],d:[.5,.5,.5,.5,.5,.625,.625,.625,.625,.75,.75,.75,.875,.875,1,1,1.125,1.125,1.25],L:[3.5,3.75,3.75,4,4,4.25,4.5,4.5,4.5,5,5,5.25,5.5,5.5,6.25,6.5,7,7.25,8]},
  300:{n:[4,4,4,4,4,8,8,8,8,8,12,12,16,16,20,20,24,24,24],d:[.5,.625,.625,.625,.75,.625,.75,.75,.75,.75,.75,.875,1,1.125,1.125,1.25,1.25,1.25,1.5],L:[3.75,4.25,4.5,4.5,5,5,5.25,5.5,5.75,6,6.25,6.75,7.5,7.75,8.25,8.5,9.25,9.75,11]},
@@ -450,10 +459,10 @@ function endFields(o,a){
 
 /* ---------- État ---------- */
 var KEY='cpt.poids.v2'; /* ancien stockage à un seul projet, lu une fois pour la migration */
-var APP_VERSION='1.7.0',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var APP_VERSION='1.9.1',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
-function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',rt:3000};}
+function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',wj:'',rt:3000};}
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,6);}
 /* ---------- Projets : chaque projet garde ses lignes et ses paramètres dans le navigateur ---------- */
 var KEY3='cpt.poids.v3';
@@ -615,7 +624,7 @@ function flgSurf(ix,cls){
   var D=(FLG_OD[cls]||FLG_OD[150])[ix],L=(FLG_LEN[cls]||FLG_LEN[150])[ix],od=NPS[ix].od,t=.45*L,P=Math.PI;
   return (P/4*(D*D-od*od)+P*D*t+P*od*(L-t))/1e6; /* une face, la tranche et le col */
 }
-function valveSurf(ix,cls,type){return (VALVE_KS[type]||3)*Math.PI*NPS[ix].od/1000*(VALVE_FF[ix]*(VALVE_FFC[cls]||1))/1000;}
+function valveSurf(ix,cls,type){return (VALVE_KS[type]||3)*Math.PI*NPS[ix].od/1000*valveFF(ix,cls)/1000;}
 function calc(it){
   var o={surf:0,usurf:0,kind:'acc',unit:0,uLabel:'kg',mult:1,metal:0,content:0,insul:0,warn:'',leq:0,auto:0,P:null};
   var rho=num(S.rho),mf=S.mat/7850,ix=it.nps,qty=Math.max(0,num(it.qty));
@@ -659,11 +668,14 @@ function calc(it){
   o.metal=o.unit*o.mult;o.content=uC*o.mult;o.insul=uI*o.mult;o.leq=uL*o.mult;
   if(it.cat==='libre'){o.unit=num(it.w);o.metal=o.unit*o.mult;}
   var ovs=num(it.overS);o.usurf=ovs>0?ovs:uS;o.surf=o.usurf*o.mult;
+  var wa=it.cat==='tube'?((it.e1&&it.e1!=='none'?1:0)+(it.e2&&it.e2!=='none'?1:0)):0,ws=String(it.wj==null?'':it.wj).trim();
+  o.wAuto=wa;o.wj=ws!==''&&isFinite(num(ws))?Math.max(0,Math.round(num(ws))):wa;o.wd=(it.cat!=='libre'&&NPS[ix])?NPS[ix].v:0;
+  o.wn=o.wj*Math.max(0,qty);o.wi=o.wn*o.wd;
   return o;
 }
 function sumItems(list){
-  var T={tube:0,acc:0,brd:0,stube:0,sacc:0,sbrd:0,len:0,content:0,insul:0,n:0},SK={tube:'stube',acc:'sacc',brd:'sbrd'};
-  list.forEach(function(it){var c=calc(it);T[c.kind]+=c.metal;T[SK[c.kind]]+=c.surf;T.content+=c.content;T.insul+=c.insul;if(it.cat==='tube')T.len+=c.mult;T.n++;});
+  var T={tube:0,acc:0,brd:0,stube:0,sacc:0,sbrd:0,len:0,content:0,insul:0,wn:0,wi:0,n:0},SK={tube:'stube',acc:'sacc',brd:'sbrd'};
+  list.forEach(function(it){var c=calc(it);T[c.kind]+=c.metal;T[SK[c.kind]]+=c.surf;T.content+=c.content;T.insul+=c.insul;T.wn+=c.wn;T.wi+=c.wi;if(it.cat==='tube')T.len+=c.mult;T.n++;});
   T.total=T.tube+T.acc+T.brd;T.stotal=T.stube+T.sacc+T.sbrd;T.service=T.total+T.content+T.insul;return T;
 }
 
@@ -720,126 +732,434 @@ function formHTML(){
   h+='<label class="f">N° spool<input data-f="spool" type="text" placeholder="ex. 1" value="'+esc(d.spool)+'"></label>';
   if(c!=='libre')h+='<label class="f">Poids unitaire imposé ('+(c==='tube'?'kg/m':'kg')+')<input data-f="over" inputmode="decimal" placeholder="auto" value="'+esc(d.over)+'"><span class="hint">Laissez vide pour le calcul automatique.</span></label>';
   h+='<label class="f">Surface imposée ('+(c==='tube'?'m²/m':'m²')+')<input data-f="overS" inputmode="decimal" placeholder="auto" value="'+esc(d.overS)+'"></label>';
+  h+='<label class="f">Joints à souder imposés<input data-f="wj" inputmode="numeric" placeholder="auto" value="'+esc(d.wj)+'"><span class="hint">Auto : 1 par extrémité raccordée d\'un tube. Saisissez un nombre pour toute autre pièce.</span></label>';
   h+='</div>';
   return h;
 }
 function isoNames(){var s={};S.items.forEach(function(i){if(i.iso)s[i.iso]=1;});return Object.keys(s);}
 
-/* ---------- Encombrement et schémas (fiche de calcul) ---------- */
-function mmf(v){return fmt(v,v>=100?0:1);}
-function hd(x1,x2,y,t){return '<path d="M'+x1+' '+(y-4)+'V'+(y+4)+'M'+x2+' '+(y-4)+'V'+(y+4)+'M'+x1+' '+y+'H'+x2+'"/><text x="'+(x1+x2)/2+'" y="'+(y+11)+'" text-anchor="middle">'+t+'</text>';}
-function vd(x,y1,y2,t,left){return '<path d="M'+(x-4)+' '+y1+'H'+(x+4)+'M'+(x-4)+' '+y2+'H'+(x+4)+'M'+x+' '+y1+'V'+y2+'"/><text x="'+(x+(left?-7:7))+'" y="'+((y1+y2)/2+3)+'" text-anchor="'+(left?'end':'start')+'">'+t+'</text>';}
-function ex(d){return '<path class="ex" d="'+d+'"/>';}
-function tx(x,y,t,a){return '<text x="'+x+'" y="'+y+'" text-anchor="'+(a||'middle')+'">'+t+'</text>';}
-function pipeArc(d){return '<path d="'+d+'" fill="none" class="pa"/><path d="'+d+'" fill="none" class="pb"/>';}
-function svgBox(inner,h,lab){return '<svg class="dm" viewBox="0 0 240 '+h+'" role="img" aria-label="'+esc(lab)+'">'+inner+'</svg>';}
-function dimsOf(it){
-  var ix=it.nps,od=NPS[ix]?NPS[ix].od:0,rows=[],svg='',h=130,note='',c=it.cat;
-  if(c==='coude'){
-    var e=sub(ELB,it.sub),R=e[2]*NPS[ix].v*25.4,ang=e[3];
-    rows.push(['Rayon R',mmf(R)+' mm']);
-    if(ang===90){
-      rows.push(['A, centre à l\'extrémité',mmf(R)+' mm']);
-      svg=pipeArc('M40 90A60 60 0 0 0 100 30')+'<path class="ax" d="M20 90H120M100 10V110"/>'+hd(40,100,108,'A = '+mmf(R))+vd(122,30,90,'A = '+mmf(R))+ex('M40 90V112M100 90V112')+tx(104,86,'I','start');
-    }else if(ang===45){
-      var A=R*Math.tan(Math.PI/8);rows.push(['A, centre à l\'extrémité',mmf(A)+' mm']);
-      svg=pipeArc('M40 90A60 60 0 0 0 82.4 47.6')+'<path class="ax" d="M20 90H120"/>'+hd(40,64.9,108,'A = '+mmf(A))+ex('M40 90V112M64.9 90V112')+tx(150,50,'45°','start');
-    }else{
-      rows.push(['O, entraxe',mmf(2*R)+' mm']);
-      svg=pipeArc('M40 30H100A30 30 0 0 1 100 90H40')+vd(150,30,90,'O = '+mmf(2*R))+ex('M100 30H152M100 90H152');
+/* ---------- Encombrement et schémas à l'échelle, présentés comme dans Pipedata ---------- */
+/* tables ASME B16.5 (mm) : diamètre de ressaut, cercle de boulons, diamètre de moyeu (bride à collerette) */
+var FLG_R=[34.9,42.9,50.8,63.5,73.0,92.1,104.8,127.0,157.2,185.7,215.9,269.9,323.8,381.0,412.8,469.9,533.4,584.2,692.2];
+var FLG_W={150:[60.3,69.9,79.4,88.9,98.4,120.7,139.7,152.4,190.5,215.9,241.3,298.5,362.0,431.8,476.3,539.8,577.9,635.0,749.3],
+ 300:[66.7,82.6,88.9,98.4,114.3,127.0,149.2,168.3,200.2,235.0,269.9,330.2,387.4,450.9,514.4,571.5,628.6,685.8,812.8],
+ 600:[66.7,82.6,88.9,98.4,114.3,127.0,149.2,168.3,215.9,266.7,292.1,349.2,431.8,489.0,527.0,603.3,654.0,723.9,838.2],
+ 900:[82.6,88.9,101.6,111.1,123.8,165.1,190.5,190.5,235.0,279.4,317.5,393.7,469.9,533.4,558.8,616.0,685.8,749.3,901.7],
+ 1500:[82.6,88.9,101.6,111.1,123.8,165.1,190.5,203.2,235.0,279.4,317.5,393.7,482.6,571.5,635.0,704.8,774.7,831.8,990.6]};
+var FLG_X={150:[30,38,49,59,65,78,90,108,135,164,192,246,305,365,400,457,505,559,663],
+ 300:[38,48,54,64,70,84,100,117,146,178,206,260,321,375,425,483,533,587,702],
+ 600:[38,48,54,64,70,84,100,117,152,189,222,273,343,400,432,495,546,610,718],
+ 900:[48,52,60,70,79,105,124,127,159,190,235,298,368,419,451,508,565,622,749],
+ 1500:[48,52,60,70,79,105,124,137,171,213,248,305,384,442,483,533,594,648,768]};
+function nn(v){return String(Math.round(v*100)/100).replace('.',',');}
+function wtOf(it,ix,sch){var k=sch||it.sch;return (WALL[k]&&WALL[k][ix]!=null)?WALL[k][ix]:WALL.STD[ix];}
+var DEFS='<defs><pattern id="hat" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><path d="M0 0V4" stroke="currentColor" stroke-width=".8"/></pattern><marker id="ar" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1L7 4L1 7" fill="none" stroke="currentColor" stroke-width="1"/></marker></defs>';
+function Dw(W,H,x0,y0,x1,y1,pl,pt,pr,pb){
+  var k=Math.min((W-pl-pr)/(x1-x0),(H-pt-pb)/(y1-y0));
+  var ox=pl+((W-pl-pr)-(x1-x0)*k)/2-x0*k,oy=pt+((H-pt-pb)-(y1-y0)*k)/2-y0*k,d={k:k,W:W,H:H,s:''};
+  function r(v){return Math.round(v*100)/100;}
+  d.X=function(x){return r(ox+x*k);};d.Y=function(y){return r(oy+y*k);};
+  d.P=function(a){var o='',i,c;for(i=0;i<arguments.length;i++){c=arguments[i];
+    if(c[0]==='A')o+='A'+r(c[1]*k)+' '+r(c[2]*k)+' 0 '+c[3]+' '+c[4]+' '+d.X(c[5])+' '+d.Y(c[6]);
+    else if(c[0]==='Z')o+='Z';else o+=c[0]+d.X(c[1])+' '+d.Y(c[2]);}return o;};
+  d.add=function(cls){var a=Array.prototype.slice.call(arguments,1);d.s+='<path class="'+cls+'" d="'+d.P.apply(d,a)+'"/>';};
+  d.ln=function(cls,xa,ya,xb,yb){d.add(cls,['M',xa,ya],['L',xb,yb]);};
+  d.px=function(cls,dd){d.s+='<path class="'+cls+'" d="'+dd+'"/>';};
+  d.text=function(x,y,t,a){d.s+='<text x="'+r(x)+'" y="'+r(y)+'" text-anchor="'+(a||'middle')+'">'+t+'</text>';};
+  d.dimH=function(xa,xb,yp,t,ya,yb){
+    var A=d.X(xa),B=d.X(xb),sa=yp<d.Y(ya)?-1:1,sb=yp<d.Y(yb)?-1:1;
+    d.px('ex','M'+A+' '+d.Y(ya)+'V'+(yp+sa*4)+'M'+B+' '+d.Y(yb)+'V'+(yp+sb*4));
+    d.px('dn','M'+A+' '+yp+'H'+B);d.text((A+B)/2,yp-4,t);
+  };
+  d.dimV=function(ya,yb,xp,t,xa,xb){
+    var A=d.Y(ya),B=d.Y(yb),sa=xp<d.X(xa)?-1:1,sb=xp<d.X(xb)?-1:1,left=xp<d.X(xa);
+    d.px('ex','M'+d.X(xa)+' '+A+'H'+(xp+sa*4)+'M'+d.X(xb)+' '+B+'H'+(xp+sb*4));
+    d.px('dn','M'+xp+' '+A+'V'+B);d.text(xp+(left?-5:5),(A+B)/2+4,t,left?'end':'start');
+  };
+  d.axis=function(xa,ya,xb,yb){d.ln('ax',xa,ya,xb,yb);};
+  d.svg=function(lab){return '<svg class="dm dp" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="'+esc(lab)+'">'+DEFS+d.s+'</svg>';};
+  return d;
+}
+function bbox(pts){var xs=pts.map(function(p){return p[0];}),ys=pts.map(function(p){return p[1];});return [Math.min.apply(0,xs),Math.min.apply(0,ys),Math.max.apply(0,xs),Math.max.apply(0,ys)];}
+
+function drwElbow(it,R,thd,od,t,lab){
+  var ro=od/2,ri=ro-t,th=thd*Math.PI/180,d,i,pts=[[0,0]];
+  if(thd>=180){
+    var Ra=R+ro,Rb=R+ri,Rc=R-ri,Rd=R-ro;
+    d=Dw(300,240,-Ra,-Ra,0,Ra,30,28,70,28);
+    d.add('ht',['M',0,-Ra],['A',Ra,Ra,0,0,0,Ra],['L',0,Rb],['A',Rb,Rb,0,1,0,-Rb],['Z']);
+    d.add('ht',['M',0,-Rc],['A',Rc,Rc,0,0,0,Rc],['L',0,Rd],['A',Rd,Rd,0,1,0,-Rd],['Z']);
+    d.ln('ln',0,-Ra,0,-Rd);d.ln('ln',0,Ra,0,Rd);
+    d.axis(0,-R,R*0.5,-R);d.axis(0,R,R*0.5,R);
+    d.dimV(-R,R,d.X(0)+34,nn(2*R),0.5*R,0.5*R);
+    return d.svg(lab);
+  }
+  var T=R*Math.tan(th/2),pt=function(Rr,ph){return [R-Rr*Math.cos(ph),T-Rr*Math.sin(ph)];};
+  for(i=0;i<=24;i++){pts.push(pt(R+ro,th*i/24));pts.push(pt(R-ro,th*i/24));}
+  pts.push([0,T]);pts.push([T,0]);
+  var b=bbox(pts);d=Dw(300,250,b[0],b[1],b[2],b[3],62,44,36,24);
+  function band(Ra,Rb){var p0=pt(Ra,0),p1=pt(Ra,th),q1=pt(Rb,th),q0=pt(Rb,0);
+    d.add('ht',['M',p0[0],p0[1]],['A',Ra,Ra,0,1,p1[0],p1[1]],['L',q1[0],q1[1]],['A',Rb,Rb,0,0,q0[0],q0[1]],['Z']);}
+  band(R+ro,R+ri);band(R-ri,R-ro);
+  [0,th].forEach(function(ph){var a=pt(R+ro,ph),c=pt(R-ro,ph);d.ln('ln',a[0],a[1],c[0],c[1]);});
+  var dir=[Math.sin(th),-Math.cos(th)],m=0.45*ro,e=T+0.35*ro;
+  d.axis(0,T+0.35*ro,0,-m);d.axis(-m*dir[0],-m*dir[1],e*dir[0],e*dir[1]);
+  d.dimV(0,T,d.X(b[0])-24,nn(T),0,-ro);
+  if(thd===90)d.dimH(0,T,d.Y(b[1])-22,nn(T),0,-ro);
+  return d.svg(lab);
+}
+function drwTee(C,M,ro,ri,rb,rbi,lab){
+  var d=Dw(300,240,-C,-M,C,ro,62,22,24,52);
+  d.add('ht eo',['M',-C,ro],['L',-C,-ro],['L',-rb,-ro],['L',-rb,-M],['L',rb,-M],['L',rb,-ro],['L',C,-ro],['L',C,ro],['Z'],
+    ['M',-C,ri],['L',-C,-ri],['L',-rbi,-ri],['L',-rbi,-M],['L',rbi,-M],['L',rbi,-ri],['L',C,-ri],['L',C,ri],['Z']);
+  d.axis(0,-M-0.12*C,0,ro+0.12*C);d.axis(-C-0.12*C,0,C+0.12*C,0);
+  d.dimV(-M,0,d.X(-C)-24,nn(M),-rb,-C);
+  var yp=d.Y(ro)+18;d.dimH(-C,0,yp,nn(C),ro,ro);d.dimH(0,C,yp,nn(C),ro,ro);
+  return d.svg(lab);
+}
+function drwRed(H,ro1,ri1,ro2,ri2,exc,lab){
+  var off=exc?ro1-ro2:0,d=Dw(300,220,0,-ro1,H,ro1,24,46,58,24);
+  if(!exc)d.add('ht eo',['M',0,ro1],['L',0,-ro1],['L',H,-ro2],['L',H,ro2],['Z'],['M',0,ri1],['L',0,-ri1],['L',H,-ri2],['L',H,ri2],['Z']);
+  else d.add('ht eo',['M',0,ro1],['L',0,-ro1],['L',H,ro1-2*ro2],['L',H,ro1],['Z'],['M',0,ri1],['L',0,-ri1],['L',H,off-ri2],['L',H,off+ri2],['Z']);
+  d.axis(-0.08*H,0,exc?0.7*H:1.08*H,0);if(exc)d.axis(0.3*H,off,1.08*H,off);
+  d.dimH(0,H,d.Y(-ro1)-22,nn(H),-ro1,exc?ro1-2*ro2:-ro2);
+  if(exc)d.dimV(0,off,d.X(H)+30,nn(off),H,H);
+  return d.svg(lab);
+}
+function drwCap(E,ro,ri,t,lab){
+  /* demi-vue extérieure à gauche, demi-coupe hachurée à droite, comme dans Pipedata */
+  var hd=Math.min(ro/2,E*0.6),hi=Math.max(hd-t,0.3*hd),ya=hd-hi,land=1.6,bv=(ro-ri>land+0.4)?(ro-ri-land)*Math.tan(37.5*Math.PI/180):0,d=Dw(300,230,-ro,0,ro,E,30,24,64,42);
+  d.add('ht',['M',0,0],['A',ro,hd,0,1,ro,hd],['L',ro,E-bv],['L',ri+land,E],['L',ri,E],['L',ri,hd],['A',ri,hi,0,0,0,ya],['Z']);
+  d.add('ln',['M',0,0],['A',ro,hd,0,0,-ro,hd],['L',-ro,E],['L',0,E]);
+  d.ln('ln',-ro,E-bv,0,E-bv);
+  d.ln('ln',0,0,0,E);
+  d.dimV(0,E,d.X(ro)+28,nn(E),0,ro);
+  d.dimH(ri,ro,d.Y(E)+24,nn(t),E,E);
+  return d.svg(lab);
+}
+function drwFlange(it,L){
+  var ix=it.nps,cl=it.cls,ty=it.sub,od=NPS[ix].od,ro=od/2,t=wtOf(it,ix,it.sch||'STD'),ri=ro-t,OD=FLG_OD[cl][ix],Y=FLG_LEN[cl][ix],tf=FLG_TF[cl]?FLG_TF[cl][ix]:null;
+  if(tf==null||ty==='LJ')return '';
+  var rf=cl<=300?1.5:6.4,tfx=cl<=300?tf-1.5:tf,R=FLG_R[ix],W=FLG_W[cl][ix],X=FLG_X[cl][ix],bs=boltSet(ix,cl),wn=ty==='WN',bl=ty==='BL';
+  var hole=bs.din+(bs.din>1.125?0.1875:0.125),dh=hole*25.4;
+  var hh=0.7*tfx,top=wn?rf+Y:rf+tfx+(bl?0:hh),hc=wn?(Y-tfx)*0.2:0,bv=wn?Math.min(hc*0.8,(ro-ri-1.6)*Math.tan(37.5*Math.PI/180)):0;
+  var pe=(wn||bl)?0:0.9*tfx,bo=ro+(ix<=11?0.45:0.8),J=[10,13,13,13,13,16,16,16,19][ix]||19,topT=top+pe;
+  var d=Dw(330,300,-OD/2,-topT,OD/2,0,70,(wn?70:(bl?44:56)),100,60);
+  [1,-1].forEach(function(s){
+    var inner=wn?ri:(bl?0:bo);
+    if(wn)d.add('ht',['M',s*ri,0],['L',s*R/2,0],['L',s*R/2,-rf],['L',s*OD/2,-rf],['L',s*OD/2,-rf-tfx],['L',s*X/2,-rf-tfx],['L',s*ro,-top+hc],['L',s*ro,-top+bv],['L',s*(ri+1.6),-top],['L',s*ri,-top],['Z']);
+    else if(bl){if(s===1)d.add('ht',['M',-R/2,0],['L',R/2,0],['L',R/2,-rf],['L',OD/2,-rf],['L',OD/2,-rf-tfx],['L',-OD/2,-rf-tfx],['L',-OD/2,-rf],['L',-R/2,-rf],['Z']);}
+    else{
+      var sb=ty==='SW'?top-J:0; /* épaulement du manchon, mesuré depuis la face */
+      d.add('ht',['M',s*(ty==='SW'?ri:bo),0],['L',s*R/2,0],['L',s*R/2,-rf],['L',s*OD/2,-rf],['L',s*OD/2,-rf-tfx],['L',s*X/2,-rf-tfx],['L',s*X/2,-top],['L',s*bo,-top],
+        ty==='SW'?['L',s*bo,-sb]:['L',s*bo,-top],ty==='SW'?['L',s*ri,-sb]:['L',s*bo,-top],['Z']);
+      /* tube introduit dans la bride */
+      d.add('ht',['M',s*ri,-(ty==='SW'?sb:0)],['L',s*ro,-(ty==='SW'?sb:0)],['L',s*ro,-topT],['L',s*ri,-topT],['Z']);
     }
-    svg=svgBox(svg,130,'Schéma du coude');
+    if(!bl||true){
+      d.s+='<rect class="hole" x="'+(d.X(s*W/2)-dh/2*d.k)+'" y="'+(d.Y(-rf-tfx)-1)+'" width="'+(dh*d.k)+'" height="'+(tfx*d.k+2)+'"/>';
+      d.ln('ln',s*W/2-dh/2*s,-rf-tfx,s*W/2-dh/2*s,-rf);d.ln('ln',s*W/2+dh/2*s,-rf-tfx,s*W/2+dh/2*s,-rf);
+      d.ln('ln',s*W/2-dh/2,-rf-tfx,s*W/2+dh/2,-rf-tfx);d.ln('ln',s*W/2-dh/2,-rf,s*W/2+dh/2,-rf); /* arêtes de la bride, continues à travers le trou */
+    }
+  });
+  if(!bl){var bq=wn?ri:bo;d.ln('ln',-bq,0,bq,0);} /* face d'étanchéité, ligne continue à travers l'alésage */
+  if(wn)d.ln('ln',-ri,-top,ri,-top); /* extrémité du moyeu */
+  else if(!bl){var wy=d.Y(-topT),wx=d.X(-ro),ww=(d.X(ro)-wx);d.px('ln','M'+wx+' '+wy+'q'+(ww/4)+' -5 '+(ww/2)+' 0t'+(ww/2)+' 0');} /* coupure du tube */
+  d.axis(0,-topT-0.08*Y,0,0.1*Y);
+  var yt=d.Y(-topT),xr=d.X(OD/2),yb=d.Y(0);
+  if(wn){
+    d.dimH(-X/2,X/2,yt-52,nn(X),-rf-tfx,-rf-tfx);d.dimH(-ro,ro,yt-34,nn(od),-top,-top);d.dimH(-ri,ri,yt-16,nn(2*ri),-top,-top);
+    d.dimV(-rf-tfx,-rf,xr+20,nn(tfx),OD/2,OD/2);d.dimV(-top,-rf,xr+44,nn(Y),ro,OD/2);d.dimV(-top,0,xr+68,nn(top),ro,R/2);
+  }else if(bl){
+    d.dimV(-rf-tfx,-rf,xr+22,nn(tfx),OD/2,OD/2);
+  }else{
+    d.dimH(-X/2,X/2,yt-(ty==='SO'?36:20),nn(X),-rf-tfx,-rf-tfx);
+    if(ty==='SO')d.dimH(-bo,bo,yt-18,nn(2*bo),-top,-top);
+    d.dimV(-rf-tfx,-rf,xr+22,nn(tfx),OD/2,OD/2);
+    if(ty==='SW')d.dimV(-top,-(top-J),d.X(-X/2)-16,nn(J),-bo,-bo);
+  }
+  d.dimV(-rf,0,d.X(-OD/2)-18,nn(rf),-OD/2,-R/2);
+  d.dimH(-R/2,R/2,yb+18,nn(R),0,0);d.dimH(-W/2,W/2,yb+34,nn(W),-rf,0);d.dimH(-OD/2,OD/2,yb+50,nn(OD),-rf,0);
+  var hy=d.Y(-rf-tfx/2);
+  d.px('ex','M'+d.X(-W/2)+' '+hy+'L40 '+(hy-34));
+  d.text(6,hy-50,bs.n+' trous','start');d.text(6,hy-37,'Ø '+fracIn(hole),'start');
+  return d.svg(L);
+}
+/* raccords forgés : schémas en coupe construits comme dans ASME B16.11-2021 (union de bras, fond hachuré) */
+function armGeo(u,segs){
+  var n=[-u[1],u[0]],o=[],b=[];
+  function P(lx,ly){return [ly*u[0]+lx*n[0],ly*u[1]+lx*n[1]];}
+  segs.forEach(function(sg,i){
+    var l0=sg[0],l1=sg[1],ro=sg[2],ri=sg[3],last=i===segs.length-1;
+    o.push([P(-ro,l0),P(ro,l0),P(ro,l1),P(-ro,l1)]);
+    if(ri>0)b.push([P(-ri,l0-(i?0.01:0)),P(ri,l0-(i?0.01:0)),P(ri,l1+(last?3:0.01)),P(-ri,l1+(last?3:0.01))]);
+  });
+  return {o:o,b:b};
+}
+function drwArms(arms,c0,W,H,pl,pt,pr,pb,lab,dimFn,extra){
+  var geo=arms.map(function(a){return armGeo(a.u,a.segs);}),pts=[],outer=[],bore=[];
+  geo.forEach(function(g){g.o.forEach(function(p){outer.push(p);p.forEach(function(q){pts.push(q);});});g.b.forEach(function(p){bore.push(p);});});
+  (extra||[]).forEach(function(p){outer.push(p);p.forEach(function(q){pts.push(q);});});
+  if(c0){pts.push([-c0.ro,-c0.ro]);pts.push([c0.ro,c0.ro]);}
+  var bb=bbox(pts),d=Dw(W,H,bb[0],bb[1],bb[2],bb[3],pl,pt,pr,pb);
+  function poly(cls,p){d.add.apply(d,[cls].concat(p.map(function(q,i){return [i?'L':'M',q[0],q[1]];})).concat([['Z']]));}
+  function circ(cls,r){d.add(cls,['M',-r,0],['A',r,r,0,1,r,0],['A',r,r,0,1,-r,0],['Z']);}
+  outer.forEach(function(p){poly('ut',p);});if(c0)circ('ut',c0.ro);
+  outer.forEach(function(p){poly('pf',p);poly('hf',p);});if(c0){circ('pf',c0.ro);circ('hf',c0.ro);}
+  bore.forEach(function(p){poly('ut',p);});if(c0&&c0.ri>0)circ('ut',c0.ri);
+  bore.forEach(function(p){poly('pf',p);});if(c0&&c0.ri>0)circ('pf',c0.ri);
+  arms.forEach(function(a){var L=a.segs[a.segs.length-1][1],m=0.1*L;d.axis(-0.12*a.segs[0][2]*a.u[0],-0.12*a.segs[0][2]*a.u[1],(L+m)*a.u[0],(L+m)*a.u[1]);});
+  dimFn(d,bb);
+  return d.svg(lab);
+}
+function swSegs(r,ix,A){var ob=r.D[ix]+2*r.G[ix],os=r.B[ix]+2*r.C[ix];return [[0,A,ob/2,r.D[ix]/2],[A,A+r.J[ix],os/2,r.B[ix]/2]];}
+function drwSW45(r,ix,lab){
+  var A=r.A45[ix],J=r.J[ix],B=r.B[ix],C=r.C[ix],D=r.D[ix],G=r.G[ix],ob=D+2*G,os=B+2*C,e=A+J,s=Math.SQRT1_2,sg=swSegs(r,ix,A);
+  return drwArms([{u:[0,1],segs:sg},{u:[s,-s],segs:sg}],{ro:ob/2,ri:D/2},330,290,64,40,60,52,lab,function(d,bb){
+    var xl=d.X(-os/2)-22;d.dimV(0,A,xl,nn(A),0,-os/2);d.dimV(A,e,xl,nn(J),-os/2,-os/2);
+    var yb=d.Y(e)+20;d.dimH(-B/2,B/2,yb,nn(B),e,e);d.dimH(-os/2,-B/2,yb+18,nn(C),e,e);
+  });
+}
+function cornerSq(a,b){var o=[];[[1,1],[1,-1],[-1,1],[-1,-1]].forEach(function(q){o.push([[q[0]*a,q[1]*a],[q[0]*b,q[1]*a],[q[0]*b,q[1]*b],[q[0]*a,q[1]*b]]);});return o;}
+function drwSWTee(r,ix,lab){
+  var A=r.A90[ix],J=r.J[ix],B=r.B[ix],C=r.C[ix],D=r.D[ix],G=r.G[ix],ob=D+2*G,os=B+2*C,e=A+J,sg=swSegs(r,ix,A);
+  return drwArms([{u:[-1,0],segs:sg},{u:[1,0],segs:sg},{u:[0,-1],segs:sg}],null,340,260,70,24,70,72,lab,function(d,bb){
+    var xp=d.X(-os/2)-24;d.dimV(0,-A,xp,nn(A),-os/2,-os/2);d.dimV(-A,-e,xp,nn(J),-os/2,-os/2);
+    var yb=d.Y(os/2)+20;d.dimH(0,A,yb,nn(A),os/2,os/2);d.dimH(A,e,yb,nn(J),os/2,os/2);
+    d.dimV(-B/2,B/2,d.X(e)+26,nn(B),e,e);d.dimV(B/2,os/2,d.X(e)+26,nn(C),e,e);
+  },[]);
+}
+function drwSWCap(r,ix,lab){
+  var J=r.J[ix],K=r.K[ix],B=r.B[ix],C=r.C[ix],os=B+2*C,Ht=J+K;
+  return drwArms([{u:[0,1],segs:[[0,K,os/2,0],[K,Ht,os/2,B/2]]}],null,300,250,70,30,70,52,lab,function(d,bb){
+    var xl=d.X(-os/2)-22;d.dimV(0,K,xl,nn(K),-os/2,-os/2);d.dimV(K,Ht,xl,nn(J),-os/2,-os/2);
+    d.dimV(0,Ht,d.X(os/2)+26,nn(Ht),os/2,os/2);
+    var yb=d.Y(Ht)+20;d.dimH(-B/2,B/2,yb,nn(B),Ht,Ht);d.dimH(B/2,os/2,yb,nn(C),Ht,Ht);
+  });
+}
+function thSegs(H,od,idf,L,l2){var l=Math.max(0,L-l2);return [[0,l,H/2,idf/2],[l,L,H/2,od/2]];}
+function drwTh(kind,rt,ix,od,lab){
+  var r=THD[rt],H=r.D[ix],idf=od-2*wtOf({sch:'STD'},ix,'STD'),l2=TH_L2[ix],s=Math.SQRT1_2;
+  if(kind==='th90'){var A=r.A[ix],sg=thSegs(H,od,idf,A,l2);
+    return drwArms([{u:[0,1],segs:sg},{u:[1,0],segs:sg}],{ro:H/2,ri:idf/2},300,260,58,34,60,40,lab,function(d){
+      d.dimV(0,A,d.X(-H/2)-22,nn(A),0,-H/2);d.dimH(0,A,d.Y(-H/2)-22,nn(A),0,-H/2);
+      d.dimV(-H/2,H/2,d.X(A)+26,nn(H),A,A);d.dimH(-H/2,H/2,d.Y(A)+22,nn(H),A,A);});}
+  if(kind==='th45'){var C=r.C[ix],sg2=thSegs(H,od,idf,C,l2);
+    return drwArms([{u:[0,1],segs:sg2},{u:[s,-s],segs:sg2}],{ro:H/2,ri:idf/2},300,260,58,34,50,44,lab,function(d){
+      d.dimV(0,C,d.X(-H/2)-22,nn(C),0,-H/2);d.dimH(-H/2,H/2,d.Y(C)+22,nn(H),C,C);});}
+  var A3=r.A[ix],sg3=thSegs(H,od,idf,A3,l2); /* té */
+  return drwArms([{u:[-1,0],segs:sg3},{u:[1,0],segs:sg3},{u:[0,-1],segs:sg3}],null,340,250,70,24,64,60,lab,function(d){
+    var yb=d.Y(H/2)+20;d.dimH(-A3,0,yb,nn(A3),H/2,H/2);d.dimH(0,A3,yb,nn(A3),H/2,H/2);
+    d.dimV(-A3,0,d.X(-H/2)-24,nn(A3),-H/2,-H/2);d.dimV(-H/2,H/2,d.X(A3)+26,nn(H),A3,A3);});
+}
+function drwSWElbow(r,ix,lab){
+  var A=r.A90[ix],J=r.J[ix],B=r.B[ix],C=r.C[ix],D=r.D[ix],G=r.G[ix],ob=D+2*G,os=B+2*C,e=A+J,rr=ob/2;
+  var d=Dw(320,270,-os/2,-rr,e,e,66,34,64,40);
+  d.add('ht eo',['M',-os/2,e],['L',-os/2,A],['L',-ob/2,A],['L',-ob/2,0],['A',rr,rr,0,1,0,-rr],['L',A,-rr],['L',A,-os/2],['L',e,-os/2],['L',e,os/2],['L',A,os/2],['L',A,ob/2],['L',ob/2,ob/2],['L',ob/2,A],['L',os/2,A],['L',os/2,e],['Z'],
+    ['M',-B/2,e],['L',-B/2,A],['L',-D/2,A],['L',-D/2,0],['A',D/2,D/2,0,1,0,-D/2],['L',A,-D/2],['L',A,-B/2],['L',e,-B/2],['L',e,B/2],['L',A,B/2],['L',A,D/2],['L',D/2,D/2],['L',D/2,A],['L',B/2,A],['L',B/2,e],['Z']);
+  d.axis(0,e+0.05*e,0,-rr-0.15*e);d.axis(-os/2-0.05*e,0,e+0.05*e,0);
+  var xl=d.X(-os/2)-22;d.dimV(0,A,xl,nn(A),0,-os/2);d.dimV(A,e,xl,nn(J),-os/2,-os/2);
+  var yb=d.Y(e)+20;d.dimH(-B/2,B/2,yb,nn(B),e,e);d.dimH(-os/2,-B/2,yb+18,nn(C),e,e);
+  d.dimV(-D/2,D/2,d.X(e)+26,nn(D),e,e);d.dimV(-rr,-D/2,d.X(A/2)+10,nn(G),A/2,A/2);
+  return d.svg(lab);
+}
+function drwThElbow(A,D,b,lab){
+  var r=D/2,e=A,d=Dw(300,260,-r,-r,A,A,58,34,60,40);
+  d.add('ht eo',['M',-r,A],['L',-r,0],['A',r,r,0,1,0,-r],['L',A,-r],['L',A,r],['L',r,r],['L',r,A],['Z'],
+    ['M',-b/2,A],['L',-b/2,0],['A',b/2,b/2,0,1,0,-b/2],['L',A,-b/2],['L',A,b/2],['L',b/2,b/2],['L',b/2,A],['Z']);
+  d.axis(0,A+0.06*A,0,-r-0.15*A);d.axis(-r-0.06*A,0,A+0.06*A,0);
+  d.dimV(0,A,d.X(-r)-22,nn(A),0,-r);d.dimH(0,A,d.Y(-r)-22,nn(A),0,-r);
+  d.dimV(-r,r,d.X(A)+26,nn(D),A,A);d.dimH(-r,r,d.Y(A)+22,nn(D),A,A);
+  return d.svg(lab);
+}
+function drwCoupling(L,os,B,J,D,lab,half){ /* manchon ou demi-manchon : coupe longitudinale */
+  var ro=os/2,d=Dw(300,200,0,-ro,L,ro,24,40,56,20),bh=B/2,dh=D/2;
+  var inner=B&&half?[['M',0,bh],['L',0,-bh],['L',J,-bh],['L',J,-dh],['L',L,-dh],['L',L,dh],['L',J,dh],['L',J,bh],['Z']]:B?[['M',0,bh],['L',0,-bh],['L',J,-bh],['L',J,-dh],['L',L-J,-dh],['L',L-J,-bh],['L',L,-bh],['L',L,bh],['L',L-J,bh],['L',L-J,dh],['L',J,dh],['L',J,bh],['Z']]:[];
+  d.add.apply(d,['ht eo',['M',0,ro],['L',0,-ro],['L',L,-ro],['L',L,ro],['Z']].concat(inner));
+  d.axis(-0.05*L,0,1.05*L,0);
+  d.dimH(0,L,d.Y(-ro)-20,nn(L),-ro,-ro);d.dimV(-ro,ro,d.X(L)+26,nn(os),L,L);
+  return d.svg(lab);
+}
+function drwStud(Lm,din,tf,lab){
+  var dd=din*25.4,nw=dd*0.88,af=1.6*dd,d=Dw(300,160,0,-af/2,Lm,af/2,24,40,24,20);
+  d.add('ln',['M',0,-dd/2],['L',Lm,-dd/2],['L',Lm,dd/2],['L',0,dd/2],['Z']);
+  [0,Lm-nw].forEach(function(x){d.add('ln',['M',x,-af/2],['L',x+nw,-af/2],['L',x+nw,af/2],['L',x,af/2],['Z']);});
+  d.axis(-0.03*Lm,0,1.03*Lm,0);d.dimH(0,Lm,d.Y(-af/2)-20,nn(Lm),-af/2,-af/2);
+  return d.svg(lab);
+}
+function valveFF(ix,cls){return (VALVE_FFT[cls]||VALVE_FFT[150])[ix];}
+function drwValve(it,Lv,lab){
+  var ix=it.nps,cl=it.cls,od=NPS[ix].od,o2=od/2,OD=FLG_OD[cl][ix],tfl=FLG_TF[cl]?FLG_TF[cl][ix]:0.06*Lv,ty=it.sub,i2=Lv/2,wt=Math.max(0.09*od,5),bh=o2+wt*1.4,d,bs=boltSet(ix,cl),Wbc=FLG_W[cl][ix];
+  function rc(x0,y0,x1,y1,h){var q=[['M',x0,y0],['L',x1,y0],['L',x1,y1],['L',x0,y1],['Z']];if(h)d.add.apply(d,['ht'].concat(q));d.add.apply(d,['ln'].concat(q));}
+  function ci(cx,cy,r,h){var q=[['M',cx-r,cy],['A',r,r,0,1,cx+r,cy],['A',r,r,0,1,cx-r,cy],['Z']];if(h)d.add.apply(d,['ht'].concat(q));d.add.apply(d,['ln'].concat(q));}
+  function whl(cx,cy,r){ci(cx,cy,r,0);ci(cx,cy,r*0.9,0);for(var a=0;a<3;a++){var t=a*2*Math.PI/3+Math.PI/2;d.ln('ln',cx,cy,cx+r*0.9*Math.cos(t),cy+r*0.9*Math.sin(t));}ci(cx,cy,r*0.12,1);}
+  function fls(){[[0,tfl],[Lv-tfl,Lv]].forEach(function(f){rc(f[0],-OD/2,f[1],-o2,1);rc(f[0],o2,f[1],OD/2,1);d.ln('ln',f[0],-OD/2,f[0],OD/2);d.ln('ln',f[1],-OD/2,f[1],OD/2);});}
+  function wall(x0,x1,h){rc(x0,-h,x1,-o2,1);rc(x0,o2,x1,h,1);}
+  var H,Rw,x0,x1,y0,y1,W=340,Hh=320,pl=56,pt=26,pr=64,pb=44;
+  if(ty==='gate'||ty==='globe'){
+    H=(ty==='gate'?2.0:1.46)*Lv;Rw=(ty==='gate'?0.41:0.34)*Lv;var by=bh+0.25*od,yt=-H+0.14*Lv;
+    x0=Math.min(0,i2-Rw);x1=Math.max(Lv,i2+Rw);y0=-H-Rw;y1=OD/2+(ty==='globe'?0.45*bh:0);d=Dw(W,Hh,x0,y0,x1,y1,pl,pt,pr,pb);
+    fls();
+    if(ty==='gate'){wall(tfl,Lv-tfl,bh);rc(tfl,-bh,Lv-tfl,bh,0);rc(i2-0.07*od,-bh,i2+0.07*od,-o2*0.9,1);}
+    else{
+      var bel=[],nb=28,rxb=(Lv-2*tfl)/2,ryb=bh*0.55,u;for(u=0;u<=nb;u++){bel.push(['L',tfl+rxb*(1-Math.cos(Math.PI*u/nb)),bh+ryb*Math.sin(Math.PI*u/nb)]);}
+      var up=[['M',tfl,-bh],['L',Lv-tfl,-bh],['L',Lv-tfl,bh]].concat(bel.slice().reverse()).concat([['Z']]);
+      d.add.apply(d,['ht',['M',tfl,o2],['L',tfl,bh]].concat(bel,[['L',Lv-tfl,o2],['Z']]));
+      d.add.apply(d,['ln'].concat([['M',tfl,-bh],['L',tfl,bh]],bel,[['L',Lv-tfl,-bh],['Z']]));
+      d.ln('ln',tfl,-o2,i2-0.2*Lv,-o2);d.ln('ln',i2-0.2*Lv,-o2,i2-0.2*Lv,o2*0.25);d.ln('ln',i2-0.2*Lv,o2*0.25,i2+0.2*Lv,o2*0.25);d.ln('ln',i2+0.2*Lv,o2*0.25,i2+0.2*Lv,o2);d.ln('ln',i2+0.2*Lv,o2,Lv-tfl,o2);
+    }
+    rc(i2-0.45*od,-by,i2-0.3*od,-bh,1);rc(i2+0.3*od,-by,i2+0.45*od,-bh,1);d.ln('ln',i2-0.3*od,-bh,i2+0.3*od,-bh);
+    rc(i2-0.6*od,-by-0.1*od,i2+0.6*od,-by,1);
+    rc(i2-0.4*od,yt,i2-0.3*od,-by-0.1*od,0);rc(i2+0.3*od,yt,i2+0.4*od,-by-0.1*od,0);rc(i2-0.45*od,yt-0.06*od,i2+0.45*od,yt,1);
+    d.ln('ln',i2-0.05*od,-bh*0.6,i2-0.05*od,-H);d.ln('ln',i2+0.05*od,-bh*0.6,i2+0.05*od,-H);
+    whl(i2,-H,Rw);
+    d.axis(-0.04*Lv,0,1.04*Lv,0);d.axis(i2,OD/2+0.05*Lv,i2,-H-Rw-0.04*Lv);
+    d.dimH(0,Lv,d.Y(y1)+20,nn(Lv),y1,y1);
+    d.dimV(-H,0,d.X(Math.max(Lv,i2+Rw))+26,nn(H),i2+Rw,Lv);
+    d.dimV(-H-Rw,-H+Rw*0+0.0001,d.X(i2-Rw)-24,nn(2*Rw),i2,i2);
+  }else if(ty==='check'){
+    H=0.69*Lv;x0=0;x1=Lv;y0=-H-0.04*od;y1=OD/2;d=Dw(W,Hh,x0,y0,x1,y1,pl,pt,pr,pb);
+    fls();wall(tfl,Lv-tfl,bh);rc(tfl,-bh,Lv-tfl,bh,0);
+    rc(i2-0.55*od,-H+0.1*od,i2-0.4*od,-bh,1);rc(i2+0.4*od,-H+0.1*od,i2+0.55*od,-bh,1);
+    rc(i2-0.8*od,-H,i2+0.8*od,-H+0.1*od,1);
+    [-0.7,0.7].forEach(function(f){rc(i2+f*od-0.05*od,-H-0.06*od,i2+f*od+0.05*od,-H,0);});
+    d.add('ht',['M',i2-0.16*Lv,-o2*0.95],['L',i2-0.11*Lv,-o2*0.95],['L',i2-0.05*Lv,o2*0.85],['L',i2-0.1*Lv,o2*0.85],['Z']);
+    d.add('ln',['M',i2-0.16*Lv,-o2*0.95],['L',i2-0.11*Lv,-o2*0.95],['L',i2-0.05*Lv,o2*0.85],['L',i2-0.1*Lv,o2*0.85],['Z']);
+    d.axis(-0.04*Lv,0,1.04*Lv,0);d.axis(i2,OD/2+0.05*Lv,i2,-H-0.1*od);
+    d.dimH(0,Lv,d.Y(OD/2)+20,nn(Lv),OD/2,OD/2);d.dimV(-H,0,d.X(Lv)+28,nn(H),i2+0.8*od,Lv);
+  }else if(ty==='ball'){
+    H=0.66*Lv;Rw=0.41*Lv;var Dd=1.08*Lv,xe=-(Dd+0.25*Lv),wy=-H*0.62,gh=0.3*Lv;
+    x0=xe-OD/2;x1=Math.max(Lv,i2+0.15*Lv+Rw);y0=Math.min(-H,wy-Rw);y1=OD/2;d=Dw(W+40,Hh,x0,y0,x1,y1,34,pt,pr,pb);
+    /* vue de bout */
+    ci(xe,0,OD/2,0);ci(xe,0,o2*1.15,1);ci(xe,0,o2,0);ci(xe,0,o2*0.8,0);
+    rc(xe-0.14*Lv,-H,xe+0.14*Lv,-OD/2*0.8,0);rc(xe-0.1*od,-OD/2,xe+0.1*od,-OD/2*0.8,0);
+    rc(xe+0.14*Lv,wy-0.03*Lv,xe+Dd,wy+0.03*Lv,0);rc(xe+Dd-0.02*Lv,wy-Rw,xe+Dd+0.02*Lv,wy+Rw,1);
+    d.axis(xe-OD/2-0.05*Lv,0,xe+OD/2+0.05*Lv,0);d.axis(xe,-H-0.04*Lv,xe,OD/2+0.05*Lv);
+    d.dimH(xe,xe+Dd,d.Y(-H)-12,nn(Dd),-H,-H);
+    /* vue de face */
+    fls();wall(tfl,Lv-tfl,bh*1.15);rc(tfl,-bh*1.15,Lv-tfl,bh*1.15,0);d.ln('ln',i2-0.14*Lv,-bh*1.15,i2-0.14*Lv,bh*1.15);d.ln('ln',i2+0.14*Lv,-bh*1.15,i2+0.14*Lv,bh*1.15);
+    rc(i2-0.1*od,-bh*1.15-0.2*od,i2+0.1*od,-bh*1.15,0);rc(i2-0.3*Lv,-H,i2+0.3*Lv,-H+gh,1);
+    whl(i2+0.15*Lv,wy,Rw);
+    d.axis(-0.04*Lv,0,1.04*Lv,0);d.axis(i2,OD/2+0.05*Lv,i2,-H-0.04*Lv);
+    d.dimH(0,Lv,d.Y(OD/2)+20,nn(Lv),OD/2,OD/2);d.dimV(-H,0,d.X(i2+0.15*Lv+Rw)+26,nn(H),i2+0.3*Lv,Lv);
+  }else{
+    var lug=ty==='lug',rb=lug?(Wbc/2+0.12*od):Wbc/2*0.95,wB=0.47*od,Ll=3.15*od;H=1.92*od;var xs=rb+0.55*od+0.5*wB,hl=Math.max(0.12*od,6);
+    x0=-rb;x1=Math.max(Ll,xs+0.6*od);y0=-H-0.1*od;y1=rb;d=Dw(W,Hh,x0,y0,x1,y1,pl,pt,pr,pb+6);
+    if(lug){var n=bs.n,rh=Math.max(0.06*od,5),ang;for(var q=0;q<n;q++){ang=q*2*Math.PI/n+Math.PI/n;ci((Wbc/2)*Math.sin(ang),-(Wbc/2)*Math.cos(ang),rh*1.9,0);}}
+    ci(0,0,rb,0);
+    if(lug){for(var q2=0;q2<bs.n;q2++){ang=q2*2*Math.PI/bs.n+Math.PI/bs.n;ci((Wbc/2)*Math.sin(ang),-(Wbc/2)*Math.cos(ang),Math.max(0.06*od,5),0);}}
+    ci(0,0,od*0.62,0);ci(0,0,o2*1.02,0);ci(0,0,o2*0.86,1);
+    rc(-0.12*od,-H+0.06*od,0.12*od,-rb*0.98,0);rc(-0.3*od,-H,0.3*od,-H+0.06*od,1);
+    d.add('ln',['M',0,-H-0.03*od],['L',Ll,-H-0.03*od],['L',Ll,-H+0.03*od],['L',0.5*od,-H+0.05*od],['L',0,-H+0.05*od],['Z']);
+    d.add('ln',['M',0.5*od,-H-0.03*od],['L',Ll,-H+0.03*od],['L',Ll*0.96,-H+0.14*od],['L',0.5*od,-H+0.05*od]);
+    /* vue de côté */
+    rc(xs-wB/2,-rb*0.98,xs+wB/2,rb*0.98,0);rc(xs-0.12*od,-H+0.06*od,xs+0.12*od,-rb*0.98,0);rc(xs-0.3*od,-H,xs+0.3*od,-H+0.06*od,1);
+    d.axis(-rb-0.05*od,0,-rb*0.0+x1,0);d.axis(0,rb+0.05*od,0,-H-0.12*od);
+    d.dimH(0,Ll,d.Y(-H)-18,nn(Ll),-H,-H);d.dimV(-H,0,d.X(xs+0.6*od)+24,nn(H),xs+0.3*od,xs+0.6*od);d.dimH(xs-wB/2,xs+wB/2,d.Y(rb)+20,nn(wB),rb,rb);
+  }
+  return d.svg(lab);
+}
+function mmf(v){return nn(v);}
+function dimsOf(it){
+  var ix=it.nps,od=NPS[ix]?NPS[ix].od:0,rows=[],svg='',note='',c=it.cat;
+  if(c==='coude'){
+    var e=sub(ELB,it.sub),R=e[2]*NPS[ix].v*25.4,ang=e[3],tw=wtOf(it,ix);
+    rows.push(['Rayon de courbure R',nn(R)+' mm']);
+    if(ang<180)rows.push(['Centre à l\'extrémité A',nn(R*Math.tan(ang*Math.PI/360))+' mm']);else rows.push(['Entraxe O (2R)',nn(2*R)+' mm']);
+    rows.push(['Ø extérieur',nn(od)+' mm']);rows.push(['Épaisseur',nn(tw)+' mm']);
+    svg=drwElbow(it,R,ang,od,tw,'Schéma du coude');
   }
   else if(c==='te'){
-    var C=TEE_C[ix],M=it.sub==='reduit'?(C+TEE_C[it.nps2])/2:C,bw=it.sub==='reduit'?6:9;
-    rows.push(['C, axe de branche à l\'extrémité du corps',mmf(C)+' mm']);rows.push(['M, axe du corps à l\'extrémité de branche',mmf(M)+' mm']);
-    svg='<path class="pb2" d="M30 81H'+(120-bw)+'V20H'+(120+bw)+'V81H210V99H30Z"/>'+'<path class="ax" d="M20 90H220M120 10V108"/>'+hd(30,120,112,'C = '+mmf(C))+hd(120,210,112,'C = '+mmf(C))+vd(70,20,90,'M = '+mmf(M),true)+ex('M'+(120-bw)+' 20H62M30 90H62');
-    svg=svgBox(svg,130,'Schéma du té');
+    var C=TEE_C[ix],M=it.sub==='reduit'?(C+TEE_C[it.nps2])/2:C,j=it.sub==='reduit'?it.nps2:ix,tw2=wtOf(it,ix),tb=wtOf(it,j);
+    rows.push(['Corps C (axe de branche à l\'extrémité)',nn(C)+' mm']);rows.push(['Branche M (axe du corps à l\'extrémité)',nn(M)+' mm']);
+    rows.push(['Ø extérieur du corps',nn(od)+' mm']);if(j!==ix)rows.push(['Ø extérieur de branche',nn(NPS[j].od)+' mm']);
+    svg=drwTee(C,M,od/2,od/2-tw2,NPS[j].od/2,NPS[j].od/2-tb,'Schéma du té');
   }
   else if(c==='red'){
-    var H=RED_H[ix],o2=NPS[it.nps2].od;
-    rows.push(['H, longueur',mmf(H)+' mm']);rows.push(['Ø extérieur gros',fmt(od,1)+' mm']);rows.push(['Ø extérieur petit',fmt(o2,1)+' mm']);
-    var sm=Math.max(10,22*o2/od);
-    svg=(it.sub==='exc'?'<path class="pb2" d="M30 48L210 '+(92-2*sm)+'V92H30Z"/>':'<path class="pb2" d="M30 48L210 '+(70-sm)+'V'+(70+sm)+'L30 92Z"/>')+'<path class="ax" d="M20 70H220"/>'+hd(30,210,108,'H = '+mmf(H))+tx(30,40,'Ø '+fmt(od,1),'start')+tx(210,40,'Ø '+fmt(o2,1),'end');
-    svg=svgBox(svg,125,'Schéma de la réduction');
+    var H=RED_H[ix],j2=it.nps2,o2=NPS[j2].od,w1=wtOf(it,ix),w2=wtOf(it,j2);
+    rows.push(['Longueur H',nn(H)+' mm']);rows.push(['Ø extérieur gros',nn(od)+' mm']);rows.push(['Ø extérieur petit',nn(o2)+' mm']);
+    if(it.sub==='exc')rows.push(['Décalage des axes',nn((od-o2)/2)+' mm']);
+    svg=drwRed(H,od/2,od/2-w1,o2/2,o2/2-w2,it.sub==='exc','Schéma de la réduction');
   }
   else if(c==='fond'){
-    var E=CAP_E[ix];rows.push(['E, longueur du fond',mmf(E)+' mm']);rows.push(['Ø extérieur',fmt(od,1)+' mm']);
-    svg='<path class="pb2" d="M40 48H130Q205 48 205 70Q205 92 130 92H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,205,108,'E = '+mmf(E))+tx(40,40,'Ø '+fmt(od,1),'start');
-    svg=svgBox(svg,125,'Schéma du fond');
+    var E=CAP_E[ix],tc=wtOf(it,ix);
+    rows.push(['Hauteur E',nn(E)+' mm']);rows.push(['Ø extérieur',nn(od)+' mm']);rows.push(['Épaisseur',nn(tc)+' mm']);
+    svg=drwCap(E,od/2,od/2-tc,tc,'Schéma du fond');
   }
   else if(c==='bride'){
-    var cl=it.cls,D=FLG_OD[cl][ix],Y=FLG_LEN[cl][ix],tf=FLG_TF[cl]?FLG_TF[cl][ix]:null,bs=boltSet(ix,cl);
-    rows.push(['Ø extérieur de bride',mmf(D)+' mm']);rows.push(['Longueur hors tout Y',mmf(Y)+' mm']);if(tf)rows.push(['Épaisseur de bride',fmt(tf,1)+' mm']);
-    rows.push(['Ø extérieur du tube',fmt(od,1)+' mm']);rows.push(['Boulons',bs.n+' × '+fracIn(bs.din)+', goujon '+fmt(bs.L,0)+' mm']);
-    note='Valeurs de bride à collerette (WN). Les autres types ont une longueur hors tout plus courte.';
-    svg='<path class="pb2" d="M30 52H180V88H30Z"/><path class="fl2" d="M70 14H92V126H70Z"/><path class="fl2" d="M92 40L128 52V88L92 100Z"/>'+'<path class="ax" d="M20 70H200"/>'+hd(70,128,138,'Y = '+mmf(Y))+vd(196,14,126,'Ø '+mmf(D),false)+ex('M92 14H198M92 126H198');
-    svg=svgBox(svg,150,'Schéma de la bride');
+    var cl=it.cls,Dd=FLG_OD[cl][ix],Yy=FLG_LEN[cl][ix],tf=FLG_TF[cl]?FLG_TF[cl][ix]:null,bs=boltSet(ix,cl),rf=cl<=300?1.5:6.4;
+    rows.push(['Ø extérieur de bride',nn(Dd)+' mm']);rows.push(['Cercle de boulons',nn(FLG_W[cl][ix])+' mm']);rows.push(['Ø du ressaut',nn(FLG_R[ix])+' mm']);
+    if(tf)rows.push(['Épaisseur de bride',nn(cl<=300?tf-1.5:tf)+' mm']);
+    if(it.sub==='WN'){rows.push(['Longueur du moyeu Y',nn(Yy)+' mm']);rows.push(['Hauteur totale avec ressaut',nn(Yy+rf)+' mm']);}
+    rows.push(['Boulons',bs.n+' × '+fracIn(bs.din)+', goujon '+fmt(bs.L,0)+' mm']);
+    svg=drwFlange(it,'Coupe de la bride');
+    note=it.sub==='WN'?'':(it.sub==='LJ'?'Bride à collet battu : pas de schéma en coupe, cotes de la bride seulement.':'Hauteur du moyeu estimée et non cotée : prenez-la dans la norme ou la fiche du fabricant.');
   }
   else if(c==='vanne'){
-    var Lv=VALVE_FF[ix]*(VALVE_FFC[it.cls]||1);
-    rows.push(['L, face à face',mmf(Lv)+' mm']);rows.push(['Ø extérieur de bride',mmf(FLG_OD[it.cls][ix])+' mm']);
-    note='Dimension face à face indicative. La hauteur avec volant dépend du fabricant : utilisez la fiche du fournisseur.';
-    var bf=it.sub==='bfly';
-    svg='<path class="pb2" d="M30 60H60V80H30Z"/><path class="pb2" d="M180 60H210V80H180Z"/><path class="fl2" d="M60 46H70V94H60ZM170 46H180V94H170Z" style="fill:var(--flg-bg)"/>'+
-      '<path class="pb2" d="M70 56H170V84H70Z"/>'+(it.sub==='check'?'':'<path class="pb2" d="M110 26H130V56H110Z"/><path d="M120 12V26M96 12H144" fill="none" stroke="var(--ink)" stroke-width="2"/>')+
-      '<path class="ax" d="M20 70H220"/>'+hd(60,180,112,'L = '+mmf(Lv))+ex('M60 94V114M180 94V114');
-    svg=svgBox(svg,130,'Schéma de la vanne');
+    var Lv=valveFF(ix,it.cls);
+    rows.push(['Face à face L',nn(Lv)+' mm']);rows.push(['Ø extérieur de bride',nn(FLG_OD[it.cls][ix])+' mm']);
+    note='Face à face selon ASME B16.10 (vanne à brides). Seul le face à face est normalisé : la hauteur, le volant ou le levier dépendent du fabricant (Pipedata utilise des vannes SLB, absentes ici). Les cotes de hauteur et de volant du schéma sont des proportions approximatives.';
+    svg=drwValve(it,Lv,'Schéma de principe de la vanne');
   }
   else if(c==='forge'){
     var t=it.sub,rt=it.rt,sw=t.indexOf('sw')===0,r=sw?SWD[rt]:THD[rt];
     if(!r||(sw&&r.B[ix]==null)||(!sw&&r.A[ix]==null))return '';
-    if(t==='sw90'||t==='sw45'){
-      var Aa=t==='sw90'?r.A90[ix]:r.A45[ix],J=r.J[ix];
-      rows.push(['A, centre au fond du manchon',mmf(Aa)+' mm']);rows.push(['J, profondeur d\'emboîtement',mmf(J)+' mm']);rows.push(['Centre à l\'extrémité (A + J)',mmf(Aa+J)+' mm']);
-      svg=t==='sw90'?pipeArc('M40 90A20 20 0 0 0 60 70')+'<path class="pa" d="M40 90H25M60 70V55"/><path class="pb" d="M40 90H25M60 70V55"/>'+'<path class="ax" d="M20 90H120M80 10V110"/>':'';
-      if(t==='sw90'){svg='<path class="pb2" d="M20 82H62V30H78V98H20Z" transform="translate(0 0)"/><path class="ax" d="M12 90H120M70 20V110"/>'+hd(20,70,108,'A + J = '+mmf(Aa+J))+vd(100,30,90,'A + J = '+mmf(Aa+J))+ex('M20 90V112M70 30H102');}
-      else{svg='<path class="pb2" d="M20 82H85L120 47L108 35L75 66H20Z"/><path class="ax" d="M12 74H140"/>'+hd(20,75,108,'A + J = '+mmf(Aa+J))+ex('M20 74V112M75 74V112');}
-    }else if(t==='swte'){
-      var At=r.A90[ix],Jt=r.J[ix];rows.push(['A, centre au fond du manchon',mmf(At)+' mm']);rows.push(['J, profondeur d\'emboîtement',mmf(Jt)+' mm']);rows.push(['Centre à l\'extrémité (A + J)',mmf(At+Jt)+' mm']);
-      svg='<path class="pb2" d="M30 81H111V20H129V81H210V99H30Z"/><path class="ax" d="M20 90H220M120 10V108"/>'+hd(30,120,112,'A+J = '+mmf(At+Jt))+hd(120,210,112,'A+J = '+mmf(At+Jt));
-    }else if(t==='swcap'){
-      var Bc=r.B&&r.B[ix]!=null?r:SWD[3000];rows.push(['J, profondeur d\'emboîtement',mmf(Bc.J[ix])+' mm']);rows.push(['Ø extérieur',mmf(Bc.B[ix]+2*Bc.C[ix])+' mm']);
-      svg='<path class="pb2" d="M40 48H170Q205 48 205 70Q205 92 170 92H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,120,108,'J = '+mmf(Bc.J[ix]));
-      note='Hauteur hors tout du fond : selon fabricant.';
-    }else if(t==='swhc'||t==='swcpl'){
-      var Lc=t==='swhc'?SW_F[ix]:2*r.J[ix]+SW_E[ix];rows.push(['Longueur hors tout',mmf(Lc)+' mm']);rows.push(['Ø extérieur',mmf(r.B[ix]+2*r.C[ix])+' mm']);
-      svg='<path class="pb2" d="M'+(t==='swhc'?'40':'40')+' 50H200V90H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,200,108,'L = '+mmf(Lc));
-    }else if(t==='thhc'||t==='thcpl'){
-      var Lt=t==='thhc'?TH_A[ix]/2:TH_A[ix];rows.push(['Longueur hors tout',mmf(Lt)+' mm']);rows.push(['Ø extérieur',mmf(TH_D[rt][ix])+' mm']);
-      svg='<path class="pb2" d="M40 50H200V90H40Z"/><path class="ax" d="M20 70H220"/>'+hd(40,200,108,'L = '+mmf(Lt));
-    }else if(t==='th90'||t==='th45'||t==='thte'){
-      var Ar=t==='th45'?r.C[ix]:r.A[ix];rows.push(['A, centre à l\'extrémité',mmf(Ar)+' mm']);rows.push(['Ø extérieur',mmf(r.D[ix])+' mm']);
-      if(t==='th90')svg='<path class="pb2" d="M20 82H62V30H78V98H20Z"/><path class="ax" d="M12 90H120M70 20V110"/>'+hd(20,70,108,'A = '+mmf(Ar))+vd(100,30,90,'A = '+mmf(Ar));
-      else if(t==='thte')svg='<path class="pb2" d="M30 81H111V20H129V81H210V99H30Z"/><path class="ax" d="M20 90H220M120 10V108"/>'+hd(30,120,112,'A = '+mmf(Ar))+hd(120,210,112,'A = '+mmf(Ar));
-      else svg='<path class="pb2" d="M20 82H85L120 47L108 35L75 66H20Z"/><path class="ax" d="M12 74H140"/>'+hd(20,75,108,'C = '+mmf(Ar));
+    if(t==='sw90'){
+      rows.push(['A, centre au fond du manchon',nn(r.A90[ix])+' mm']);rows.push(['J, profondeur d\'emboîtement',nn(r.J[ix])+' mm']);rows.push(['B, Ø intérieur du manchon',nn(r.B[ix])+' mm']);
+      rows.push(['C, paroi du manchon',nn(r.C[ix])+' mm']);rows.push(['D, Ø intérieur du corps',nn(r.D[ix])+' mm']);rows.push(['G, paroi du corps',nn(r.G[ix])+' mm']);
+      svg=drwSWElbow(r,ix,'Coupe du coude à souder');
+      note='Cotes ASME B16.11-2021 (tableau 6.1-1), identiques à Pipedata.';
+    }else if(t==='sw45'||t==='swte'){
+      var Aw=t==='sw45'?r.A45[ix]:r.A90[ix];
+      rows.push(['A, centre au fond du manchon',nn(Aw)+' mm']);rows.push(['J, profondeur d\'emboîtement',nn(r.J[ix])+' mm']);rows.push(['B, Ø intérieur du manchon',nn(r.B[ix])+' mm']);
+      rows.push(['C, paroi du manchon',nn(r.C[ix])+' mm']);rows.push(['D, Ø intérieur du corps',nn(r.D[ix])+' mm']);rows.push(['G, paroi du corps',nn(r.G[ix])+' mm']);
+      svg=t==='sw45'?drwSW45(r,ix,'Coupe du coude à souder 45°'):drwSWTee(r,ix,'Coupe du té à souder');
+      note='Cotes ASME B16.11-2021 (tableau 6.1-1).';
     }
-    svg=svgBox(svg,130,'Schéma du raccord forgé');
+    else if(t==='swcap'){
+      if(r.K&&r.K[ix]!=null){rows.push(['J, profondeur d\'emboîtement',nn(r.J[ix])+' mm']);rows.push(['K, épaisseur du fond',nn(r.K[ix])+' mm']);rows.push(['Hauteur hors tout (J + K)',nn(r.J[ix]+r.K[ix])+' mm']);rows.push(['B, Ø intérieur du manchon',nn(r.B[ix])+' mm']);rows.push(['C, paroi du manchon',nn(r.C[ix])+' mm']);
+        svg=drwSWCap(r,ix,'Coupe du fond à souder');note='Cotes ASME B16.11-2021 (tableau 6.1-2).';}
+    }
+    else if(t==='swhc'||t==='swcpl'){
+      var Lc=t==='swhc'?SW_F[ix]:2*r.J[ix]+SW_E[ix],osc=r.B[ix]+2*r.C[ix];
+      rows.push(['Longueur hors tout',nn(Lc)+' mm']);rows.push(['Ø extérieur',nn(osc)+' mm']);rows.push(['J, profondeur d\'emboîtement',nn(r.J[ix])+' mm']);
+      svg=drwCoupling(Lc,osc,r.B[ix],r.J[ix],r.D[ix],t==='swhc'?'Coupe du demi-manchon à souder':'Coupe du manchon à souder',t==='swhc');
+    }else if(t==='thhc'||t==='thcpl'){
+      var Lt=t==='thhc'?TH_A[ix]/2:TH_A[ix],Dt=TH_D[rt][ix];
+      rows.push(['Longueur hors tout',nn(Lt)+' mm']);rows.push(['Ø extérieur',nn(Dt)+' mm']);
+      svg=drwCoupling(Lt,Dt,0,0,od,'Coupe du manchon fileté');
+    }else if(t==='th90'||t==='th45'||t==='thte'){
+      rows.push([t==='th45'?'C, centre à l\'extrémité':'A, centre à l\'extrémité',nn(t==='th45'?r.C[ix]:r.A[ix])+' mm']);rows.push(['H, Ø de la bande',nn(r.D[ix])+' mm']);
+      rows.push(['G, paroi minimale',nn(TH_G[rt][ix])+' mm']);rows.push(['B, longueur de filet parfait',nn(TH_B[ix])+' mm']);rows.push(['L2, longueur utile de filet',nn(TH_L2[ix])+' mm']);
+      svg=drwTh(t,rt,ix,od,t==='th90'?'Coupe du coude fileté':t==='th45'?'Coupe du coude fileté 45°':'Coupe du té fileté');
+      note='Cotes ASME B16.11-2021 (tableau 6.1-3). Le passage intérieur est schématique.';
+    }
+    if(!svg&&!note)note='Cotes seules : le schéma en coupe n\'est pas disponible pour ce raccord.';
   }
   else if(c==='olet'){
-    rows.push(['Ø extérieur de la ligne',fmt(od,1)+' mm']);
+    rows.push(['Ø extérieur de la ligne',nn(od)+' mm']);
     note='La hauteur du piquage (côte sur côte) n\'est pas intégrée : prenez-la dans la fiche du fabricant (MSS SP-97).';
-    svg='<path class="pb2" d="M20 70H220V110H20Z"/><path class="pb2" d="M96 70V40Q96 30 106 30H134Q144 30 144 40V70Z" style="fill:var(--fit-bg);stroke:var(--fit)"/><path class="ax" d="M120 10V120"/>'+tx(120,24,'piquage','middle');
-    svg=svgBox(svg,125,'Schéma du piquage');
   }
   else if(c==='boulon'){
     var b=boltSet(ix,it.cls),tf2=FLG_TF[it.cls]?FLG_TF[it.cls][ix]:null;
-    rows.push(['Nombre de goujons',String(b.n)]);rows.push(['Diamètre',fracIn(b.din)]);rows.push(['Longueur de goujon',fmt(b.L,0)+' mm']);if(tf2)rows.push(['Épaisseur de bride',fmt(tf2,1)+' mm']);rows.push(['Écrous',String(2*b.n)]);
-    svg='<path class="pb2" d="M40 62H200V78H40Z"/><path class="fl2" d="M40 54H56V86H40ZM184 54H200V86H184Z" style="fill:var(--fit-bg);stroke:var(--fit)"/>'+hd(40,200,108,'L = '+fmt(b.L,0));
-    svg=svgBox(svg,125,'Schéma du goujon et des écrous');
+    rows.push(['Nombre de goujons',String(b.n)]);rows.push(['Diamètre',fracIn(b.din)]);rows.push(['Longueur de goujon',nn(b.L)+' mm']);if(tf2)rows.push(['Épaisseur de bride',nn(tf2)+' mm']);rows.push(['Écrous',String(2*b.n)]);
+    svg=drwStud(b.L,b.din,tf2,'Goujon et écrous');
   }
   else if(c==='tube'){
-    var cc=calc(it),Lm=num(it.len)*1000;if(!(Lm>0))return '';
-    var e1=endDim(it,'e1'),e2=endDim(it,'e2'),en=encTotal(it);
-    rows.push(['Longueur mesurée',mmf(Lm)+' mm']);
-    if(it.e1!=='none')rows.push(['Extrémité 1 : '+sub(ENDS,it.e1)[1].toLowerCase(),'− '+mmf(e1)+' mm']);
-    if(it.e2!=='none')rows.push(['Extrémité 2 : '+sub(ENDS,it.e2)[1].toLowerCase(),'− '+mmf(e2)+' mm']);
-    if(num(it.encO)>0)rows.push(['Encombrement imposé','− '+mmf(num(it.encO))+' mm']);
-    rows.push(['Tube net',mmf(Math.max(0,Lm-en))+' mm']);
-    var wA=en>0&&Lm>0?Math.min(70,Math.max(14,e1/Lm*180)):0,wB=en>0&&Lm>0?Math.min(70,Math.max(14,e2/Lm*180)):0;
-    if(!(e1>0))wA=0;if(!(e2>0))wB=0;
-    svg='<path class="pb2" d="M30 54H210V86H30Z"/>'+(wA?'<path class="fi2" d="M30 54H'+(30+wA)+'V86H30Z"/>':'')+(wB?'<path class="fi2" d="M'+(210-wB)+' 54H210V86H'+(210-wB)+'Z"/>':'')+'<path class="ax" d="M20 70H220"/>'+hd(30,210,28,'L = '+mmf(Lm))+(wA?hd(30,30+wA,108,mmf(e1)):'')+(wB?hd(210-wB,210,108,mmf(e2)):'')+hd(30+wA,210-wB,124,'net = '+mmf(Math.max(0,Lm-en)));
-    svg=svgBox(svg,146,'Schéma du tube et des encombrements d\'extrémité');
+    var Lm=num(it.len)*1000;if(!(Lm>0))return '';
+    var e1=endDim(it,'e1'),e2=endDim(it,'e2'),en=encTotal(it),net=Math.max(0,Lm-en);
+    rows.push(['Longueur mesurée',nn(Lm)+' mm']);
+    if(it.e1!=='none')rows.push(['Extrémité 1 : '+sub(ENDS,it.e1)[1].toLowerCase(),'− '+nn(e1)+' mm']);
+    if(it.e2!=='none')rows.push(['Extrémité 2 : '+sub(ENDS,it.e2)[1].toLowerCase(),'− '+nn(e2)+' mm']);
+    if(num(it.encO)>0)rows.push(['Encombrement imposé','− '+nn(num(it.encO))+' mm']);
+    rows.push(['Tube net',nn(net)+' mm']);
+    var wA=e1>0?Math.min(60,Math.max(16,e1/Lm*200)):0,wB=e2>0?Math.min(60,Math.max(16,e2/Lm*200)):0;
+    var d=Dw(300,170,0,-18,200,18,40,46,40,62);
+    d.add('ln',['M',0,-18],['L',200,-18],['L',200,18],['L',0,18],['Z']);d.add('ht',['M',0,-18],['L',200,-18],['L',200,-13],['L',0,-13],['Z']);d.add('ht',['M',0,18],['L',200,18],['L',200,13],['L',0,13],['Z']);
+    if(wA)d.add('ln bk',['M',0,-18],['L',wA,-18],['L',wA,18],['L',0,18],['Z']);if(wB)d.add('ln bk',['M',200-wB,-18],['L',200,-18],['L',200,18],['L',200-wB,18],['Z']);
+    d.axis(-8,0,208,0);d.dimH(0,200,d.Y(-18)-18,nn(Lm),-18,-18);
+    var yb2=d.Y(18)+20;if(wA)d.dimH(0,wA,yb2,nn(e1),18,18);if(wB)d.dimH(200-wB,200,yb2,nn(e2),18,18);d.dimH(wA,200-wB,yb2+18,nn(net),18,18);
+    svg=d.svg('Tube : longueur mesurée, encombrements d\'extrémité et tube net');
   }
   else return '';
   var h='<div class="lbl">Encombrement et schéma</div>'+svg;
@@ -861,6 +1181,7 @@ function resultHTML(){
      (d.cat==='tube'?'<dt>Longueur mesurée</dt><dd>'+fmt(num(d.len))+' m</dd>'+(c.enc>0?'<dt>Encombrement extrémités</dt><dd>− '+fmt(c.enc*1000,0)+' mm</dd>':'')+'<dt>Tube net × quantité</dt><dd>'+fmt(c.mult)+' m</dd>':'<dt>Quantité</dt><dd>'+fmt(c.mult,0)+'</dd>')+
      (c.content>0?'<dt>Contenu</dt><dd>'+fmt(c.content)+' kg</dd>':'')+
      (c.insul>0?'<dt>Isolation</dt><dd>'+fmt(c.insul)+' kg</dd>':'')+
+     (c.wn>0||c.wj>0?'<dt>Joints à souder</dt><dd>'+fmt(c.wj,0)+(c.wn!==c.wj?' × '+fmt(num(d.qty),0)+' = '+fmt(c.wn,0):'')+(String(d.wj||'').trim()!==''?' (imposé)':'')+'</dd><dt>Diamètre principal</dt><dd>'+fmt(c.wd)+' po</dd><dt>Pouces à souder</dt><dd>'+fmt(c.wi)+' po</dd>':'')+
      '<dt>Surface unitaire</dt><dd>'+fmt(c.usurf,3)+(d.cat==='tube'?' m²/m':' m²')+(num(d.overS)>0?' (imposée)':'')+'</dd>'+
      '</dl>';
   if(c.warn)h+='<div class="warn">'+esc(c.warn)+'</div>';
@@ -904,12 +1225,12 @@ function totalsHTML(T){
   var lab=multi?'Total général':(I.length===1&&I[0].iso!=='Sans ISO'?'Total · '+esc(I[0].iso):'Total');
   function box(cls,l,kg,m2){return '<div class="'+cls+'"><div class="lbl">'+l+'</div><div class="v">'+fmt(kg)+' <small>kg</small></div><div class="sf">'+fmt(m2)+' m² peinture</div></div>';}
   var h='<div class="totals">'+box('t1','Tubes',T.tube,T.stube)+box('t2','Accessoires',T.acc,T.sacc)+box('t3','Brides',T.brd,T.sbrd)+box('tot',lab,T.total,T.stotal)+'</div>'+
-   '<div class="strip"><span>Tube posé <b>'+fmt(T.len)+' m</b></span><span>Surface de peinture <b>'+fmt(T.stotal)+' m²</b></span></div>';
+   '<div class="strip"><span>Tube posé <b>'+fmt(T.len)+' m</b></span><span>Surface de peinture <b>'+fmt(T.stotal)+' m²</b></span><span>Joints à souder <b>'+fmt(T.wn,0)+'</b></span><span>Pouces à souder <b>'+fmt(T.wi)+' po</b></span></div>';
   if(multi){
     h+='<div class="isos">'+I.map(function(g){
       return '<div class="isobox"><div class="lbl">'+esc(g.iso)+'</div><div class="v">'+fmt(g.total)+' <small>kg</small></div>'+
         '<div class="sub">Tubes '+fmt(g.tube)+' · Acc. '+fmt(g.acc)+' · Brides '+fmt(g.brd)+'</div>'+
-        '<div class="sub">Peinture '+fmt(g.stotal)+' m²</div></div>';
+        '<div class="sub">Peinture '+fmt(g.stotal)+' m²</div><div class="sub">Soudures '+fmt(g.wn,0)+' joints · '+fmt(g.wi)+' po</div></div>';
     }).join('')+'</div>';
   }
   return h;
@@ -946,10 +1267,11 @@ function lineHTML(it){
   h+='<label class="f">Quantité<input data-q="qty" inputmode="numeric" value="'+esc(it.qty)+'"></label>';
   if(cat!=='libre')h+='<label class="f">Poids imposé ('+(cat==='tube'?'kg/m':'kg')+')<input data-q="over" inputmode="decimal" placeholder="auto" value="'+esc(it.over)+'"></label>';
   h+='<label class="f">Surface imposée ('+(cat==='tube'?'m²/m':'m²')+')<input data-q="overS" inputmode="decimal" placeholder="auto" value="'+esc(it.overS)+'"></label>';
+  h+='<label class="f">Joints à souder imposés<input data-q="wj" inputmode="numeric" placeholder="auto" value="'+esc(it.wj)+'"></label>';
   h+='</div>';
   h+='<div class="note" data-enc'+(encText(it)?'':' hidden')+'>'+esc(encText(it))+'</div>';
   h+='<div class="warn" data-warn'+(c.warn?'':' hidden')+'>'+esc(c.warn)+'</div>';
-  h+='<div class="lf"><span>Poids unit. : <b class="u">'+fmt(c.unit)+' '+c.uLabel+'</b></span><span>Total : <b class="t">'+fmt(c.metal)+' kg</b></span><span>Peinture : <b class="s">'+fmt(c.surf)+' m²</b></span></div>';
+  h+='<div class="lf"><span>Poids unit. : <b class="u">'+fmt(c.unit)+' '+c.uLabel+'</b></span><span>Total : <b class="t">'+fmt(c.metal)+' kg</b></span><span>Peinture : <b class="s">'+fmt(c.surf)+' m²</b></span><span>Soudures : <b class="w">'+fmt(c.wn,0)+' joints · '+fmt(c.wd)+' po · '+fmt(c.wi)+' po-diam.</b></span></div>';
   h+='<div class="actions" style="justify-content:flex-end"><button class="btn sm" data-act="dup">Dupliquer</button><button class="btn sm danger" data-act="del">Supprimer</button></div></article>';
   return h;
 }
@@ -958,7 +1280,7 @@ function refreshLine(el,it){
   el.querySelector('.name').textContent=descr(it);
   el.querySelector('.u').textContent=fmt(c.unit)+' '+c.uLabel;
   el.querySelector('.t').textContent=fmt(c.metal)+' kg';
-  el.querySelector('.s').textContent=fmt(c.surf)+' m²';
+  el.querySelector('.s').textContent=fmt(c.surf)+' m²';el.querySelector('.w').textContent=fmt(c.wn,0)+' joints · '+fmt(c.wd)+' po · '+fmt(c.wi)+' po-diam.';
   var w=el.querySelector('[data-warn]');w.textContent=c.warn;w.hidden=!c.warn;
   var en=el.querySelector('[data-enc]');if(en){var tx=encText(it);en.textContent=tx;en.hidden=!tx;}
 }
@@ -989,7 +1311,7 @@ function renderSpool(){
     var tot=g.total||1;
     h+='<section class="spool"><header><h3>'+esc(g.iso)+' <span class="spn">Spool '+esc(g.sp)+'</span></h3><span class="num">'+fmt(g.total)+' kg</span></header><div class="inner">'+
      '<div class="bar" aria-hidden="true"><i class="b1" style="width:'+(g.tube/tot*100).toFixed(1)+'%"></i><i class="b2" style="width:'+(g.acc/tot*100).toFixed(1)+'%"></i><i class="b3" style="width:'+(g.brd/tot*100).toFixed(1)+'%"></i></div>'+
-     '<dl class="kv"><dt>Tubes ('+fmt(g.len)+' m)</dt><dd>'+fmt(g.tube)+' kg</dd><dt>Accessoires</dt><dd>'+fmt(g.acc)+' kg</dd><dt>Brides</dt><dd>'+fmt(g.brd)+' kg</dd><dt>Surface de peinture</dt><dd>'+fmt(g.stotal)+' m²</dd></dl>'+
+     '<dl class="kv"><dt>Tubes ('+fmt(g.len)+' m)</dt><dd>'+fmt(g.tube)+' kg</dd><dt>Accessoires</dt><dd>'+fmt(g.acc)+' kg</dd><dt>Brides</dt><dd>'+fmt(g.brd)+' kg</dd><dt>Surface de peinture</dt><dd>'+fmt(g.stotal)+' m²</dd><dt>Joints à souder</dt><dd>'+fmt(g.wn,0)+'</dd><dt>Pouces à souder</dt><dd>'+fmt(g.wi)+' po</dd></dl>'+
      '<details><summary>'+g.items.length+' ligne'+(g.items.length>1?'s':'')+'</summary><div class="tbl-wrap"><table><thead><tr><th>Désignation</th><th>Qté</th><th>kg</th><th>m²</th></tr></thead><tbody>'+
      g.items.map(function(it){var c=calc(it);return '<tr><td>'+esc(descr(it))+(it.cat==='tube'?' · '+fmt(c.net)+' m net':'')+'</td><td class="n">'+fmt(num(it.qty),0)+'</td><td class="n">'+fmt(c.metal)+'</td><td class="n">'+fmt(c.surf)+'</td></tr>';}).join('')+
      '</tbody></table></div></details></div></section>';
@@ -1008,19 +1330,19 @@ function toast(m){var t=$('toast');t.textContent=m;t.className='on';clearTimeout
 function csvCell(v){var s=String(v==null?'':v);return /[;"\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;}
 function csvNum(n,d){return (isFinite(n)?n:0).toFixed(d===undefined?2:d).replace('.',',');}
 function csvLines(){
-  var r=[['ISO','Spool','Désignation','Classe','NPS','Schedule','Longueur mesurée (m)','Longueur nette (m)','Quantité','Poids unitaire','Unité','Poids total (kg)','Surface peinture (m²)','Catégorie (code)','Type (code)','NPS réduit','Poids imposé','Désignation libre','Poids libre (kg)','Ext. 1 (code)','Ext. 1 type (code)','Ext. 2 (code)','Ext. 2 type (code)','Encombrement imposé (mm)','Surface imposée (m²)','Classe forgée (code)']];
+  var r=[['ISO','Spool','Désignation','Classe','NPS','Schedule','Longueur mesurée (m)','Longueur nette (m)','Quantité','Poids unitaire','Unité','Poids total (kg)','Surface peinture (m²)','Catégorie (code)','Type (code)','NPS réduit','Poids imposé','Désignation libre','Poids libre (kg)','Ext. 1 (code)','Ext. 1 type (code)','Ext. 2 (code)','Ext. 2 type (code)','Joints à souder','Diamètre principal (po)','Pouces à souder','Joints imposés','Encombrement imposé (mm)','Surface imposée (m²)','Classe forgée (code)']];
   S.items.forEach(function(it){var c=calc(it);var sc=(it.cat==='bride'||it.cat==='vanne'||it.cat==='libre'||it.cat==='forge'||it.cat==='boulon'||(it.cat==='olet'&&it.sub!=='weld'))?'':it.sch;
     var tb=it.cat==='tube',hasB=tb&&(it.e1==='bride'||it.e2==='bride');
     r.push([it.iso,it.spool,descr(it),(it.cat==='bride'||it.cat==='vanne'||it.cat==='boulon'||hasB)?it.cls:'',it.cat==='libre'?'':NPS[it.nps].l,sc,tb?csvNum(num(it.len)):'',tb?csvNum(c.net,3):'',csvNum(num(it.qty),0),csvNum(c.unit),c.uLabel,csvNum(c.metal),csvNum(c.surf),
       it.cat,it.sub||'',((it.cat==='te'&&it.sub==='reduit')||it.cat==='red')?NPS[it.nps2].l:'',num(it.over)>0?csvNum(num(it.over),3):'',it.cat==='libre'?it.name:'',it.cat==='libre'?csvNum(num(it.w),3):'',
-      tb?it.e1:'',tb&&it.e1==='coude'?it.e1s:'',tb?it.e2:'',tb&&it.e2==='coude'?it.e2s:'',tb&&num(it.encO)>0?csvNum(num(it.encO),1):'',num(it.overS)>0?csvNum(num(it.overS),4):'',(it.cat==='forge'||(it.cat==='olet'&&it.sub!=='weld'))?it.rt:'']);});
-  var T=sumItems(S.items);r.push(['TOTAL','','','','','','','','','','',csvNum(T.total),csvNum(T.stotal),'','','','','','','','','','','','','']);
+      tb?it.e1:'',tb&&it.e1==='coude'?it.e1s:'',tb?it.e2:'',tb&&it.e2==='coude'?it.e2s:'',csvNum(c.wn,0),csvNum(c.wd),csvNum(c.wi),String(it.wj||''),tb&&num(it.encO)>0?csvNum(num(it.encO),1):'',num(it.overS)>0?csvNum(num(it.overS),4):'',(it.cat==='forge'||(it.cat==='olet'&&it.sub!=='weld'))?it.rt:'']);});
+  var T=sumItems(S.items),tr=r[0].map(function(){return '';});tr[0]='TOTAL';tr[11]=csvNum(T.total);tr[12]=csvNum(T.stotal);tr[23]=csvNum(T.wn,0);tr[25]=csvNum(T.wi);r.push(tr);
   return r;
 }
 function csvSpools(){
-  var r=[['ISO','Spool','Lignes','Tubes (m)','Tubes (kg)','Accessoires (kg)','Brides (kg)','Total (kg)','Surface peinture (m²)']];
-  groupSpools().forEach(function(g){r.push([g.iso,g.sp,g.items.length,csvNum(g.len),csvNum(g.tube),csvNum(g.acc),csvNum(g.brd),csvNum(g.total),csvNum(g.stotal)]);});
-  var T=sumItems(S.items);r.push(['TOTAL','',S.items.length,csvNum(T.len),csvNum(T.tube),csvNum(T.acc),csvNum(T.brd),csvNum(T.total),csvNum(T.stotal)]);
+  var r=[['ISO','Spool','Lignes','Tubes (m)','Tubes (kg)','Accessoires (kg)','Brides (kg)','Total (kg)','Surface peinture (m²)','Joints à souder','Pouces à souder']];
+  groupSpools().forEach(function(g){r.push([g.iso,g.sp,g.items.length,csvNum(g.len),csvNum(g.tube),csvNum(g.acc),csvNum(g.brd),csvNum(g.total),csvNum(g.stotal),csvNum(g.wn,0),csvNum(g.wi)]);});
+  var T=sumItems(S.items);r.push(['TOTAL','',S.items.length,csvNum(T.len),csvNum(T.tube),csvNum(T.acc),csvNum(T.brd),csvNum(T.total),csvNum(T.stotal),csvNum(T.wn,0),csvNum(T.wi)]);
   return r;
 }
 function p2(n){return (n<10?'0':'')+n;}
@@ -1108,15 +1430,26 @@ function sheetXml(sh){
   if(nR>0)x+='<autoFilter ref="A1:'+colL(sh.head.length-1)+last+'"/>';
   return x+'</worksheet>';
 }
+function lineDia(it){
+  if(it.cat==='libre'||!NPS[it.nps])return '—';
+  var l=NPS[it.nps].l;
+  if(((it.cat==='te'&&it.sub==='reduit')||it.cat==='red')&&NPS[it.nps2])l+=' x '+NPS[it.nps2].l;
+  return l;
+}
+function pipeDias(items){
+  var tb=items.filter(function(it){return it.cat==='tube';}),src=tb.length?tb:items.filter(function(it){return it.cat!=='libre';}),seen={},o=[];
+  src.forEach(function(it){if(!seen[it.nps]){seen[it.nps]=1;o.push(it.nps);}});
+  return o.sort(function(a,b){return a-b;}).map(function(i){return NPS[i].l;}).join(', ')||'—';
+}
 function buildXlsx(){
   var G=groupSpools(),I=isoTotals();
   var sheets=[
-    {name:'Récap',head:['Isométrique (ISO)','Spool','Poids (kg)','Surface de peinture (m²)'],widths:[24,12,14,24],numCols:[2,3],total:{label:'TOTAL',sumCols:[2,3]},
-     rows:G.map(function(g){return [g.iso,g.sp,g.total,g.stotal];})},
-    {name:'Par ISO',head:['Isométrique (ISO)','Poids (kg)','Surface de peinture (m²)'],widths:[24,14,24],numCols:[1,2],total:{label:'TOTAL',sumCols:[1,2]},
-     rows:I.map(function(g){return [g.iso,g.total,g.stotal];})},
-    {name:'Détail',head:['Isométrique (ISO)','Spool','Désignation','Quantité','Poids (kg)','Surface de peinture (m²)'],widths:[24,12,46,10,14,24],numCols:[3,4,5],total:{label:'TOTAL',sumCols:[4,5]},
-     rows:S.items.map(function(it){var c=calc(it);return [it.iso||'Sans ISO',it.spool||'—',descr(it)+(it.cat==='tube'?' · '+fmt(c.net)+' m net':''),num(it.qty),c.metal,c.surf];})}
+    {name:'Récap',head:['Isométrique (ISO)','Diamètre des pipes','Spool','Poids (kg)','Surface de peinture (m²)','Joints à souder','Pouces à souder (po)'],widths:[24,18,12,14,24,16,20],numCols:[3,4,5,6],total:{label:'TOTAL',sumCols:[3,4,5,6]},
+     rows:G.map(function(g){return [g.iso,pipeDias(g.items),g.sp,g.total,g.stotal,g.wn,g.wi];})},
+    {name:'Par ISO',head:['Isométrique (ISO)','Diamètre des pipes','Poids (kg)','Surface de peinture (m²)','Joints à souder','Pouces à souder (po)'],widths:[24,18,14,24,16,20],numCols:[2,3,4,5],total:{label:'TOTAL',sumCols:[2,3,4,5]},
+     rows:I.map(function(g){return [g.iso,pipeDias(S.items.filter(function(it){return (it.iso||'Sans ISO')===g.iso;})),g.total,g.stotal,g.wn,g.wi];})},
+    {name:'Détail',head:['Isométrique (ISO)','Diamètre','Spool','Désignation','Quantité','Poids (kg)','Surface de peinture (m²)','Joints par pièce','Joints à souder','Pouces à souder (po)'],widths:[24,14,12,46,10,14,24,14,14,20],numCols:[4,5,6,7,8,9],total:{label:'TOTAL',sumCols:[5,6,8,9]},
+     rows:S.items.map(function(it){var c=calc(it);return [it.iso||'Sans ISO',lineDia(it),it.spool||'—',descr(it)+(it.cat==='tube'?' · '+fmt(c.net)+' m net':''),num(it.qty),c.metal,c.surf,c.wj,c.wn,c.wi];})}
   ];
   var ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>';
   var wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>';
@@ -1188,7 +1521,7 @@ function cleanItem(o,warn,ln){
   });
   it.encO=num(o.encO)>0?String(o.encO):'';
   var rtv=parseInt(String(o.rt).replace(/\D/g,''),10);it.rt=[2000,3000,6000].indexOf(rtv)>=0?rtv:3000;
-  it.overS=num(o.overS)>0?String(o.overS):'';
+  it.overS=num(o.overS)>0?String(o.overS):'';it.wj=(o.wj===''||o.wj==null||!isFinite(num(o.wj)))?'':String(Math.max(0,Math.round(num(o.wj))));
   it.over=num(o.over)>0?String(o.over):'';it.name=String(o.name||'');it.w=String(o.w==null?'':o.w);
   fixItem(it);
   if(cat==='tube'&&!(num(it.len)>0))warn.push('Ligne '+ln+' : longueur de tube manquante.');
@@ -1223,12 +1556,12 @@ function importText(name,text){
       name:col(function(x){return x.indexOf('designation libre')===0;}),w:col(function(x){return x.indexOf('poids libre')===0;}),
       e1:col(function(x){return x==='ext. 1 (code)';}),e1s:col(function(x){return x==='ext. 1 type (code)';}),
       e2:col(function(x){return x==='ext. 2 (code)';}),e2s:col(function(x){return x==='ext. 2 type (code)';}),
-      encO:col(function(x){return x.indexOf('encombrement impose')===0;}),overS:col(function(x){return x.indexOf('surface imposee')===0;}),rt:col(function(x){return x.indexOf('classe forgee')===0;})};
+      encO:col(function(x){return x.indexOf('encombrement impose')===0;}),wj:col(function(x){return x.indexOf('joints impose')===0;}),overS:col(function(x){return x.indexOf('surface imposee')===0;}),rt:col(function(x){return x.indexOf('classe forgee')===0;})};
     if(ci.cat<0)return {error:'Format non reconnu. Importez un CSV exporté par cette application (colonne « Catégorie (code) » requise).'};
     for(var r=1;r<rows.length;r++){
       var row=rows[r];if(norm(row[0])==='total'&&!String(row[ci.cat]||'').trim())continue;
       function g(k){return ci[k]>=0?(row[ci[k]]||''):'';}
-      var it=cleanItem({iso:g('iso'),spool:g('spool'),cat:g('cat'),sub:g('sub'),nps:g('nps'),nps2:g('nps2'),sch:g('sch'),cls:g('cls'),len:g('len'),qty:g('qty'),over:g('over'),name:g('name'),w:g('w'),e1:g('e1'),e1s:g('e1s'),e2:g('e2'),e2s:g('e2s'),encO:g('encO'),overS:g('overS'),rt:g('rt')},warn,r+1);
+      var it=cleanItem({iso:g('iso'),spool:g('spool'),cat:g('cat'),sub:g('sub'),nps:g('nps'),nps2:g('nps2'),sch:g('sch'),cls:g('cls'),len:g('len'),qty:g('qty'),over:g('over'),name:g('name'),w:g('w'),e1:g('e1'),e1s:g('e1s'),e2:g('e2'),e2s:g('e2s'),encO:g('encO'),overS:g('overS'),wj:g('wj'),rt:g('rt')},warn,r+1);
       if(it)items.push(it);
     }
   }
@@ -1265,7 +1598,7 @@ function ioHTML(){
 function clean(d){var o={};Object.keys(d).forEach(function(k){o[k]=d[k];});return o;}
 function fixItem(d){
   if(!avail(d.nps,d.sch)&&d.cat!=='olet')d.sch='STD';
-  if(!d.e1)d.e1='none';if(!d.e2)d.e2='none';if(!d.e1s)d.e1s='90lr';if(!d.e2s)d.e2s='90lr';if(d.encO==null)d.encO='';if(d.overS==null)d.overS='';if(d.rt==null)d.rt=3000;
+  if(!d.e1)d.e1='none';if(!d.e2)d.e2='none';if(!d.e1s)d.e1s='90lr';if(!d.e2s)d.e2s='90lr';if(d.encO==null)d.encO='';if(d.overS==null)d.overS='';if(d.wj==null)d.wj='';if(d.rt==null)d.rt=3000;
   if(d.cat==='forge'){if(d.nps>8)d.nps=8;if(forgeRatings(d.sub).indexOf(d.rt)<0)d.rt=3000;}
   if(d.cat==='olet'){
     if(d.sub==='weld'){var sm={'40':'STD','80':'XS','160':'XXS'};if(sm[d.sch])d.sch=sm[d.sch];if(['STD','XS','XXS'].indexOf(d.sch)<0)d.sch='STD';if(d.sch==='XXS'&&d.nps>10)d.sch='XS';}

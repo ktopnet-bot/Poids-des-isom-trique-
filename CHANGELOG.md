@@ -2,6 +2,41 @@
 
 Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
 
+## 1.9.1
+- Récap Excel : colonne « Diamètre des pipes » en B (Récap, Par ISO, Détail) ; poids, surface de peinture et soudures décalés à droite.
+
+## 1.9.0
+- Soudures : nombre de joints à souder (1 par extrémité raccordée d'un tube, ou valeur imposée), diamètre principal et pouces-diamètre (joints × NPS × quantité) par ligne, par spool, par ISO et au total.
+- Récap Excel : colonnes Joints à souder / Pouces à souder dans Récap, Par ISO et Détail. Colonnes ajoutées aux CSV (liste et spools), import compatible.
+
+## 1.8.1
+- Schémas de vannes redessinés d'après Pipedata : opercule, soupape, clapet, boisseau (vue de bout + face), papillon wafer.
+- Nouvelle vanne papillon à oreilles.
+
+## 1.8.0
+- Tableaux SW/TH remplacés par les valeurs réelles de l'ASME B16.11-2021 (B, C, D, G, J, A, K ; 3000/6000 SW, 2000/3000/6000 TH).
+- Nouveaux schémas en coupe (style Pipedata) : coude SW 45°, té SW, bouchon SW, coude 90°/45° fileté, té fileté.
+- Les poids des raccords forgés SW peuvent varier légèrement (recalibrage sur Pipedata conservé).
+
+## 1.7.4 - 2026-10-26
+
+- Schéma du fond corrigé : demi-vue extérieure et demi-coupe hachurée comme dans Pipedata, biseau de soudure, axe central. Le dessin ne se déforme plus sur les petits diamètres à forte épaisseur (par exemple 1/2" SCH XXS).
+
+## 1.7.3 - 2026-10-26
+
+- Schémas de brides conformes au dessin technique : ligne continue de la face d'étanchéité à travers l'alésage, extrémité du moyeu fermée, arêtes de la bride tracées à travers les trous de boulons, coupure du tube sur les brides SO, SW et filetée.
+
+## 1.7.2 - 2026-10-26
+
+- Brides : schémas en coupe ajoutés pour la bride pleine, à emboîtement glissant (SO), filetée et à souder (SW), avec le diamètre d'alésage SO et la profondeur d'emboîtement SW. La hauteur du moyeu de ces types est estimée et non cotée.
+
+## 1.7.1 - 2026-10-26
+
+- Schémas redessinés à l'échelle dans le style Pipedata : coupes hachurées et cotes à flèches (coudes, tés, réductions, fonds, brides à collerette, coudes et manchons forgés, vannes, goujons, tube).
+- Brides : ajout du cercle de boulons, du diamètre de ressaut et du diamètre de moyeu (ASME B16.5), des cotes Y et de la hauteur totale.
+- Vannes : face à face par classe selon ASME B16.10 (remplace le coefficient forfaitaire), ce qui affine la surface de peinture.
+- Le schéma en coupe des brides n'est donné que pour la bride à collerette ; les autres types affichent leurs cotes.
+
 ## 1.7.0 - 2026-10-26
 
 - Fiche de calcul : bloc « Encombrement et schéma » pour chaque catégorie, avec un schéma côté et les dimensions : coudes (R, A, O), tés (C, M), réductions (H), fonds (E), brides (Ø, longueur Y, épaisseur, boulons), vannes (face à face L), raccords forgés B16.11 (A, J, L), boulonnerie et piquages.
