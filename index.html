@@ -198,6 +198,8 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 .pcard .rn{display:flex;gap:6px;flex-wrap:wrap}
 .pcard .rn input{flex:1;min-width:120px;font-size:15px;background:var(--panel);border:1px solid var(--line);border-radius:5px;padding:6px 10px;min-height:38px;color:var(--ink)}
 .projpanel .safe{font-size:12.5px;color:var(--muted);margin:0}
+.fileinp{position:absolute;left:-9999px;top:0;width:1px;height:1px;opacity:0}
+label.btn{display:inline-flex;align-items:center;cursor:pointer}
 .dm{width:100%;height:auto;display:block;background:var(--panel);border:1px solid var(--line);border-radius:5px;color:var(--ink)}
 .dm text{font-family:var(--f-body);font-size:11px;fill:var(--ink)}
 .dm .ln{fill:none;stroke:var(--ink);stroke-width:1.4;stroke-linejoin:round}
@@ -223,7 +225,7 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 <div class="wrap">
   <header class="title-block">
     <h1>Calcul poids tuyauterie</h1>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.9.1 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.12.2 · Kamel Nasralli</div>
   </header>
   <div id="projbar"></div>
   <nav class="tabs" role="tablist" id="tabs"></nav>
@@ -232,10 +234,10 @@ tfoot td{border-top:2px solid var(--ink);font-weight:600;font-family:var(--f-mon
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.9.1 · Format de fichier 6 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.12.2 · Format de fichier 6 · Licence MIT</p>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
-<input type="file" id="file" accept=".csv,.json,.txt,text/csv,application/json" hidden>
+<input type="file" id="file" class="fileinp">
 
 <script>
 (function(){
@@ -322,6 +324,19 @@ var WOL_LB={
 (function(){for(var i=0;i<WOL_LB.XS.length;i++)WOL_LB.XS[i]=Math.max(WOL_LB.XS[i],WOL_LB.STD[i]);})(); /* une série XS ne peut pas être plus légère que la STD */
 /* Sockolets : moyenne de deux tableaux publiés (kg et lb), kg */
 var SOCK_KG={3000:[0.10,0.14,0.24,0.34,0.42,0.68,1.14,1.71,3.14,4.76,6.80],6000:[0.23,0.36,0.59,0.73,0.91,2.34]};
+/* Piquages MSS SP-97, taille sur taille, mm (Bonney Forge, tableaux publiés par Wermac). A hauteur, B largeur de base, D alésage. */
+var OLD={
+ weldSTD:{A:[19.05,22.23,26.99,31.75,33.34,38.10,41.28,44.45,50.80,57.15,60.3,69.85,77.79,85.73,88.90,93.66,103.19,117.48,136.53],B:[34.93,41.28,50.80,60.3,73,88.90,103.19,122.24,152.40,180.98,215.90,263.53,319.09,377.83,409.58,463.55,527.05,585.79,708.03],C:[23.81,30.16,36.51,44.45,50.80,65.09,76.20,93.66,120.65,141.29,169.86,220.66,274.64,325.44,357.19,407.99,473.08,509.59,638.18],D:[15.88,20.64,26.19,34.93,41.28,52.39,61.91,77.79,101.60,128.59,153.99,201.61,254.00,304.80,336.55,387.35,438.15,488.95,590.55]},
+ weldXS:{A:[19.05,22.23,26.99,31.75,33.34,38.10,41.28,44.45,50.80,57.15,77.79,98.43,88.90,100.01,104.78,112.71,119.06,127.00,139.70],B:[34.93,41.28,50.80,61.91,73.00,88.90,103.19,122.24,152.40,180.98,225.43,269.88,327.03,385.76,423.86,479.43,536.58,593.73,708.03],C:[23.81,30.16,36.51,44.45,50.80,65.09,76.20,93.66,120.65,141.29,169.86,220.66,265.11,330.20,363.54,419.10,473.08,528.64,638.18],D:[15.88,20.64,26.19,34.93,41.28,52.39,61.91,77.79,101.60,128.59,153.99,193.68,254.00,304.80,330.20,381.00,431.80,482.60,584.20]},
+ sock3000:{A:[25.40,26.98,33.33,33.33,34.92,38.10,39.68,44.45,47.62,61.91,68.26],B:[34.92,41.27,50.80,60.32,73.02,88.90,103.18,122.23,153.98,184.15,220.66],D:[15.80,20.93,26.64,35.05,40.89,52.50,62.71,77.93,102.26,128.19,154.05]},
+ sock6000:{A:[31.75,36.51,39.68,41.27,42.86,52.38],B:[43.65,49.60,61.91,69.05,82.55,102.39],D:[11.84,15.60,20.70,29.46,33.99,42.90]},
+ thr3000:{A:[25.40,26.98,33.33,33.33,34.92,38.10,48.41,50.80,57.15,61.91,69.85],B:[34.92,41.27,50.80,60.32,73.02,88.90,103.18,122.23,153.98,184.15,220.66],D:[15.87,20.63,26.98,34.92,41.27,52.38,63.50,77.78,103.18,133.35,146.05]}
+};
+function oletDims(it){
+  var k=it.sub==='weld'?(it.sch==='XS'?'weldXS':(it.sch==='XXS'?null:'weldSTD')):(it.sub==='sock'?(it.rt===6000?'sock6000':'sock3000'):(it.rt===3000?'thr3000':null));
+  var t=k?OLD[k]:null;if(!t||t.A[it.nps]==null)return null;
+  return {A:t.A[it.nps],B:t.B[it.nps],C:t.C?t.C[it.nps]:null,D:t.D[it.nps]};
+}
 function oletMax(it){return it.sub==='weld'?18:10;}
 function weldSchOpts(it){
   var o=[['STD','SCH 40 / STD'],['XS','SCH 80 / XS']];if(it.nps<=10)o.push(['XXS','SCH 160 / XXS']);
@@ -459,7 +474,7 @@ function endFields(o,a){
 
 /* ---------- État ---------- */
 var KEY='cpt.poids.v2'; /* ancien stockage à un seul projet, lu une fois pour la migration */
-var APP_VERSION='1.9.1',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var APP_VERSION='1.12.2',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
 function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',wj:'',rt:3000};}
@@ -467,7 +482,8 @@ function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2
 /* ---------- Projets : chaque projet garde ses lignes et ses paramètres dans le navigateur ---------- */
 var KEY3='cpt.poids.v3';
 var PR={cur:null,list:[],trash:[]};
-function defData(){return {mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:false,open:true};}
+var TBK=['p1','p2','p3','code','doc','rev','sub','svc','cls','sys'];
+function defData(){return {mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,tb:{},items:[],seed:false,open:true};}
 function exampleItems(){return [
     {id:uid(),cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:3,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'coude',sub:'90lr',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
@@ -476,8 +492,8 @@ function exampleItems(){return [
     {id:uid(),cat:'te',sub:'egal',nps:10,sch:'40',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'vanne',sub:'gate',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''}
   ];}
-function snap(){return {mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,items:S.items,seed:S.seed,open:S.open};}
-function applyData(d){var k,df=defData();for(k in df)S[k]=(d&&d[k]!=null)?d[k]:df[k];if(!Array.isArray(S.items))S.items=[];S.items.forEach(fixItem);}
+function snap(){return {mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,tb:S.tb,items:S.items,seed:S.seed,open:S.open};}
+function applyData(d){var k,df=defData();for(k in df)S[k]=(d&&d[k]!=null)?d[k]:df[k];if(!Array.isArray(S.items))S.items=[];if(!S.tb||typeof S.tb!=='object')S.tb={};S.items.forEach(fixItem);}
 function curProj(){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===PR.cur)return PR.list[i];return null;}
 function findProj(id){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===id)return PR.list[i];return null;}
 function persist(){
@@ -532,13 +548,13 @@ function dataFrom(st,items){
   if(st){
     if(MATS.some(function(m){return m[0]===st.matK;}))d.matK=st.matK;if(num(st.mat)>0)d.mat=num(st.mat);
     if(FLUIDS.some(function(m){return m[0]===st.fluK;}))d.fluK=st.fluK;if(st.rho!=null&&num(st.rho)>=0)d.rho=num(st.rho);
-    d.insOn=!!st.insOn;if(st.insT!=null)d.insT=num(st.insT);if(st.insRho!=null)d.insRho=num(st.insRho);
+    d.insOn=!!st.insOn;if(st.insT!=null)d.insT=num(st.insT);if(st.insRho!=null)d.insRho=num(st.insRho);if(st.tb&&typeof st.tb==='object'){TBK.forEach(function(k){if(st.tb[k]!=null)d.tb[k]=String(st.tb[k]).slice(0,120);});}
   }
   return d;
 }
 function projectObj(p){
   var d=p.id===PR.cur?snap():p.data;
-  return {name:p.name,settings:{matK:d.matK,mat:d.mat,fluK:d.fluK,rho:d.rho,insOn:d.insOn,insT:d.insT,insRho:d.insRho},
+  return {name:p.name,settings:{matK:d.matK,mat:d.mat,fluK:d.fluK,rho:d.rho,insOn:d.insOn,insT:d.insT,insRho:d.insRho,tb:d.tb||{}},
     items:d.items.map(function(it){var c=clean(it);delete c.id;return c;})};
 }
 function exportProject(p){
@@ -1059,6 +1075,31 @@ function drwValve(it,Lv,lab){
   }
   return d.svg(lab);
 }
+function drwOlet(it,o,lab){
+  var ix=it.nps,od=NPS[ix].od,R=od/2,pp=props(ix,it.sch)||props(ix,'STD'),tw=pp?pp.t:0.1*od,A=o.A,B=o.B,D=o.D,t=it.sub,
+      sw=(t==='sock')?SWD[it.rt]:null,Bs=od+1.6,Ws=Math.max(0.09*od,4),Js=12.7;
+  if(sw&&sw.B[ix]!=null){Bs=sw.B[ix];Ws=sw.C[ix];Js=sw.J[ix];}
+  var So=t==='weld'?(o.C||od*1.08):(t==='sock'?Bs+2*Ws:od*1.25);
+  if(So>B*0.95)So=B*0.95;
+  var Lh=B*0.6,yb=-(R-tw),y0=-R-A,y1=yb+0.3*A,d=Dw(340,260,-Lh,y0,Lh,y1,40,40,64,52),i,h;
+  var bt=-R,ytop=-R-A,sh=-R-0.55*A,sh0=-R-0.12*A;
+  /* contour de la paroi gauche : de la jonction jusqu'au sommet puis alésage */
+  function side(sg){
+    var q=[['M',sg*-B/2,yb],['L',sg*-B/2,sh0],['L',sg*-So/2,sh]];
+    if(t==='weld'){var bv=Math.min(0.22*A,(So-D)/2*0.9),tip=D/2+0.35*(So/2-D/2);q.push(['L',sg*-So/2,ytop+bv],['L',sg*-tip,ytop],['L',sg*-D/2,ytop]);}
+    else if(t==='sock'){q.push(['L',sg*-So/2,ytop],['L',sg*-Bs/2,ytop],['L',sg*-Bs/2,ytop+Js],['L',sg*-D/2,ytop+Js]);}
+    else{var Dt=D*1.18,Jt=0.6*A;q.push(['L',sg*-So/2,ytop],['L',sg*-Dt/2,ytop],['L',sg*-Dt/2,ytop+Jt],['L',sg*-D/2,ytop+Jt]);}
+    q.push(['L',sg*-D/2,yb],['Z']);return q;
+  }
+  [1,-1].forEach(function(sg){var q=side(sg);d.add.apply(d,['ht'].concat(q));d.add.apply(d,['ln'].concat(q));});
+  var wt=t==='weld'?D:(t==='sock'?Bs:D*1.18);d.ln('ln',-wt/2,ytop,wt/2,ytop);d.ln('ln',-D/2,yb,D/2,yb);
+  if(t==='thr'){var Dt2=D*1.18,Jt2=0.6*A;for(i=1;i<=4;i++){var yy=ytop+Jt2*i/5;d.ln('ln',-Dt2/2,yy,-Dt2/2+0.12*Dt2,yy);d.ln('ln',Dt2/2,yy,Dt2/2-0.12*Dt2,yy);}}
+  d.axis(0,-R-A-0.12*A,0,yb+0.2*A);
+  d.dimV(-R-A,-R,d.X(Lh)+24,nn(A),So/2,Lh);
+  d.dimH(-B/2,B/2,d.Y(y1)+20,nn(B),-R,-R);
+  d.dimH(-D/2,D/2,d.Y(-R-A)-16,nn(D),-R-A,-R-A);
+  return d.svg(lab);
+}
 function mmf(v){return nn(v);}
 function dimsOf(it){
   var ix=it.nps,od=NPS[ix]?NPS[ix].od:0,rows=[],svg='',note='',c=it.cat;
@@ -1138,7 +1179,12 @@ function dimsOf(it){
   }
   else if(c==='olet'){
     rows.push(['Ø extérieur de la ligne',nn(od)+' mm']);
-    note='La hauteur du piquage (côte sur côte) n\'est pas intégrée : prenez-la dans la fiche du fabricant (MSS SP-97).';
+    var od2=oletDims(it);
+    if(od2){
+      rows.push(['Hauteur A',nn(od2.A)+' mm']);rows.push(['Largeur de base B',nn(od2.B)+' mm']);rows.push(['Alésage D',nn(od2.D)+' mm']);
+      svg=drwOlet(it,od2,'Coupe du piquage');
+      note='Cotes MSS SP-97 taille sur taille (Bonney Forge, tableaux Wermac) : A hauteur à partir de la surface de la ligne, B largeur de la base, D alésage. Schéma de principe, forme de la base et du col simplifiée ; '+(it.sub==='sock'?'emboîtement selon ASME B16.11.':(it.sub==='thr'?'filetage représenté symboliquement.':'extrémité à souder biseautée.'));
+    }else note='Cotes non intégrées pour ce piquage (SCH XXS ou classe filetée 6000) : prenez la hauteur dans la fiche du fabricant (MSS SP-97).';
   }
   else if(c==='boulon'){
     var b=boltSet(ix,it.cls),tf2=FLG_TF[it.cls]?FLG_TF[it.cls][ix]:null;
@@ -1302,9 +1348,14 @@ function groupSpools(){
   S.items.forEach(function(it){var k=(it.iso||'Sans ISO')+'\u0001'+(it.spool||'—');if(!m[k]){m[k]=[];order.push(k);}m[k].push(it);});
   return order.sort(function(a,b){return a.localeCompare(b,'fr',{numeric:true});}).map(function(k){var T=sumItems(m[k]);var p=k.split('\u0001');T.iso=p[0];T.sp=p[1];T.items=m[k];return T;});
 }
+var TBL=[['p1','Projet (ligne 1)','ex. STEG / ANSALDO'],['p2','Titre (ligne 2)','ex. Étude, fourniture et montage de …'],['p3','Titre (ligne 3)','ex. à l\'usine …'],['code','Code artc','ex. BOP'],['doc','Document N°','ex. AR327-23-06-IS-0007'],['rev','Rev iso','ex. C'],['sub','Soumission','ex. WR'],['svc','Service','ex. EAU INDUSTRIELLE'],['cls','Pipe / class','ex. 1A1'],['sys','SYS','ex. 1A1']];
+function tbForm(){
+  return '<details class="io" style="margin-top:12px"><summary>Tableau d\'avancement : informations de l\'en-tête</summary><div class="iobody"><p class="note" style="margin:0 0 8px">Ces champs sont recopiés dans le tableau du récap Excel (chaque ligne reçoit les mêmes valeurs ; modifiez-les ensuite dans Excel si besoin).</p><div class="grid">'+
+   TBL.map(function(f){return '<label class="f">'+f[1]+'<input data-tb="'+f[0]+'" type="text" maxlength="120" placeholder="'+esc(f[2])+'" value="'+esc(S.tb[f[0]]||'')+'"></label>';}).join('')+'</div></div></details>';
+}
 function renderSpool(){
   var G=groupSpools(),T=sumItems(S.items);
-  var h='<div class="panel"><h2>Rapport par spool</h2><div class="actions"><button class="btn primary" data-act="xlsx">Récap Excel (.xlsx)</button><button class="btn" data-act="csv2">Exporter CSV (spools)</button></div><p class="note" style="margin:8px 0 0">Fichier : <span class="mono">'+fileNames().spool+'</span>, enregistré dans le dossier « Téléchargements » de votre appareil.</p>';
+  var h='<div class="panel"><h2>Rapport par spool</h2><div class="actions"><button class="btn primary" data-act="xlsx">Récap Excel (.xlsx)</button><button class="btn primary" data-act="xlsxopen">Ouvrir le Tableau de Bord</button><button class="btn" data-act="csv2">Exporter CSV (spools)</button></div>'+tbForm()+'';
   h+='<div style="margin-top:14px">'+totalsHTML(T)+'</div>';
   if(!G.length)h+='<div class="stack"><div class="empty">Aucun spool. Ajoutez des pièces avec un nom d\'ISO et un numéro de spool.</div></div>';
   G.forEach(function(g){
@@ -1350,24 +1401,48 @@ function stamp(){var d=new Date();return d.getFullYear()+'-'+p2(d.getMonth()+1)+
 function slug(n){return String(n||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,30);}
 function fileNames(pn){
   var d=stamp(),cp=curProj(),sl=slug(pn!=null?pn:(cp?cp.name:'')),q=sl?'_'+sl:'';
-  return {csv:'poids-tuyauterie-liste'+q+'_'+d+'.csv',spool:'poids-tuyauterie-spools'+q+'_'+d+'.csv',json:'poids-tuyauterie-projet'+q+'_'+d+'.json',xlsx:'poids-tuyauterie-recap'+q+'_'+d+'.xlsx',all:'poids-tuyauterie-tous-projets_'+d+'.json'};
+  return {csv:'poids-tuyauterie-liste'+q+'_'+d+'.csv',spool:'poids-tuyauterie-spools'+q+'_'+d+'.csv',json:'poids-tuyauterie-projet'+q+'_'+d+'.json',xlsx:'Tableau-de-Bord'+q+'_'+d+'.xlsx',all:'poids-tuyauterie-tous-projets_'+d+'.json'};
 }
 function anchorDownload(name,data,mime){
   var b=new Blob([data],{type:mime}),u=URL.createObjectURL(b),a=document.createElement('a');
   a.href=u;a.download=name;document.body.appendChild(a);a.click();
   setTimeout(function(){document.body.removeChild(a);URL.revokeObjectURL(u);},800);
 }
+var lastFile=null;
+function openXlsxNow(){
+  if(!S.items.length){toast('La liste est vide.');return;}
+  var nm=fileNames().xlsx,mime='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',data=buildXlsx(),f=null;
+  try{f=new File([data],nm,{type:mime});}catch(e){}
+  function save(){exportFile(nm,new Blob([data],{type:mime}),mime,false,true);toast('Ouverture directe indisponible ici : enregistrez le fichier puis ouvrez-le.');}
+  if(f&&navigator.canShare&&navigator.canShare({files:[f]})&&navigator.share){
+    lastFile={name:nm,mime:mime,data:data};
+    navigator.share({files:[f],title:nm}).catch(function(e){if(e&&e.name==='AbortError')return;save();});
+  }else save();
+}
+function openBtn(){return lastFile?'<button class="btn" data-act="openlast">Ouvrir '+esc(lastFile.name.replace(/_.*(\.\w+)$/,'$1'))+'</button>':'';}
+function openLast(){
+  if(!lastFile){toast('Aucun fichier exporté pour le moment.');return;}
+  var blob=new Blob([lastFile.data],{type:lastFile.mime||'application/octet-stream'}),nm=lastFile.name,f=null;
+  try{f=new File([blob],nm,{type:blob.type});}catch(e){}
+  function fallback(){
+    try{var u=URL.createObjectURL(blob),w=window.open(u,'_blank');setTimeout(function(){URL.revokeObjectURL(u);},60000);if(!w)throw 0;}
+    catch(e){toast('Ouverture impossible dans cette vue : ouvrez le fichier depuis « Téléchargements ».');}
+  }
+  if(f&&navigator.canShare&&navigator.canShare({files:[f]})&&navigator.share){
+    navigator.share({files:[f],title:nm}).catch(function(e){if(e&&e.name==='AbortError')return;fallback();});
+  }else fallback();
+}
 function exportFile(name,text,mime,bom,isBin,ok){
-  var data=isBin?text:(bom?'﻿':'')+text;
+  var data=isBin?text:(bom?'\ufeff':'')+text;
   var viewer=!!(window.claude&&window.claude.use);
   Promise.resolve(viewer?window.claude.use('downloads'):null).then(function(dl){
     if(dl)return dl.save({filename:name,data:data});
     if(!viewer){anchorDownload(name,data,mime);return;}
     throw {code:'unavailable'};
   }).then(function(){
-    var d=new Date();S.last={name:name,t:p2(d.getHours())+':'+p2(d.getMinutes())};
+    var d=new Date();S.last={name:name,t:p2(d.getHours())+':'+p2(d.getMinutes())};lastFile={name:name,mime:mime,data:data};
     if(typeof ok==='function')ok();
-    toast('Fichier prêt : '+name);if(S.tab==='liste')renderListe();
+    toast('Fichier prêt : '+name);if(S.tab==='liste')renderListe();else if(S.tab==='spool')renderSpool();
   }).catch(function(e){
     if(e&&e.code==='declined')return;
     if(isBin){toast('Export indisponible dans cette vue');return;}
@@ -1398,7 +1473,7 @@ function zipStore(files){
   var tot=0;parts.forEach(function(x){tot+=x.length;});var out=new Uint8Array(tot),o=0;parts.forEach(function(x){out.set(x,o);o+=x.length;});return out;
 }
 function xe(v){return String(v==null?'':v).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'');}
-function colL(i){return String.fromCharCode(65+i);}
+function colL(i){return i<26?String.fromCharCode(65+i):String.fromCharCode(64+Math.floor(i/26))+String.fromCharCode(65+i%26);}
 /* sheet : {name, head:[..], rows:[[..]], widths:[..], numCols:[indices], total:{label, sumCols:[indices]}} */
 function sheetXml(sh){
   var nR=sh.rows.length,last=nR+1,x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>';
@@ -1430,6 +1505,70 @@ function sheetXml(sh){
   if(nR>0)x+='<autoFilter ref="A1:'+colL(sh.head.length-1)+last+'"/>';
   return x+'</worksheet>';
 }
+
+function spoolNo(v){v=String(v==null?'':v).trim();return /^\d+$/.test(v)?'SP'+(v.length<2?'0':'')+v:(v||'—');}
+function maxDN(items){
+  var tb=items.filter(function(it){return it.cat==='tube';}),src=tb.length?tb:items.filter(function(it){return it.cat!=='libre'&&NPS[it.nps];}),m=0;
+  src.forEach(function(it){if(NPS[it.nps]&&NPS[it.nps].v>m)m=NPS[it.nps].v;});return m;
+}
+function spoolAxe(items){
+  var w=0,l=0;items.forEach(function(it){var c=calc(it);w+=c.metal;if(it.cat==='tube'){var q=Math.max(0,num(it.qty));w+=c.unit*(c.enc||0)*q;l+=num(it.len)*1000*q;}});
+  return {w:w,l:l};
+}
+function frDate(){var d=new Date();return p2(d.getDate())+'/'+p2(d.getMonth()+1)+'/'+d.getFullYear();}
+/* feuille « Tableau d'avancement » : modèle tableau de bord de fabrication tuyauterie */
+function tableauXml(){
+  var G=groupSpools(),n=G.length,r0=10,rN=r0+Math.max(n,1)-1,NC=27,cells={},merges=[],TB=S.tb||{};
+  function put(r,c,x){(cells[r]=cells[r]||{})[c]=x;}
+  function tx(r,c,t,st){put(r,c,'<c r="'+colL(c)+r+'" s="'+st+'" t="inlineStr"><is><t xml:space="preserve">'+xe(t)+'</t></is></c>');}
+  function nu(r,c,v,st){put(r,c,'<c r="'+colL(c)+r+'" s="'+st+'"><v>'+(isFinite(v)?Math.round(v*1e6)/1e6:0)+'</v></c>');}
+  function fo(r,c,f,v,st){put(r,c,'<c r="'+colL(c)+r+'" s="'+st+'"><f>'+xe(f)+'</f><v>'+(isFinite(v)?Math.round(v*1e6)/1e6:0)+'</v></c>');}
+  function bl(r,c,st){put(r,c,'<c r="'+colL(c)+r+'" s="'+st+'"/>');}
+  function mg(a){merges.push(a);}
+  var A=0,B=1,C=2,D=3,E=4,F=5,Gc=6,H=7,I=8,J=9,K=10,L=11,M=12,N=13,O=14,P=15,Q=16,R=17,Sx=18,T=19,U=20,V=21,W=22,X=23,Y=24,Z=25,AA=26;
+  tx(1,A,'Projet : '+(TB.p1||''),13);mg('A1:AA1');tx(2,A,TB.p2||'',13);mg('A2:AA2');tx(3,A,TB.p3||'',13);mg('A3:AA3');
+  tx(4,A,'TABLEAU D\'AVANCEMENT DE FABRICATION TUYAUTERIE',13);mg('A4:AA4');
+  tx(5,X,'Date mise à jour :',14);mg('X5:Y5');tx(5,Z,frDate(),21);mg('Z5:AA5');
+  /* légende et totaux */
+  bl(6,A,18);tx(6,B,'Spool pas encore soudé/débité',14);mg('B6:C6');fo(6,D,'COUNTIF(Y'+r0+':Y'+rN+',0)',n,16);
+  bl(7,A,19);tx(7,B,'Spool partiellement soudé/débité',14);mg('B7:C7');fo(7,D,'COUNT(Y'+r0+':Y'+rN+')-D6-D8',0,16);
+  bl(8,A,20);tx(8,B,'Spool soudé/préfabriqué',14);mg('B8:C8');fo(8,D,'COUNTIF(Y'+r0+':Y'+rN+',">=1")',0,16);
+  var T0=sumItems(S.items),axe=G.map(function(g){return spoolAxe(g.items);}),sw=0,sl=0;axe.forEach(function(a){sw+=a.w;sl+=a.l;});
+  tx(6,H,'TOTAUX PROJET',14);mg('H6:I6');tx(7,H,'TOTAUX LANCES',14);mg('H7:I7');tx(8,H,'SOUS-TOTAUX (FILTRE)',14);mg('H8:I8');
+  var cols=[[J,T0.wn,16,'J'],[K,T0.wi,15,'K'],[M,0,15,'M'],[N,T0.total,15,'N'],[O,sw,15,'O'],[P,sl,16,'P'],[Q,T0.stotal,15,'Q']];
+  cols.forEach(function(c){fo(6,c[0],'SUM('+c[3]+r0+':'+c[3]+rN+')',c[1],c[2]);fo(7,c[0],'SUM('+c[3]+r0+':'+c[3]+rN+')',c[1],c[2]);fo(8,c[0],'SUBTOTAL(109,'+c[3]+r0+':'+c[3]+rN+')',c[1],c[2]);});
+  fo(6,L,'COUNTA(L'+r0+':L'+rN+')',n,16);fo(7,L,'COUNTA(L'+r0+':L'+rN+')',n,16);fo(8,L,'SUBTOTAL(103,L'+r0+':L'+rN+')',n,16);
+  fo(6,Z,'SUM(Z'+r0+':Z'+rN+')',0,17);
+  var WT=[0.05,0.25,0.35,0.05,0.05,0.20,0.05];WT.forEach(function(w,i){nu(8,R+i,w,22);});fo(8,Y,'SUM(R8:X8)',1,22);
+  /* en-têtes */
+  var HD=['Code artc','DOCUMENT N°','LINE NO (iso)','rev iso','soumission','Service','PIPE / CLASS','SYS','DN (diamètre ligne princ.) "','nombre de soudures','NPS (nombre de pouces)','SPOOL N°','NPS soudée','Poids (kg) théorique','POIDS (kg) AXE-AXE','Longueur axe-axe (mm)','Surface peinture (m²)','Sortie matériel','Débitage / Assembl.','Pointage / Soudage','NDT','Inspection','Peinture / Passivation','Livraison Site','Avanct. par SPOOL %','Avancement TOTAL FABRICATION','cumul nbre pouces soudés'];
+  HD.forEach(function(h,i){tx(9,i,h,i>=R&&i<=X?6:5);});
+  /* lignes */
+  G.forEach(function(g,i){
+    var r=r0+i,a=axe[i];
+    tx(r,A,TB.code||'',7);tx(r,B,TB.doc||'',7);tx(r,C,g.iso,7);tx(r,D,TB.rev||'',8);tx(r,E,TB.sub||'',8);tx(r,F,TB.svc||'',8);tx(r,Gc,TB.cls||'',8);tx(r,H,TB.sys||'',8);
+    nu(r,I,maxDN(g.items),9);nu(r,J,g.wn,10);nu(r,K,g.wi,9);tx(r,L,spoolNo(g.sp),8);
+    fo(r,M,'K'+r+'*T'+r,0,9);nu(r,N,g.total,9);nu(r,O,a.w,9);nu(r,P,a.l,10);nu(r,Q,g.stotal,9);
+    for(var c=R;c<=X;c++)bl(r,c,11);
+    fo(r,Y,'SUMPRODUCT($R$8:$X$8,R'+r+':X'+r+')',0,12);
+    fo(r,Z,'IF(SUM(N$'+r0+':N$'+rN+')=0,0,Y'+r+'*N'+r+'/SUM(N$'+r0+':N$'+rN+'))',0,12);
+    fo(r,AA,'SUM(M$'+r0+':M'+r+')',0,9);
+  });
+  var x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView workbookViewId="0" zoomScale="85" zoomScaleNormal="85"><pane xSplit="3" ySplit="9" topLeftCell="D10" activePane="bottomRight" state="frozen"/></sheetView></sheetViews><cols>';
+  var W_=[8,22,28,7,10,20,10,12,11,10,11,9,9,11,11,11,10,9,9,9,8,9,10,9,10,14,12];
+  W_.forEach(function(w,i){x+='<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>';});
+  x+='</cols><sheetData>';
+  Object.keys(cells).map(Number).sort(function(a,b){return a-b;}).forEach(function(r){
+    x+='<row r="'+r+'"'+(r===9?' ht="64" customHeight="1"':(r<=4?' ht="'+(r===4?24:20)+'" customHeight="1"':''))+'>';
+    Object.keys(cells[r]).map(Number).sort(function(a,b){return a-b;}).forEach(function(c){x+=cells[r][c];});
+    x+='</row>';
+  });
+  x+='</sheetData><autoFilter ref="A9:AA'+rN+'"/><mergeCells count="'+merges.length+'">'+merges.map(function(m){return '<mergeCell ref="'+m+'"/>';}).join('')+'</mergeCells>';
+  var rg='A'+r0+':Q'+rN;
+  x+='<conditionalFormatting sqref="'+rg+'"><cfRule type="expression" dxfId="0" priority="1"><formula>ROUND($Y'+r0+',4)&gt;=1</formula></cfRule><cfRule type="expression" dxfId="1" priority="2"><formula>$Y'+r0+'&gt;0</formula></cfRule><cfRule type="expression" dxfId="2" priority="3"><formula>$Y'+r0+'=0</formula></cfRule></conditionalFormatting>';
+  x+='<pageMargins left="0.3" right="0.3" top="0.4" bottom="0.4" header="0.2" footer="0.2"/><pageSetup paperSize="8" orientation="landscape" fitToWidth="1" fitToHeight="0"/></worksheet>';
+  return x;
+}
 function lineDia(it){
   if(it.cat==='libre'||!NPS[it.nps])return '—';
   var l=NPS[it.nps].l;
@@ -1444,12 +1583,11 @@ function pipeDias(items){
 function buildXlsx(){
   var G=groupSpools(),I=isoTotals();
   var sheets=[
-    {name:'Récap',head:['Isométrique (ISO)','Diamètre des pipes','Spool','Poids (kg)','Surface de peinture (m²)','Joints à souder','Pouces à souder (po)'],widths:[24,18,12,14,24,16,20],numCols:[3,4,5,6],total:{label:'TOTAL',sumCols:[3,4,5,6]},
-     rows:G.map(function(g){return [g.iso,pipeDias(g.items),g.sp,g.total,g.stotal,g.wn,g.wi];})},
+    {name:'Tableau d\'avancement',xml:tableauXml()},
     {name:'Par ISO',head:['Isométrique (ISO)','Diamètre des pipes','Poids (kg)','Surface de peinture (m²)','Joints à souder','Pouces à souder (po)'],widths:[24,18,14,24,16,20],numCols:[2,3,4,5],total:{label:'TOTAL',sumCols:[2,3,4,5]},
      rows:I.map(function(g){return [g.iso,pipeDias(S.items.filter(function(it){return (it.iso||'Sans ISO')===g.iso;})),g.total,g.stotal,g.wn,g.wi];})},
-    {name:'Détail',head:['Isométrique (ISO)','Diamètre','Spool','Désignation','Quantité','Poids (kg)','Surface de peinture (m²)','Joints par pièce','Joints à souder','Pouces à souder (po)'],widths:[24,14,12,46,10,14,24,14,14,20],numCols:[4,5,6,7,8,9],total:{label:'TOTAL',sumCols:[5,6,8,9]},
-     rows:S.items.map(function(it){var c=calc(it);return [it.iso||'Sans ISO',lineDia(it),it.spool||'—',descr(it)+(it.cat==='tube'?' · '+fmt(c.net)+' m net':''),num(it.qty),c.metal,c.surf,c.wj,c.wn,c.wi];})}
+    {name:'Détail',head:['Isométrique (ISO)','Diamètre','Spool','Nuance','Désignation','Quantité','Poids (kg)','Surface de peinture (m²)','Joints par pièce','Joints à souder','Pouces à souder (po)'],widths:[24,14,12,22,46,10,14,24,14,14,20],numCols:[5,6,7,8,9,10],total:{label:'TOTAL',sumCols:[6,7,9,10]},
+     rows:S.items.map(function(it){var c=calc(it);return [it.iso||'Sans ISO',lineDia(it),it.spool||'—',sub(MATS,S.matK)[1],descr(it)+(it.cat==='tube'?' · '+fmt(c.net)+' m net':''),num(it.qty),c.metal,c.surf,c.wj,c.wn,c.wi];})}
   ];
   var ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>';
   var wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>';
@@ -1459,11 +1597,30 @@ function buildXlsx(){
     ct+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
     wb+='<sheet name="'+xe(sh.name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';
     wr+='<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';
-    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:sheetXml(sh)});
+    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:sh.xml||sheetXml(sh)});
   });
   ct+='</Types>';wb+='</sheets></workbook>';
   wr+='<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';
-  var styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.00"/></numFmts><fonts count="3"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts><fills count="4"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FF0A6A78"/><bgColor indexed="64"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDCF0F2"/><bgColor indexed="64"/></patternFill></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="5"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf><xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/><xf numFmtId="164" fontId="2" fillId="3" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/><xf numFmtId="0" fontId="2" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
+  var thin='<border><left style="thin"><color rgb="FF808080"/></left><right style="thin"><color rgb="FF808080"/></right><top style="thin"><color rgb="FF808080"/></top><bottom style="thin"><color rgb="FF808080"/></bottom><diagonal/></border>';
+  function fl(c){return '<fill><patternFill patternType="solid"><fgColor rgb="FF'+c+'"/><bgColor indexed="64"/></patternFill></fill>';}
+  function xf(nf,fo,fi,bo,al){return '<xf numFmtId="'+nf+'" fontId="'+fo+'" fillId="'+fi+'" borderId="'+bo+'" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1" applyBorder="1"'+(al?' applyAlignment="1"><alignment '+al+'/></xf>':'/>');}
+  var CEN='horizontal="center" vertical="center" wrapText="1"',LFT='horizontal="left" vertical="center"';
+  var styles='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><numFmts count="1"><numFmt numFmtId="164" formatCode="#,##0.00"/></numFmts>'+
+   '<fonts count="6"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="9"/><name val="Calibri"/></font><font><b/><sz val="14"/><name val="Calibri"/></font><font><b/><sz val="9"/><color rgb="FFFFFFFF"/><name val="Calibri"/></font></fonts>'+
+   '<fills count="11"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill>'+fl('0A6A78')+fl('DCF0F2')+fl('7030A0')+fl('FFD966')+fl('FFC000')+fl('FF0000')+fl('FFFF00')+fl('00B050')+fl('FCE4D6')+'</fills>'+
+   '<borders count="2"><border><left/><right/><top/><bottom/><diagonal/></border>'+thin+'</borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs>'+
+   '<cellXfs count="23">'+
+   '<xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/>'+
+   '<xf numFmtId="0" fontId="1" fillId="2" borderId="0" xfId="0" applyFont="1" applyFill="1" applyAlignment="1"><alignment horizontal="center" vertical="center" wrapText="1"/></xf>'+
+   '<xf numFmtId="164" fontId="0" fillId="0" borderId="0" xfId="0" applyNumberFormat="1"/>'+
+   '<xf numFmtId="164" fontId="2" fillId="3" borderId="0" xfId="0" applyNumberFormat="1" applyFont="1" applyFill="1"/>'+
+   '<xf numFmtId="0" fontId="2" fillId="3" borderId="0" xfId="0" applyFont="1" applyFill="1"/>'+
+   xf(0,5,4,1,CEN)+xf(0,3,5,1,CEN)+xf(0,3,0,1,LFT)+xf(0,3,0,1,'horizontal="center" vertical="center"')+xf(164,3,0,1,'horizontal="right" vertical="center"')+
+   xf(1,3,0,1,'horizontal="center" vertical="center"')+xf(9,3,0,1,'horizontal="center" vertical="center"')+xf(10,3,0,1,'horizontal="center" vertical="center"')+
+   xf(0,4,0,0,'horizontal="center" vertical="center"')+xf(0,3,0,0,'horizontal="left" vertical="center"')+xf(164,3,10,1,'horizontal="right" vertical="center"')+xf(1,3,10,1,'horizontal="center" vertical="center"')+xf(10,3,10,1,'horizontal="center" vertical="center"')+
+   xf(0,3,7,1,CEN)+xf(0,3,8,1,CEN)+xf(0,3,9,1,CEN)+xf(14,3,0,1,'horizontal="center" vertical="center"')+xf(9,3,5,1,'horizontal="center" vertical="center"')+
+   '</cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles>'+
+   '<dxfs count="3"><dxf><fill><patternFill patternType="solid"><fgColor rgb="FFC6EFCE"/><bgColor rgb="FFC6EFCE"/></patternFill></fill></dxf><dxf><fill><patternFill patternType="solid"><fgColor rgb="FFFFEB9C"/><bgColor rgb="FFFFEB9C"/></patternFill></fill></dxf><dxf><fill><patternFill patternType="solid"><fgColor rgb="FFFFC7CE"/><bgColor rgb="FFFFC7CE"/></patternFill></fill></dxf></dxfs></styleSheet>';
   files.unshift({name:'[Content_Types].xml',data:ct},{name:'_rels/.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/></Relationships>'},{name:'xl/workbook.xml',data:wb},{name:'xl/_rels/workbook.xml.rels',data:wr},{name:'xl/styles.xml',data:styles});
   return zipStore(files);
 }
@@ -1589,9 +1746,8 @@ function impHTML(){
 }
 function ioHTML(){
   var f=fileNames();
-  return '<details class="io" open><summary>Import / Export</summary><div class="iobody"><div class="actions"><button class="btn" data-act="import">Importer un fichier</button><button class="btn" data-act="xlsx">Récap Excel (.xlsx)</button><button class="btn" data-act="csv">Exporter CSV</button><button class="btn" data-act="json">Sauvegarde .json</button></div>'+
-    '<dl class="paths"><dt>Récap (Excel)</dt><dd>'+f.xlsx+'</dd><dt>Liste (CSV)</dt><dd>'+f.csv+'</dd><dt>Spools (CSV)</dt><dd>'+f.spool+'</dd><dt>Projet complet</dt><dd>'+f.json+'</dd>'+
-    '<dt>Enregistré dans</dt><dd class="plain">le dossier « Téléchargements » de votre appareil. Sur iPhone et iPad, choisissez « Enregistrer dans Fichiers ».</dd>'+
+  return '<details class="io" open><summary>Import / Export</summary><div class="iobody"><div class="actions"><label class="btn" for="file" role="button" tabindex="0">Importer un fichier</label><button class="btn" data-act="xlsx">Récap Excel (.xlsx)</button><button class="btn" data-act="xlsxopen">Ouvrir le Tableau de Bord</button><button class="btn" data-act="csv">Exporter CSV</button><button class="btn" data-act="json">Sauvegarde .json</button></div>'+
+    '<dl class="paths">'+
     (S.last?'<dt>Dernier export</dt><dd>'+esc(S.last.name)+' à '+S.last.t+'</dd>':'')+
     '<dt>Import accepté</dt><dd class="plain">CSV exporté par cette application (modifiable dans Excel) ou sauvegarde .json.</dd></dl></div></details>';
 }
@@ -1649,6 +1805,8 @@ document.addEventListener('click',function(e){
     return;
   }
   if(a==='csv'){if(!S.items.length){toast('La liste est vide.');return;}exportCSV(csvLines(),fileNames().csv);return;}
+  if(a==='openlast'){openLast();return;}
+  if(a==='xlsxopen'){openXlsxNow();return;}
   if(a==='xlsx'){if(!S.items.length){toast('La liste est vide.');return;}exportXlsx();return;}
   if(a==='csv2'){if(!S.items.length){toast('La liste est vide.');return;}exportCSV(csvSpools(),fileNames().spool);return;}
   if(a==='json'){if(!S.items.length){toast('La liste est vide.');return;}exportJSON();return;}
@@ -1679,7 +1837,6 @@ document.addEventListener('click',function(e){
     ma.projects.forEach(function(pr){PR.list.push(mkProj(pr.name,dataFrom(pr.settings,pr.items)));});
     S.imp=null;S.projOpen=true;persist();render();toast(ma.projects.length+' projet(s) ajouté(s)');return;
   }
-  if(a==='import'){$('file').click();return;}
   if(a==='imp-cancel'){S.imp=null;renderListe();return;}
   if(a==='imp-add'||a==='imp-replace'){
     var m=S.imp;if(!m)return;
@@ -1752,6 +1909,7 @@ document.addEventListener('change',function(e){
 });
 document.addEventListener('input',function(e){
   var t=e.target;
+  if(t.dataset&&t.dataset.tb){S.tb[t.dataset.tb]=t.value;save();return;}
   if(t.dataset&&t.dataset.f&&t.tagName==='INPUT'){onField(e,false);return;}
   if(t.dataset&&t.dataset.q&&t.tagName==='INPUT'){
     var line=t.closest('[data-id]');var it=S.items.filter(function(x){return x.id===line.dataset.id;})[0];
@@ -1762,16 +1920,19 @@ $('settings').addEventListener('toggle',function(){S.open=this.open;save();});
 
 $('file').addEventListener('change',function(){
   var f=this.files&&this.files[0],inp=this;if(!f)return;
+  if(/\.xlsx?$/i.test(f.name)){inp.value='';toast('Un fichier Excel ne peut pas être importé : choisissez le CSV (liste) ou la sauvegarde .json.');return;}
   if(f.size>5*1024*1024){toast('Fichier trop volumineux (5 Mo maximum).');inp.value='';return;}
   var rd=new FileReader();
   rd.onload=function(){
-    var r=importText(f.name,String(rd.result||''));
+    var txt;
+    try{txt=new TextDecoder('utf-8',{fatal:true}).decode(rd.result);}catch(e){try{txt=new TextDecoder('windows-1252').decode(rd.result);}catch(e2){txt='';}}
+    var r;try{r=importText(f.name,txt);}catch(e3){r={error:'Fichier illisible.'};}
     inp.value='';
     if(r.error){toast(r.error);return;}
     S.imp=r;S.tab='liste';render();window.scrollTo(0,0);
   };
   rd.onerror=function(){inp.value='';toast('Lecture du fichier impossible.');};
-  rd.readAsText(f,'utf-8');
+  rd.readAsArrayBuffer(f);
 });
 load();
 /* matériau personnalisé : conserver la liste déroulante cohérente */

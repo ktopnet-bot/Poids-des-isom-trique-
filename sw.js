@@ -1,5 +1,5 @@
 /* Service worker minimal : permet l'installation sur l'écran d'accueil et l'usage hors connexion. */
-var CACHE = 'poids-tuyauterie-v1.9.1';
+var CACHE = 'poids-tuyauterie-v1.12.2';
 var FILES = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-maskable-512.png', './apple-touch-icon.png', './favicon-32.png', './favicon.svg', './icon.svg'];
 self.addEventListener('install', function (e) {
   /* un fichier manquant ne doit pas empêcher l'installation : chaque ajout est indépendant */

@@ -2,7 +2,7 @@
 
 Application web pour calculer le poids des tuyauteries : tubes, raccords, brides, vannes. Elle fonctionne dans le navigateur, sans serveur et sans installation. Les données restent sur l'appareil.
 
-**Créé par Kamel Nasralli** · Version 1.9.1 · Licence MIT
+**Créé par Kamel Nasralli** · Version 1.12.2 · Licence MIT
 
 ## Fonctionnalités
 
@@ -131,7 +131,7 @@ Cette application est une aide au calcul. Elle ne remplace pas les données du f
 cd poids-tuyauterie
 git init
 git add .
-git commit -m "Version 1.9.1"
+git commit -m "Version 1.12.2"
 git branch -M main
 git remote add origin https://github.com/VOTRE-COMPTE/poids-tuyauterie.git
 git push -u origin main

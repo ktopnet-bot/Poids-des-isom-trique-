@@ -2,6 +2,32 @@
 
 Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
 
+## 1.12.2
+- Import corrigé : sélecteur de fichier sans filtre de type (les fichiers CSV/JSON ne sont plus grisés sur Android), bouton en libellé, lecture UTF-8 ou Windows-1252, message clair si un fichier Excel est choisi.
+
+## 1.12.1
+- Schémas de piquages corrigés : suppression des bouts de ligne parasites, lignes de fermeture ajoutées en haut et en bas de l'alésage.
+
+## 1.12.0
+- Piquages : schémas en coupe du weldolet, du sockolet et du threadolet avec cotes MSS SP-97 taille sur taille (hauteur A, largeur de base B, alésage D).
+
+## 1.11.2
+- Allègement de l'interface d'export : suppression de la liste des noms de fichiers, des notes de dossier et des boutons « Ouvrir » en double (reste « Ouvrir le Tableau de Bord »).
+
+## 1.11.1
+- Bouton « Ouvrir le Tableau de Bord » : génère et ouvre le fichier en un seul geste (feuille de partage), sans exporter d'abord ; repli sur l'enregistrement si l'appareil ne le permet pas.
+
+## 1.11.0
+- Bouton « Ouvrir » après un export : ouvre le dernier fichier (feuille de partage de l'appareil pour choisir Excel, ou nouvel onglet).
+
+## 1.10.1
+- Le fichier Excel du récap s'appelle maintenant « Tableau-de-Bord_<projet>_<date>.xlsx ».
+
+## 1.10.0
+- Récap Excel : nouvelle feuille « Tableau d'avancement » au modèle du tableau de bord de fabrication tuyauterie (ISO, DN, nombre de soudures, pouces, spool, poids théorique et axe-axe, longueur, peinture, colonnes d'avancement pondérées, totaux, sous-totaux filtrables, couleurs de statut).
+- Informations d'en-tête du tableau (projet, code, document, rev, service, classe, SYS) saisies dans l'onglet Rapport par spool et enregistrées avec le projet.
+- Feuille Détail : colonne Nuance.
+
 ## 1.9.1
 - Récap Excel : colonne « Diamètre des pipes » en B (Récap, Par ISO, Détail) ; poids, surface de peinture et soudures décalés à droite.
 
