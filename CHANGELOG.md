@@ -2,6 +2,41 @@
 
 Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
 
+## 1.16.0
+- Onglet « Suivi » supprimé de l'application.
+- Feuille Excel « Suivi des travaux » avec formules : « Pouces soudés » et les phases se saisissent dans Excel ; Pointage / Soudage = pouces soudés ÷ pouces à souder (100 % quand ils sont égaux) ; Avancement = somme des phases × pondérations (ligne modifiable) ; Poids fabriqué = avancement × poids ; Statut automatique (Non commencé / En cours / Terminé) ; indicateurs et totaux recalculés. Barres de progression et couleurs de statut conservées.
+
+## 1.15.2
+- Feuille Excel « Suivi des travaux » : ajout des colonnes Code artc, Document N°, Rev iso, Soumission, Service, Pipe / class et SYS, dans l'ordre exact du Tableau de Bord (Code artc, Document N°, ISO, Rev iso, … , DN, joints, pouces à souder, spool, …). Les trois premières colonnes restent figées.
+
+## 1.15.1
+- Code artc, Document N°, Rev iso, Soumission, Service, Pipe / class et SYS ajoutés directement dans chaque ligne de la liste et dans chaque carte de l'onglet Suivi (« Données ISO »). Ils sont partagés par toutes les lignes du même ISO.
+
+## 1.15.0
+- « Joints à souder imposés » : valeur par défaut 1 pour toute nouvelle ligne (vider la case pour revenir au calcul automatique).
+- Données par ISO dans l'application (code artc, document N°, rev iso, soumission, service, pipe / class, SYS), dans l'ordre des colonnes du Tableau de Bord ; une case vide reprend la valeur d'en-tête. Elles sont enregistrées avec le projet et reprises ligne par ligne dans le Tableau de Bord Excel.
+- Pouces à souder d'un spool = diamètre principal × nombre de joints, calculé automatiquement (appli, Suivi, Excel).
+
+## 1.14.2
+- Feuille « Suivi des travaux » : ajout des colonnes « Longueur axe-axe (mm) » et « Surface peinture (m²) » juste après « Poids (kg) », avec leurs totaux.
+
+## 1.14.1
+- Feuille « Suivi des travaux » : colonnes réordonnées selon l'ordre du Tableau de Bord (ISO, DN, joints à souder, pouces à souder, spool, pouces soudés, poids, phases dans l'ordre chronologique, avancement, poids fabriqué, statut).
+
+## 1.14.0
+- Nouvel onglet « Suivi » : tableau de suivi de travaux moderne par spool, avec indicateurs (avancement global, spools terminés / en cours / à démarrer, pouces soudés, poids fabriqué), 7 phases pondérées (sortie matériel, débitage/assemblage, pointage/soudage, NDT, inspection, peinture/passivation, livraison), filtres, recherche et « Tout à 100 % » / « Remettre à 0 ». Données enregistrées avec le projet.
+- Export Excel : nouvelle feuille « Suivi des travaux » (indicateurs, barres de progression, statuts colorés, totaux) ; « Tableau d'avancement » rempli avec les valeurs du suivi.
+
+## 1.13.2
+- Fichier Tableau de Bord : suppression de toutes les formules de calcul (totaux, sous-totaux, avancement, cumul) ; les valeurs sont écrites telles quelles et la mise en forme (couleurs, en-têtes, bordures, couleurs de statut) est conservée. Les colonnes d'avancement restent à remplir dans Excel.
+
+## 1.13.1
+- Le matériau est la première cellule de la fiche et de chaque ligne, avec « Acier carbone » par défaut pour toute nouvelle ligne (le choix est conservé d'une ligne à l'autre).
+
+## 1.13.0
+- Matériau par ligne : liste déroulante (acier carbone, basse température, P11/P22, inox 304/316/321/347, duplex, super duplex, Inconel, Monel, cuivre, cupronickel, titane, aluminium) dans la fiche et dans chaque ligne ; le matériau du projet reste la valeur par défaut.
+- Poids calculés avec la masse volumique de chaque matériau ; répartition des kg par matériau dans les totaux ; colonne Nuance (Excel Détail) et colonne « Matériau (code) » dans le CSV (import compatible).
+
 ## 1.12.2
 - Import corrigé : sélecteur de fichier sans filtre de type (les fichiers CSV/JSON ne sont plus grisés sur Android), bouton en libellé, lecture UTF-8 ou Windows-1252, message clair si un fichier Excel est choisi.
 
