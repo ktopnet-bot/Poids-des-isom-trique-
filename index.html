@@ -21,7 +21,7 @@
 <style>
 /* Concept : cartouche de plan d'ingénieur, colonne unique centrée ; teal = tubes, cuivre = raccords, indigo = brides */
 :root{
-  --bg:#edf1f3; --panel:#ffffff; --panel2:#f5f8f9; --ink:#0f1d27; --muted:#566673; --line:#d3dce1;
+  --tid:#c9d6dd; --tid2:#b7c8d1; --bg:#edf1f3; --panel:#ffffff; --panel2:#f5f8f9; --ink:#0f1d27; --muted:#566673; --line:#d3dce1;
   --tube:#0a6a78; --tube-bg:#dcf0f2; --fit:#a05a14; --fit-bg:#f8e9d6; --flg:#434fa0; --flg-bg:#e3e6f7;
   --on-accent:#ffffff; --warn:#a4380f; --warn-bg:#fbe6dc; --ok:#1b7a43;
   --f-display:"Barlow Semi Condensed","Arial Narrow",system-ui,sans-serif;
@@ -30,13 +30,13 @@
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg:#0c1920; --panel:#13252e; --panel2:#0f2028; --ink:#e5eef2; --muted:#8ea3af; --line:#27414e;
+    --tid:#1c3a48; --tid2:#264b5b; --bg:#0c1920; --panel:#13252e; --panel2:#0f2028; --ink:#e5eef2; --muted:#8ea3af; --line:#27414e;
     --tube:#52c4d2; --tube-bg:#12363d; --fit:#e3a255; --fit-bg:#3b2a14; --flg:#98a4ea; --flg-bg:#222a4f;
     --on-accent:#08181d; --warn:#ff9d78; --warn-bg:#3d2016; --ok:#6fd49a; color-scheme:dark;
   }
 }
 :root[data-theme="dark"]{
-  --bg:#0c1920; --panel:#13252e; --panel2:#0f2028; --ink:#e5eef2; --muted:#8ea3af; --line:#27414e;
+  --tid:#1c3a48; --tid2:#264b5b; --bg:#0c1920; --panel:#13252e; --panel2:#0f2028; --ink:#e5eef2; --muted:#8ea3af; --line:#27414e;
   --tube:#52c4d2; --tube-bg:#12363d; --fit:#e3a255; --fit-bg:#3b2a14; --flg:#98a4ea; --flg-bg:#222a4f;
   --on-accent:#08181d; --warn:#ff9d78; --warn-bg:#3d2016; --ok:#6fd49a; color-scheme:dark;
 }
@@ -55,7 +55,10 @@ button,input,select{font:inherit;color:inherit}
 .title-block h1{font-size:30px;line-height:1.05;font-weight:700}
 .title-block .ref{font-family:var(--f-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right}
 nav.tabs{display:flex;gap:4px;margin-top:2px;border-bottom:1px solid var(--line);overflow-x:auto}
-details.tid{margin:8px 0 2px}details.tid summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}details.tid .grid{margin-top:8px}
+#sdi{width:100%;margin-bottom:8px}.sdavg{display:flex;gap:10px;align-items:center;margin-top:8px}.sdavg .pb{flex:1;margin-top:0}.sdavg b{font-size:14px;min-width:56px;text-align:right}
+.sdl{display:flex;gap:12px;align-items:flex-end;flex-wrap:wrap;margin-top:8px}.sdl .f{flex:1 1 130px;min-width:120px}.sdr{display:flex;flex-direction:column;font-size:12.5px;color:var(--muted);min-width:70px}.sdr b{font-size:16px;color:var(--ink)}
+@media(max-width:480px){nav.tabs button{font-size:16px;padding:12px 8px 9px;gap:5px}}
+details.tid{margin:8px 0 10px;background:var(--tid);border:1px solid var(--muted);border-radius:10px;padding:8px 10px}details.tid .grid .f input{background:var(--tid2);border-color:var(--muted);color:var(--ink)}details.tid input::placeholder{color:var(--muted);opacity:.8}details.tid summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--muted)}details.tid .grid{margin-top:8px}
 nav.tabs button{background:none;border:0;border-bottom:3px solid transparent;padding:12px 10px 9px;cursor:pointer;
   font-family:var(--f-display);font-size:18px;font-weight:600;color:var(--muted);white-space:nowrap;display:flex;gap:8px;align-items:center}
 nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--tube)}
@@ -252,7 +255,7 @@ label.btn{display:inline-flex;align-items:center;cursor:pointer}
 <div class="wrap">
   <header class="title-block">
     <h1>Calcul poids tuyauterie</h1>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.16.0 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v1.18.1 · Kamel Nasralli</div>
   </header>
   <div id="projbar"></div>
   <nav class="tabs" role="tablist" id="tabs"></nav>
@@ -261,7 +264,7 @@ label.btn{display:inline-flex;align-items:center;cursor:pointer}
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.13.2 · Format de fichier 6 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 1.18.1 · Format de fichier 6 · Licence MIT</p>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
 <input type="file" id="file" class="fileinp">
@@ -470,7 +473,7 @@ function forgeCalc(it){
   }
   return {w:w,s:sf,err:''};
 }
-var ENDS=[['none','Libre (aucun)'],['bride','Bride'],['coude','Coude'],['fond','Fond (cap)']];
+var ENDS=[['none','Libre (aucun)'],['bride','Bride'],['coude','Coude'],['fond','Fond (cap)'],['te','Té (passage)'],['red','Réduction']];
 var ELBEND=ELB.filter(function(x){return x[3]<180;}).map(function(x){return [x[0],x[1]];});
 var FLG_LEN={ /* mm, longueur totale d'une bride à collerette avec face (ASME B16.5), valeurs indicatives */
  150:[48,52,56,57,62,64,70,70,76,89,89,102,102,114,127,140,152,159,168],
@@ -485,6 +488,8 @@ function endDim(it,k){
   if(t==='bride')return FLG_LEN[it.cls]?FLG_LEN[it.cls][ix]:0;
   if(t==='coude'){var e=sub(ELB,it[k+'s']);return e[2]*NPS[ix].v*25.4*Math.tan(e[3]*Math.PI/360);}
   if(t==='fond')return CAP_E[ix];
+  if(t==='te')return TEE_C[ix];
+  if(t==='red')return RED_H[ix];
   return 0;
 }
 function encTotal(it){var o=num(it.encO);return o>0?o:endDim(it,'e1')+endDim(it,'e2');}
@@ -507,7 +512,7 @@ function endFields(o,a){
 
 /* ---------- État ---------- */
 var KEY='cpt.poids.v2'; /* ancien stockage à un seul projet, lu une fois pour la migration */
-var APP_VERSION='1.16.0',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var APP_VERSION='1.18.1',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
 function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',wj:'1',mk:'cs',rt:3000};}
@@ -517,7 +522,7 @@ var KEY3='cpt.poids.v3';
 var PR={cur:null,list:[],trash:[]};
 var TIK=['code','doc','rev','sub','svc','cls','sys'];
 var TBK=['p1','p2','p3','code','doc','rev','sub','svc','cls','sys'];
-function defData(){return {mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,tb:{},ti:{},sv:{},items:[],seed:false,open:true};}
+function defData(){return {mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,tb:{},ti:{},sv:{},sd:{},items:[],seed:false,open:true};}
 function exampleItems(){return [
     {id:uid(),cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:3,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'coude',sub:'90lr',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
@@ -526,8 +531,8 @@ function exampleItems(){return [
     {id:uid(),cat:'te',sub:'egal',nps:10,sch:'40',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'vanne',sub:'gate',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''}
   ];}
-function snap(){return {mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,tb:S.tb,ti:S.ti,sv:S.sv,items:S.items,seed:S.seed,open:S.open};}
-function applyData(d){var k,df=defData();for(k in df)S[k]=(d&&d[k]!=null)?d[k]:df[k];if(!Array.isArray(S.items))S.items=[];if(!S.tb||typeof S.tb!=='object')S.tb={};if(!S.ti||typeof S.ti!=='object')S.ti={};if(!S.sv||typeof S.sv!=='object')S.sv={};S.items.forEach(fixItem);}
+function snap(){return {mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,tb:S.tb,ti:S.ti,sv:S.sv,sd:S.sd,items:S.items,seed:S.seed,open:S.open};}
+function applyData(d){var k,df=defData();for(k in df)S[k]=(d&&d[k]!=null)?d[k]:df[k];if(!Array.isArray(S.items))S.items=[];if(!S.tb||typeof S.tb!=='object')S.tb={};if(!S.ti||typeof S.ti!=='object')S.ti={};if(!S.sv||typeof S.sv!=='object')S.sv={};if(!S.sd||typeof S.sd!=='object')S.sd={};S.items.forEach(fixItem);}
 function curProj(){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===PR.cur)return PR.list[i];return null;}
 function findProj(id){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===id)return PR.list[i];return null;}
 function persist(){
@@ -583,6 +588,7 @@ function dataFrom(st,items){
     if(MATS.some(function(m){return m[0]===st.matK;}))d.matK=st.matK;if(num(st.mat)>0)d.mat=num(st.mat);
     if(FLUIDS.some(function(m){return m[0]===st.fluK;}))d.fluK=st.fluK;if(st.rho!=null&&num(st.rho)>=0)d.rho=num(st.rho);
     d.insOn=!!st.insOn;if(st.insT!=null)d.insT=num(st.insT);if(st.insRho!=null)d.insRho=num(st.insRho);if(st.sv&&typeof st.sv==='object'){Object.keys(st.sv).slice(0,5000).forEach(function(k){var a=st.sv[k];if(Array.isArray(a)&&a.length===7)d.sv[String(k).slice(0,200)]=a.map(function(v){v=+v;return isFinite(v)?Math.max(0,Math.min(100,Math.round(v))):0;});});}
+    if(st.sd&&typeof st.sd==='object'){Object.keys(st.sd).slice(0,5000).forEach(function(k){var v=num(st.sd[k]);if(isFinite(v)&&v>=0&&String(st.sd[k]).trim()!=='')d.sd[String(k).slice(0,200)]=String(Math.round(v*100)/100);});}
     if(st.ti&&typeof st.ti==='object'){Object.keys(st.ti).slice(0,2000).forEach(function(i){var o=st.ti[i],r={};if(o&&typeof o==='object'){TIK.forEach(function(k){if(o[k]!=null&&String(o[k])!=='')r[k]=String(o[k]).slice(0,120);});if(Object.keys(r).length)d.ti[String(i).slice(0,200)]=r;}});}
     if(st.tb&&typeof st.tb==='object'){TBK.forEach(function(k){if(st.tb[k]!=null)d.tb[k]=String(st.tb[k]).slice(0,120);});}
   }
@@ -590,7 +596,7 @@ function dataFrom(st,items){
 }
 function projectObj(p){
   var d=p.id===PR.cur?snap():p.data;
-  return {name:p.name,settings:{matK:d.matK,mat:d.mat,fluK:d.fluK,rho:d.rho,insOn:d.insOn,insT:d.insT,insRho:d.insRho,tb:d.tb||{},ti:d.ti||{},sv:d.sv||{}},
+  return {name:p.name,settings:{matK:d.matK,mat:d.mat,fluK:d.fluK,rho:d.rho,insOn:d.insOn,insT:d.insT,insRho:d.insRho,tb:d.tb||{},ti:d.ti||{},sv:d.sv||{},sd:d.sd||{}},
     items:d.items.map(function(it){var c=clean(it);delete c.id;return c;})};
 }
 function exportProject(p){
@@ -740,7 +746,7 @@ function npsOpts(val,max){var h='';NPS.forEach(function(n,i){if(max!==undefined&
 function schOpts(ix,val){return SCHS.filter(function(s){return avail(ix,s.k);}).map(function(s){return '<option value="'+s.k+'"'+(s.k===val?' selected':'')+'>'+s.l+'</option>';}).join('');}
 
 function renderTabs(){
-  var t=[['fiche','Fiche'],['liste','Liste'],['spool','Rapport par spool']];
+  var t=[['fiche','Fiche'],['liste','Liste'],['spool','Rapport par spool'],['soud','Soudure']];
   $('tabs').innerHTML=t.map(function(x){return '<button role="tab" data-tab="'+x[0]+'" aria-selected="'+(S.tab===x[0])+'">'+x[1]+(x[0]==='liste'&&S.items.length?'<span class="badge">'+S.items.length+'</span>':'')+'</button>';}).join('');
 }
 function renderSettings(){
@@ -783,6 +789,7 @@ function formHTML(){
   }
   if(c==='tube'){h+='<label class="f">Longueur mesurée (m)<input data-f="len" inputmode="decimal" placeholder="0" value="'+esc(d.len)+'"></label>'+endFields(d,'data-f');}
   h+='<label class="f">Quantité<input data-f="qty" inputmode="numeric" value="'+esc(d.qty)+'"></label>';
+  h+=tiBoxF();
   h+='<div class="isof"><label class="f">Isométrique (ISO)<input data-f="iso" type="text" autocomplete="off" placeholder="ex. ISO-001" value="'+esc(d.iso)+'"></label><div class="chips"></div></div>';
   h+='<label class="f">N° spool<input data-f="spool" type="text" placeholder="ex. 1" value="'+esc(d.spool)+'"></label>';
   if(c!=='libre')h+='<label class="f">Poids unitaire imposé ('+(c==='tube'?'kg/m':'kg')+')<input data-f="over" inputmode="decimal" placeholder="auto" value="'+esc(d.over)+'"><span class="hint">Laissez vide pour le calcul automatique.</span></label>';
@@ -1306,8 +1313,8 @@ function isoTotals(){
   S.items.forEach(function(it){var k=it.iso||'Sans ISO';if(!m[k]){m[k]=[];o.push(k);}m[k].push(it);});
   return o.sort(function(a,b){return a.localeCompare(b,'fr',{numeric:true});}).map(function(k){var T=sumItems(m[k]);T.iso=k;return T;});
 }
-function totalsHTML(T){
-  var I=isoTotals(),multi=I.length>1;
+function totalsHTML(T,only){
+  var I=isoTotals().filter(function(x){return !only||x.iso===only;}),multi=I.length>1;
   var lab=multi?'Total général':(I.length===1&&I[0].iso!=='Sans ISO'?'Total · '+esc(I[0].iso):'Total');
   function box(cls,l,kg,m2){return '<div class="'+cls+'"><div class="lbl">'+l+'</div><div class="v">'+fmt(kg)+' <small>kg</small></div><div class="sf">'+fmt(m2)+' m² peinture</div></div>';}
   var h='<div class="totals">'+box('t1','Tubes',T.tube,T.stube)+box('t2','Accessoires',T.acc,T.sacc)+box('t3','Brides',T.brd,T.sbrd)+box('tot',lab,T.total,T.stotal)+'</div>'+
@@ -1333,6 +1340,7 @@ function lineHTML(it){
   var c=calc(it),cat=it.cat,h='';
   var kl=c.kind==='tube'?'Tube':c.kind==='brd'?'Bride':'Accessoire';
   h+='<article class="line '+c.kind+'" data-id="'+it.id+'"><div class="top"><div class="name">'+esc(descr(it))+'</div><span class="tag '+c.kind+'">'+kl+'</span></div>';
+  h+=tiBox(it.iso,it.id);
   h+='<div class="isorow"><div class="isof"><label class="f">Isométrique (ISO)<input data-q="iso" type="text" autocomplete="off" placeholder="ex. ISO-001" value="'+esc(it.iso)+'"></label><div class="chips"></div></div>'+
      '<label class="f">N° spool<input data-q="spool" type="text" placeholder="1" value="'+esc(it.spool)+'"></label></div>';
   h+='<div class="lg">';
@@ -1355,7 +1363,6 @@ function lineHTML(it){
   if(cat!=='libre')h+='<label class="f">Poids imposé ('+(cat==='tube'?'kg/m':'kg')+')<input data-q="over" inputmode="decimal" placeholder="auto" value="'+esc(it.over)+'"></label>';
   h+='<label class="f">Surface imposée ('+(cat==='tube'?'m²/m':'m²')+')<input data-q="overS" inputmode="decimal" placeholder="auto" value="'+esc(it.overS)+'"></label>';
   h+='<label class="f">Joints à souder imposés<input data-q="wj" inputmode="numeric" placeholder="auto" value="'+esc(it.wj)+'"></label>';
-  h+=tiFields(it.iso);
   h+='</div>';
   h+='<div class="note" data-enc'+(encText(it)?'':' hidden')+'>'+esc(encText(it))+'</div>';
   h+='<div class="warn" data-warn'+(c.warn?'':' hidden')+'>'+esc(c.warn)+'</div>';
@@ -1399,6 +1406,18 @@ function tiFields(iso){
   iso=iso||'Sans ISO';var o=S.ti[iso]||{};
   return TBL.slice(3).map(function(f){return '<label class="f">'+f[1]+'<input data-ti="'+esc(f[0])+'" data-iso="'+esc(iso)+'" type="text" maxlength="120" placeholder="'+esc(S.tb[f[0]]||f[2])+'" value="'+esc(o[f[0]]||'')+'"></label>';}).join('');
 }
+var TIDO={};
+function tiBox(iso,id){
+  var o=S.ti[iso||'Sans ISO']||{},v=TIK.map(function(k){return o[k];}).filter(Boolean).slice(0,3).join(' · ');
+  return '<details class="tid" data-tk="'+esc(id||'')+'"'+(TIDO[id||'']?' open':'')+'><summary>Paramètres isométrique'+(v?' · '+esc(v):'')+'</summary><div class="grid">'+tiFields(iso)+'</div></details>';
+}
+var TIP={};
+function tiBoxF(){
+  var o=S.ti[D.iso||'Sans ISO']||{};
+  return '<details class="tid fx" data-tk="fx"'+(TIDO.fx?' open':'')+'><summary>Paramètres isométrique (à renseigner en premier)</summary><div class="grid">'+TBL.slice(3).map(function(f){var v=TIP[f[0]]!=null?TIP[f[0]]:(o[f[0]]||'');return '<label class="f">'+f[1]+'<input data-tif="'+esc(f[0])+'" type="text" maxlength="120" placeholder="'+esc(S.tb[f[0]]||f[2])+'" value="'+esc(v)+'"></label>';}).join('')+'</div></details>';
+}
+function tifRefresh(){var o=S.ti[D.iso||'Sans ISO']||{};[].forEach.call(document.querySelectorAll('input[data-tif]'),function(i){var k=i.dataset.tif;if(TIP[k]==null||TIP[k]==='')i.value=o[k]||'';});}
+function tiApply(){var k=D.iso||'Sans ISO';TIK.forEach(function(f){if(TIP[f]!=null&&TIP[f]!==''){S.ti[k]=S.ti[k]||{};S.ti[k][f]=TIP[f];}});}
 function tiForm(){
   var I=isoTotals();if(!I.length)return '';
   return '<h3 style="margin:14px 0 4px;font-size:15px">Données par ISO</h3><p class="note" style="margin:0 0 8px">Dans l\'ordre des colonnes du Tableau de Bord. Une case vide reprend la valeur d\'en-tête ci-dessus. Diamètre principal, joints et pouces à souder (diamètre principal × joints) sont calculés automatiquement.</p>'+I.map(function(g){var o=S.ti[g.iso]||{},sp=groupSpools().filter(function(x){return x.iso===g.iso;});
@@ -1406,11 +1425,11 @@ function tiForm(){
     '<div class="note" style="margin-top:6px">'+sp.map(function(x){return 'Spool '+esc(spoolNo(x.sp))+' : DN '+fmt(maxDN(x.items),1)+' × '+fmt(x.wn,0)+' joint'+(x.wn>1?'s':'')+' = '+fmt(x.wi,1)+' po';}).join(' · ')+'</div></div>';}).join('');
 }
 var PH=[['Sortie matériel',5],['Débitage / Assemblage',25],['Pointage / Soudage',35],['NDT',5],['Inspection',5],['Peinture / Passivation',20],['Livraison site',5]];
-function svPct(k){return PH.map(function(){return 0;});}
+function svPct(k){var a=S.sv[k];return PH.map(function(_,i){return a&&a[i]!=null?+a[i]:0;});}
 function svProg(p){var t=0;PH.forEach(function(ph,i){t+=ph[1]*p[i]/100;});return t;}
 function svStatus(pr){return pr>=99.999?2:(pr>0?1:0);}
 var SVST=['Non commencé','En cours','Terminé'];
-function svRows(){return groupSpools().map(function(g){var key=g.iso+'|'+g.sp,p=svPct(key),pr=svProg(p);return {g:g,key:key,p:p,pr:pr,st:svStatus(pr),wsd:g.wi*p[2]/100,kgf:g.total*pr/100};});}
+function svRows(){return groupSpools().map(function(g){var key=g.iso+'|'+g.sp,p=svPct(key),w=sdVal(key)||0;p[2]=g.wi>0?Math.min(100,w/g.wi*100):0;if(p[2]>10){p[0]=100;p[1]=100;}var pr=svProg(p);return {g:g,key:key,p:p,pr:pr,st:svStatus(pr),wsd:sdVal(key)||0,kgf:g.total*pr/100};});}
 function svSum(rows){
   var o={n:rows.length,st:[0,0,0],kg:0,kgf:0,wi:0,wsd:0,wn:0};
   rows.forEach(function(r){o.st[r.st]++;o.kg+=r.g.total;o.kgf+=r.kgf;o.wi+=r.g.wi;o.wsd+=r.wsd;o.wn+=r.g.wn;});
@@ -1442,6 +1461,62 @@ function svListHTML(){
   });
   return R.length?R.map(svCardHTML).join(''):'<p class="note" style="margin-top:12px">Aucun spool ne correspond.</p>';
 }
+var SDST=['À souder','En cours','Soudé'];
+function sdVal(k){var v=S.sd&&S.sd[k];if(v==null||v==='')return null;v=num(v);return isFinite(v)?Math.max(0,v):null;}
+function sdState(g,v){var d=v==null?0:v;return d<=0?0:(g.wi>0&&d>=g.wi-1e-9?2:1);}
+function sdRows(){return groupSpools().map(function(g){var k=g.iso+'|'+g.sp,v=sdVal(k);return {g:g,key:k,v:v,st:sdState(g,v)};});}
+function sdFiltered(){
+  var q=norm(S.sdq||''),f=S.sdf==null?'all':String(S.sdf),io=S.sdi||'';
+  return sdRows().filter(function(r){
+    if(io&&r.g.iso!==io)return false;
+    if(f!=='all'&&String(r.st)!==f)return false;
+    return !q||norm(r.g.iso+' '+r.g.sp+' '+spoolNo(r.g.sp)).indexOf(q)>=0;
+  });
+}
+function sdKpiHTML(rows){
+  var a=0,d=0,n=[0,0,0];rows.forEach(function(r){a+=r.g.wi;d+=r.v||0;n[r.st]++;});
+  var pc=a>0?Math.min(100,d/a*100):0;
+  return '<div class="kpis"><div class="kpi main"><div class="kl">Pouces soudés</div><div class="kv2">'+fmt(d,1)+' / '+fmt(a,1)+' po</div><div class="pb"><i style="width:'+pc.toFixed(1)+'%"></i></div><div class="ks">'+fmt(pc,0)+' % · reste '+fmt(Math.max(0,a-d),1)+' po</div></div>'+
+   '<div class="kpi"><div class="kl">Spools</div><div class="kv2">'+rows.length+'</div><div class="ks">'+n[2]+' soudés · '+n[1]+' en cours · '+n[0]+' à souder</div></div>'+
+   '<div class="kpi"><div class="kl">Joints à souder</div><div class="kv2">'+fmt(rows.reduce(function(t,r){return t+r.g.wn;},0),0)+'</div><div class="ks">sur les spools affichés</div></div></div>';
+}
+function sdRowHTML(r){
+  var g=r.g;
+  return '<article class="svc st'+r.st+'" data-sk="'+esc(r.key)+'"><div class="svh"><div><b>'+esc(g.iso)+'</b> <span class="spn">Spool '+esc(spoolNo(g.sp))+'</span></div><span class="stchip">'+SDST[r.st]+'</span></div>'+
+   '<div class="svm">DN '+fmt(maxDN(g.items),1)+' po · '+fmt(g.wn,0)+(g.wn>1?' joints':' joint')+' · <b>'+fmt(g.wi,1)+' po à souder</b></div>'+
+   sdPhHTML(r)+'<div class="sdl"><label class="f">Pouces soudés<input data-sd="'+esc(r.key)+'" inputmode="decimal" autocomplete="off" placeholder="saisir" value="'+esc(r.v==null?'':String(S.sd[r.key]))+'"></label><div class="sdr"><span>Reste</span><b class="rest">'+fmt(Math.max(0,g.wi-(r.v||0)),1)+' po</b></div><button type="button" class="btn sm" data-act="sdfull">Tout soudé</button></div></article>';
+}
+var SDPH=[0,1,3,4,5,6],PCTS=[0,25,50,75,100];
+function sdForced(g){var v=sdVal(g.iso+'|'+g.sp)||0;return g.wi>0&&v/g.wi>0.1;}
+function sdPhHTML(r){
+  var g=r.g,pv=svPct(r.key),fo=sdForced(g);
+  return '<div class="sdavg"><div class="pb"><i style="width:'+Math.min(100,sdAvg(r)).toFixed(1)+'%"></i></div><b class="avg">'+fmt(sdAvg(r),1)+' %</b></div><div class="ph">'+SDPH.map(function(i){
+    var forced=fo&&i<2,cur=forced?100:pv[i],o=PCTS.slice();if(o.indexOf(cur)<0)o.push(cur);
+    return '<label>'+PH[i][0]+' · '+PH[i][1]+' %<select data-sph="'+i+'"'+(forced?' disabled':'')+'>'+o.map(function(v){return '<option value="'+v+'"'+(v===cur?' selected':'')+'>'+v+' %</option>';}).join('')+'</select></label>';}).join('')+'</div>';
+}
+function sdAvg(r){var p=svPct(r.key),w=r.v||0;p[2]=r.g.wi>0?Math.min(100,w/r.g.wi*100):0;if(p[2]>10){p[0]=100;p[1]=100;}return svProg(p);}
+function sdListHTML(rows){return rows.length?rows.map(sdRowHTML).join(''):'<p class="note" style="margin-top:12px">Aucun spool ne correspond.</p>';}
+function renderSoud(){
+  var f=S.sdf==null?'all':String(S.sdf),G=groupSpools();
+  var h='<div class="panel"><h2>Suivi de la soudure</h2>';
+  if(!G.length){$('view').innerHTML=h+'<p class="note">Ajoutez des pièces avec un ISO et un numéro de spool : chaque spool apparaîtra ici avec ses pouces à souder.</p></div>';return;}
+  var isos=[];G.forEach(function(g){if(isos.indexOf(g.iso)<0)isos.push(g.iso);});
+  var rows=sdFiltered();
+  h+='<div id="sdkpi">'+sdKpiHTML(rows)+'</div><div class="svbar"><select id="sdi"><option value="">Tous les ISO</option>'+isos.map(function(i){return '<option value="'+esc(i)+'"'+(S.sdi===i?' selected':'')+'>'+esc(i)+'</option>';}).join('')+'</select>'+
+   '<input id="sdq" type="search" placeholder="Rechercher un spool" autocomplete="off" value="'+esc(S.sdq||'')+'"><div class="svf">'+
+   [['all','Tous'],['0','À souder'],['1','En cours'],['2','Soudés']].map(function(x){return '<button type="button" data-sdf="'+x[0]+'" aria-pressed="'+(f===x[0])+'">'+x[1]+'</button>';}).join('')+'</div></div>'+
+   '<div id="sdlist">'+sdListHTML(rows)+'</div><p class="note" style="margin-top:12px">Saisissez les pouces soudés de chaque spool (case vide = rien de soudé) et l\'avancement des autres tâches (0 à 100 % par paliers de 25). Au-delà de 10 % de soudage, sortie matériel et débitage passent à 100 %. Le fichier « Tableau de Bord » reprend ces valeurs : pointage / soudage = pouces soudés ÷ pouces à souder.</p></div>';
+  $('view').innerHTML=h;
+}
+function sdRefresh(){var k=$('sdkpi');if(k)k.innerHTML=sdKpiHTML(sdFiltered());}
+function sdUpdateRow(art){
+  var k=art.dataset.sk,g=groupSpools().filter(function(x){return x.iso+'|'+x.sp===k;})[0];if(!g)return;
+  var v=sdVal(k),st=sdState(g,v);
+  var rr=sdRows().filter(function(x){return x.key===k;})[0],pv=svPct(k),fo=sdForced(g);
+  [].forEach.call(art.querySelectorAll('select[data-sph]'),function(sel){var i=+sel.dataset.sph,f=fo&&i<2,cur=f?100:pv[i];if(!sel.querySelector('option[value="'+cur+'"]')){var op=document.createElement('option');op.value=cur;op.textContent=cur+' %';sel.appendChild(op);}sel.value=String(cur);sel.disabled=f;});
+  if(rr){art.querySelector('.avg').textContent=fmt(sdAvg(rr),1)+' %';art.querySelector('.sdavg .pb i').style.width=Math.min(100,sdAvg(rr)).toFixed(1)+'%';}
+  art.className='svc st'+st;art.querySelector('.stchip').textContent=SDST[st];art.querySelector('.rest').textContent=fmt(Math.max(0,g.wi-(v||0)),1)+' po';
+}
 function renderSuivi(){
   var f=S.svf==null?'all':String(S.svf);
   var h='<div class="panel"><h2>Suivi des travaux</h2>';
@@ -1453,9 +1528,13 @@ function renderSuivi(){
 }
 function svRefreshKpi(){var k=$('svkpi');if(k)k.innerHTML=svKpiHTML();}
 function renderSpool(){
-  var G=groupSpools(),T=sumItems(S.items);
+  var G=groupSpools(),isos=[];G.forEach(function(g){if(isos.indexOf(g.iso)<0)isos.push(g.iso);});
+  if(S.spi&&isos.indexOf(S.spi)<0)S.spi='';
+  var fi=S.spi||'';if(fi)G=G.filter(function(g){return g.iso===fi;});
+  var T=sumItems(fi?S.items.filter(function(it){return (it.iso||'Sans ISO')===fi;}):S.items);
   var h='<div class="panel"><h2>Rapport par spool</h2><div class="actions"><button class="btn primary" data-act="xlsx">Récap Excel (.xlsx)</button><button class="btn primary" data-act="xlsxopen">Ouvrir le Tableau de Bord</button><button class="btn" data-act="csv2">Exporter CSV (spools)</button></div>'+tbForm()+'';
-  h+='<div style="margin-top:14px">'+totalsHTML(T)+'</div>';
+  if(isos.length>1)h+='<label class="f" style="margin-top:12px">Filtrer par isométrique<select id="spi"><option value="">Tous les ISO</option>'+isos.map(function(i){return '<option value="'+esc(i)+'"'+(fi===i?' selected':'')+'>'+esc(i)+'</option>';}).join('')+'</select></label>';
+  h+='<div style="margin-top:14px">'+totalsHTML(T,fi)+'</div>';
   if(!G.length)h+='<div class="stack"><div class="empty">Aucun spool. Ajoutez des pièces avec un nom d\'ISO et un numéro de spool.</div></div>';
   G.forEach(function(g){
     var tot=g.total||1;
@@ -1471,7 +1550,7 @@ function renderSpool(){
 }
 function render(){
   renderProjBar();renderTabs();renderSettings();$('settings').hidden=S.tab!=='fiche';
-  if(S.tab==='fiche')renderFiche();else if(S.tab==='liste')renderListe();else renderSpool();
+  if(S.tab==='fiche')renderFiche();else if(S.tab==='liste')renderListe();else if(S.tab==='soud')renderSoud();else renderSpool();
 }
 
 /* ---------- Actions ---------- */
@@ -1650,7 +1729,7 @@ function tableauXml(){
     var r=r0+i,a=axe[i];
     tx(r,A,TV(g.iso,'code'),7);tx(r,B,TV(g.iso,'doc'),7);tx(r,C,g.iso,7);tx(r,D,TV(g.iso,'rev'),8);tx(r,E,TV(g.iso,'sub'),8);tx(r,F,TV(g.iso,'svc'),8);tx(r,Gc,TV(g.iso,'cls'),8);tx(r,H,TV(g.iso,'sys'),8);
     nu(r,I,maxDN(g.items),9);nu(r,J,g.wn,10);nu(r,K,g.wi,9);tx(r,L,spoolNo(g.sp),8);
-    var sv=SV[i];sv.p[2]>0?nu(r,M,sv.wsd,9):bl(r,M,9);nu(r,N,g.total,9);nu(r,O,a.w,9);nu(r,P,a.l,10);nu(r,Q,g.stotal,9);
+    var sv=SV[i];sv.wsd>0?nu(r,M,sv.wsd,9):bl(r,M,9);nu(r,N,g.total,9);nu(r,O,a.w,9);nu(r,P,a.l,10);nu(r,Q,g.stotal,9);
     for(var c=R;c<=X;c++){sv.p[c-R]>0?nu(r,c,sv.p[c-R]/100,11):bl(r,c,11);}
     cum+=sv.wsd;sv.pr>0?nu(r,Y,sv.pr/100,12):bl(r,Y,12);(sv.pr>0&&SS.kg>0)?nu(r,Z,sv.pr/100*g.total/SS.kg,12):bl(r,Z,12);cum>0?nu(r,AA,cum,9):bl(r,AA,9);
   });
@@ -1682,7 +1761,7 @@ function suiviXml(){
   var NCOL=26,rg=function(L){return L+r0+':'+L+rN;};
   tx(1,0,'Suivi des travaux · '+(TB.p1||(cp?cp.name:'')),29);mg('A1:Z1');
   tx(2,0,[TB.p2,TB.p3].filter(Boolean).join(' · ')+(TB.p2||TB.p3?'  ·  ':'')+'Mis à jour le '+frDate()+'  ·  Saisir « Pouces soudés » et les phases en clair (0 à 100 %) ; le reste se calcule.',30);mg('A2:Z2');
-  var K=[['Avancement global','=ROUND(IFERROR(SUMPRODUCT('+rg('N')+','+rg('X')+')/SUM('+rg('N')+'),0)*100,1)&" %"','0 %','A','B'],
+  var K=[['Avancement global','=ROUND(IF(SUM('+rg('N')+')=0,0,SUMPRODUCT('+rg('N')+','+rg('X')+')/SUM('+rg('N')+'))*100,1)&" %"','0 %','A','B'],
    ['Spools terminés','=COUNTIF('+rg('Z')+',"Terminé")&" / "&COUNTA('+rg('C')+')','0 / '+n,'C','E'],
    ['En cours','=COUNTIF('+rg('Z')+',"En cours")','0','F','G'],
    ['À démarrer','=COUNTIF('+rg('Z')+',"Non commencé")',String(n),'H','I'],
@@ -1696,16 +1775,22 @@ function suiviXml(){
   HD.forEach(function(h,i){tx(7,i,h,23);});
   G.forEach(function(g,i){var rr=r0+i,L=function(c){return colL(c)+rr;};
     tx(rr,0,TV(g.iso,'code'),24);tx(rr,1,TV(g.iso,'doc'),24);tx(rr,2,g.iso,24);tx(rr,3,TV(g.iso,'rev'),25);tx(rr,4,TV(g.iso,'sub'),25);tx(rr,5,TV(g.iso,'svc'),25);tx(rr,6,TV(g.iso,'cls'),25);tx(rr,7,TV(g.iso,'sys'),25);
-    nu(rr,8,maxDN(g.items),26);nu(rr,9,g.wn,27);nu(rr,10,g.wi,26);tx(rr,11,spoolNo(g.sp),25);bl(rr,12,26);nu(rr,13,g.total,26);nu(rr,14,spoolAxe(g.items).l,26);nu(rr,15,g.stotal,26);
-    PH.forEach(function(ph,k){if(k===2)fn(rr,18,'IF('+L(10)+'<=0,0,MIN(1,'+L(12)+'/'+L(10)+'))',0,28);else bl(rr,16+k,28);});
-    fn(rr,23,'SUMPRODUCT($Q$6:$W$6,'+L(16)+':'+L(22)+')',0,28);
-    fn(rr,24,L(23)+'*'+L(13),0,26);
-    fs(rr,25,'IF(ROUND('+L(23)+',4)>=1,"Terminé",IF('+L(23)+'>0,"En cours","Non commencé"))','Non commencé',33);});
+    nu(rr,8,maxDN(g.items),26);nu(rr,9,g.wn,27);nu(rr,10,g.wi,26);tx(rr,11,spoolNo(g.sp),25);(function(){var v=sdVal(g.iso+'|'+g.sp);if(v==null)bl(rr,12,26);else nu(rr,12,v,26);})();nu(rr,13,g.total,26);nu(rr,14,spoolAxe(g.items).l,26);nu(rr,15,g.stotal,26);
+    var wv=sdVal(g.iso+'|'+g.sp)||0,pt=g.wi>0?Math.min(1,wv/g.wi):0,mp=svPct(g.iso+'|'+g.sp).map(function(v){return Math.max(0,Math.min(100,v))/100;}),pv=mp.slice();
+    pv[2]=pt;if(pt>0.1){pv[0]=1;pv[1]=1;}
+    var xv=0;PH.forEach(function(ph,k){xv+=ph[1]/100*pv[k];});
+    PH.forEach(function(ph,k){
+      if(k===2)fn(rr,18,'IF('+L(10)+'<=0,0,MIN(1,'+L(12)+'/'+L(10)+'))',pt,28);
+      else if(k<2)fn(rr,16+k,'IF('+L(18)+'>0.1,1,'+(mp[k]||0)+')',pv[k],28);
+      else if(mp[k]>0)nu(rr,16+k,mp[k],28);else bl(rr,16+k,28);});
+    fn(rr,23,'SUMPRODUCT($Q$6:$W$6,'+L(16)+':'+L(22)+')',xv,28);
+    fn(rr,24,L(23)+'*'+L(13),xv*g.total,26);
+    fs(rr,25,'IF(ROUND('+L(23)+',4)>=1,"Terminé",IF('+L(23)+'>0,"En cours","Non commencé"))',xv>=0.9999?'Terminé':(xv>0?'En cours':'Non commencé'),33);});
   tx(tr,0,'TOTAL',23);for(var c=1;c<26;c++)bl(tr,c,23);
-  function sub(c,v,st){fn(tr,c,'SUBTOTAL(109,'+rg(colL(c))+')',v,st);}
+  function sub(c,v,st){fn(tr,c,'SUBTOTAL(9,'+rg(colL(c))+')',v,st);}
   sub(9,G.reduce(function(a,g){return a+g.wn;},0),34);sub(10,sumI,35);sub(12,0,35);sub(13,sumW,35);
   sub(14,G.reduce(function(a,g){return a+spoolAxe(g.items).l;},0),35);sub(15,G.reduce(function(a,g){return a+g.stotal;},0),35);
-  fn(tr,23,'IFERROR(SUMPRODUCT('+rg('N')+','+rg('X')+')/SUM('+rg('N')+'),0)',0,36);sub(24,0,35);
+  fn(tr,23,'IF(SUM('+rg('N')+')=0,0,SUMPRODUCT('+rg('N')+','+rg('X')+')/SUM('+rg('N')+'))',0,36);sub(24,0,35);
   var x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetPr><tabColor rgb="FF0A6A78"/><pageSetUpPr fitToPage="1"/></sheetPr><sheetViews><sheetView showGridLines="0" workbookViewId="0" zoomScale="90" zoomScaleNormal="90"><pane xSplit="3" ySplit="7" topLeftCell="D8" activePane="bottomRight" state="frozen"/></sheetView></sheetViews><cols>';
   [11,22,22,9,11,20,11,9,9,11,13,9,13,12,14,13,13,14,13,11,12,14,12,13,15,15].forEach(function(w,i){x+='<col min="'+(i+1)+'" max="'+(i+1)+'" width="'+w+'" customWidth="1"/>';});
   x+='</cols><sheetData>';
@@ -1731,15 +1816,17 @@ function pipeDias(items){
   src.forEach(function(it){if(!seen[it.nps]){seen[it.nps]=1;o.push(it.nps);}});
   return o.sort(function(a,b){return a-b;}).map(function(i){return NPS[i].l;}).join(', ')||'—';
 }
+var TIH=['Code artc','Document N°','Rev iso','Soumission','Service','Pipe / class','SYS'];
+function TIV(iso){var o=S.ti[iso]||{},b=S.tb||{};return TIK.map(function(k){return o[k]||b[k]||'';});}
 function buildXlsx(){
   var G=groupSpools(),I=isoTotals();
   var sheets=[
     {name:'Suivi des travaux',xml:suiviXml()},
     {name:'Tableau d\'avancement',xml:tableauXml()},
-    {name:'Par ISO',head:['Isométrique (ISO)','Diamètre des pipes','Poids (kg)','Surface de peinture (m²)','Joints à souder','Pouces à souder (po)'],widths:[24,18,14,24,16,20],numCols:[2,3,4,5],total:{label:'TOTAL',sumCols:[2,3,4,5]},
-     rows:I.map(function(g){return [g.iso,pipeDias(S.items.filter(function(it){return (it.iso||'Sans ISO')===g.iso;})),g.total,g.stotal,g.wn,g.wi];})},
-    {name:'Détail',head:['Isométrique (ISO)','Diamètre','Spool','Nuance','Désignation','Quantité','Poids (kg)','Surface de peinture (m²)','Joints par pièce','Joints à souder','Pouces à souder (po)'],widths:[24,14,12,22,46,10,14,24,14,14,20],numCols:[5,6,7,8,9,10],total:{label:'TOTAL',sumCols:[6,7,9,10]},
-     rows:S.items.map(function(it){var c=calc(it);return [it.iso||'Sans ISO',lineDia(it),it.spool||'—',matName(it),descr0(it)+(it.cat==='tube'?' · '+fmt(c.net)+' m net':''),num(it.qty),c.metal,c.surf,c.wj,c.wn,c.wi];})}
+    {name:'Par ISO',head:['Isométrique (ISO)'].concat(TIH,['Diamètre des pipes','Poids (kg)','Surface de peinture (m²)','Joints à souder','Pouces à souder (po)']),widths:[24,12,22,10,12,20,12,10,18,14,24,16,20],numCols:[9,10,11,12],total:{label:'TOTAL',sumCols:[9,10,11,12]},
+     rows:I.map(function(g){return [g.iso].concat(TIV(g.iso),[pipeDias(S.items.filter(function(it){return (it.iso||'Sans ISO')===g.iso;})),g.total,g.stotal,g.wn,g.wi]);})},
+    {name:'Détail',head:['Isométrique (ISO)'].concat(TIH,['Diamètre','Spool','Nuance','Désignation','Quantité','Poids (kg)','Surface de peinture (m²)','Joints par pièce','Joints à souder','Pouces à souder (po)']),widths:[24,12,22,10,12,20,12,10,14,12,22,46,10,14,24,14,14,20],numCols:[12,13,14,15,16,17],total:{label:'TOTAL',sumCols:[13,14,16,17]},
+     rows:S.items.map(function(it){var c=calc(it);return [it.iso||'Sans ISO'].concat(TIV(it.iso||'Sans ISO'),[lineDia(it),it.spool||'—',matName(it),descr0(it)+(it.cat==='tube'?' · '+fmt(c.net)+' m net':''),num(it.qty),c.metal,c.surf,c.wj,c.wn,c.wi]);})}
   ];
   var ct='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>';
   var wb='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships"><sheets>';
@@ -1923,14 +2010,15 @@ function fixDraft(){fixItem(D);}
 function setCat(c){D.cat=c;D.sub=DEFSUB[c]||'';fixDraft();}
 
 document.addEventListener('click',function(e){
-  var b=e.target.closest('[data-tab],[data-cat],[data-act],[data-sch],[data-svf]');if(!b)return;
+  var b=e.target.closest('[data-tab],[data-cat],[data-act],[data-sch],[data-svf],[data-sdf]');if(!b)return;
+  if(b.dataset.sdf!==undefined){S.sdf=b.dataset.sdf;renderSoud();return;}
   if(b.dataset.svf!==undefined){S.svf=b.dataset.svf;renderSuivi();return;}
   if(b.dataset.tab){S.tab=b.dataset.tab;render();window.scrollTo(0,0);return;}
   if(b.dataset.cat){setCat(b.dataset.cat);renderFiche();return;}
   if(b.dataset.sch){D.sch=b.dataset.sch;renderFiche();return;}
   var a=b.dataset.act,line=e.target.closest('[data-id]'),id=line&&line.dataset.id;
   if(a==='svdone'||a==='svreset'){var cd=e.target.closest('[data-key]');if(cd){S.sv[cd.dataset.key]=PH.map(function(){return a==='svdone'?100:0;});save();var rw=svRows().filter(function(r){return r.key===cd.dataset.key;})[0];if(rw)cd.outerHTML=svCardHTML(rw);svRefreshKpi();}return;}
-  if(a==='add'){
+  if(a==='add'){tiApply();TIP={};
     var it=clean(D);
     if(it.cat==='tube'&&!(num(it.len)>0)){toast('Saisissez une longueur de tube.');return;}
     if(!(num(it.qty)>0)){toast('La quantité doit être supérieure à 0.');return;}
@@ -1955,7 +2043,12 @@ document.addEventListener('click',function(e){
   if(a==='new'){S.edit=null;var keepI=D.iso,keepS=D.spool;D=blank();D.iso=keepI;D.spool=keepS;S.tab='fiche';render();return;}
   if(a==='edit'){var f=S.items.filter(function(x){return x.id===id;})[0];if(f){D=clean(f);S.edit=id;S.tab='fiche';render();window.scrollTo(0,0);}return;}
   if(a==='dup'){var s=S.items.filter(function(x){return x.id===id;})[0];if(s){var cp=clean(s);cp.id=uid();S.items.splice(S.items.indexOf(s)+1,0,cp);S.seed=false;save();renderTabs();renderListe();toast('Ligne dupliquée');}return;}
-  if(a==='del'){S.items=S.items.filter(function(x){return x.id!==id;});save();renderTabs();renderListe();toast('Ligne supprimée');return;}
+  if(a==='del'){
+    if(b.classList.contains('armed')){S.items=S.items.filter(function(x){return x.id!==id;});save();renderTabs();renderListe();toast('Ligne supprimée');}
+    else{b.classList.add('armed');b.textContent='Confirmer la suppression';setTimeout(function(){if(b.isConnected){b.classList.remove('armed');b.textContent='Supprimer';}},4000);}
+    return;
+  }
+  if(a==='sdfull'){var ar=b.closest('[data-sk]'),gg=groupSpools().filter(function(x){return x.iso+'|'+x.sp===ar.dataset.sk;})[0];if(gg){S.sd[ar.dataset.sk]=String(Math.round(gg.wi*100)/100);save();ar.querySelector('input').value=S.sd[ar.dataset.sk];sdUpdateRow(ar);sdRefresh();}return;}
   if(a==='clear'){
     if(b.classList.contains('armed')){S.items=[];S.seed=false;save();renderTabs();renderListe();toast('Liste vidée');}
     else{b.classList.add('armed');b.textContent='Confirmer : tout supprimer';setTimeout(function(){if($('clr')){$('clr').classList.remove('armed');$('clr').textContent='Vider la liste';}},4000);}
@@ -2002,6 +2095,7 @@ document.addEventListener('click',function(e){
     S.seed=false;S.imp=null;save();render();toast(m.items.length+' ligne(s) importée(s)');return;
   }
 });
+document.addEventListener('toggle',function(e){var d=e.target;if(d&&d.classList&&d.classList.contains('tid')&&d.dataset.tk!==undefined)TIDO[d.dataset.tk]=d.open;},true);
 document.addEventListener('focusin',function(e){
   var t=e.target;
   if(!(t.dataset&&(t.dataset.q==='iso'||t.dataset.f==='iso')))return;
@@ -2038,8 +2132,11 @@ function onField(e,commit){
 document.addEventListener('change',function(e){
   var t=e.target;
   if(t.id==='pj'){switchProject(t.value);return;}
+  if(t.dataset&&t.dataset.sph!==undefined){var ar2=t.closest('[data-sk]');if(ar2){var k2=ar2.dataset.sk,arr2=svPct(k2);arr2[+t.dataset.sph]=+t.value;S.sv[k2]=arr2;save();sdUpdateRow(ar2);}return;}
+  if(t.id==='spi'){S.spi=t.value;renderSpool();return;}
+  if(t.id==='sdi'){S.sdi=t.value;renderSoud();return;}
   if(t.dataset&&t.dataset.sv!==undefined){var cd2=t.closest('[data-key]');if(cd2){var arr=svPct(cd2.dataset.key);arr[+t.dataset.sv]=+t.value;S.sv[cd2.dataset.key]=arr;save();var rw2=svRows().filter(function(r){return r.key===cd2.dataset.key;})[0];if(rw2)cd2.outerHTML=svCardHTML(rw2);svRefreshKpi();}return;}
-  if(t.dataset&&t.dataset.f){if(t.tagName==='SELECT'){onField(e,true);}else{onField(e,false);}return;}
+  if(t.dataset&&t.dataset.f){if(t.tagName==='SELECT'){onField(e,true);}else{onField(e,false);if(t.dataset.f==='iso')tifRefresh();}return;}
   if(t.dataset&&t.dataset.q){
     var line=t.closest('[data-id]');var it=S.items.filter(function(x){return x.id===line.dataset.id;})[0];
     if(it){
@@ -2065,15 +2162,26 @@ document.addEventListener('change',function(e){
   else return;
   save();render();
 });
+function isoRename(line,it,v){
+  var oi=it.iso||'Sans ISO',ni=String(v)||'Sans ISO';
+  if(oi===ni)return;
+  if(S.ti[oi]&&!S.ti[ni]){S.ti[ni]=JSON.parse(JSON.stringify(S.ti[oi]));if(!S.items.some(function(x){return x!==it&&(x.iso||'Sans ISO')===oi;}))delete S.ti[oi];}
+  [].forEach.call(line.querySelectorAll('input[data-ti]'),function(inp){inp.dataset.iso=ni;if(S.ti[ni]&&S.ti[ni][inp.dataset.ti]!=null)inp.value=S.ti[ni][inp.dataset.ti];});
+}
 document.addEventListener('input',function(e){
   var t=e.target;
+  if(t.id==='sdq'){S.sdq=t.value;$('sdlist').innerHTML=sdListHTML(sdFiltered());sdRefresh();return;}
+  if(t.dataset&&t.dataset.sd!==undefined){var sk=t.dataset.sd;var gm=groupSpools().filter(function(x){return x.iso+'|'+x.sp===sk;})[0];
+    if(gm){var nv=num(t.value.trim().replace(',','.')),mx=Math.round(gm.wi*100)/100;if(isFinite(nv)&&nv>mx+1e-9){t.value=String(mx);toast('Maximum : '+fmt(mx,2)+' po (pouces à souder du spool).');}}
+    if(t.value.trim()==='')delete S.sd[sk];else S.sd[sk]=t.value.trim().replace(',','.');save();sdUpdateRow(t.closest('[data-sk]'));sdRefresh();return;}
   if(t.id==='svq'){S.svq=t.value;$('svlist').innerHTML=svListHTML();return;}
+  if(t.dataset&&t.dataset.tif){TIP[t.dataset.tif]=t.value;if(D.iso)tiApply();save();return;}
   if(t.dataset&&t.dataset.ti){var io=t.dataset.iso;S.ti[io]=S.ti[io]||{};S.ti[io][t.dataset.ti]=t.value;save();return;}
   if(t.dataset&&t.dataset.tb){S.tb[t.dataset.tb]=t.value;save();return;}
   if(t.dataset&&t.dataset.f&&t.tagName==='INPUT'){onField(e,false);return;}
   if(t.dataset&&t.dataset.q&&t.tagName==='INPUT'){
     var line=t.closest('[data-id]');var it=S.items.filter(function(x){return x.id===line.dataset.id;})[0];
-    if(it){it[t.dataset.q]=t.value;save();refreshLine(line,it);updTotals();}
+    if(it){if(t.dataset.q==='iso')isoRename(line,it,t.value);it[t.dataset.q]=t.value;save();refreshLine(line,it);updTotals();}
   }
 });
 $('settings').addEventListener('toggle',function(){S.open=this.open;save();});

@@ -2,6 +2,45 @@
 
 Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
 
+## 1.18.1
+- Onglet « Soudure » : les pouces soudés ne peuvent plus dépasser les pouces à souder du spool (la valeur est ramenée au maximum, avec un message).
+- Onglet « Rapport par spool » : filtre par isométrique (spools et totaux filtrés ; les exports restent complets).
+
+## 1.18.0
+- Onglet « Soudure » : avancement des autres tâches par spool (sortie matériel, débitage / assemblage, NDT, inspection, peinture / passivation, livraison site) en paliers 0 / 25 / 50 / 75 / 100 %, avec l'avancement global du spool. Sortie matériel et débitage passent à 100 % (verrouillés) au-delà de 10 % de soudage.
+- Excel « Suivi des travaux » et « Tableau d'avancement » : ces avancements sont repris dans les colonnes correspondantes.
+- Barre d'onglets plus compacte sur téléphone.
+
+## 1.17.1
+- Excel : dès que « Pointage / Soudage » dépasse 10 %, « Sortie matériel » et « Débitage / Assemblage » passent automatiquement à 100 % (feuilles « Suivi des travaux » et « Tableau d'avancement »).
+
+## 1.17.0
+- Nouvel onglet « Soudure » : liste des spools avec filtres (ISO, recherche de spool, état À souder / En cours / Soudés), pouces à souder de chaque spool et case « Pouces soudés » à saisir à la main (bouton « Tout soudé »), reste et totaux. Les valeurs sont enregistrées avec le projet et reprises dans le Tableau de Bord Excel (colonne « Pouces soudés » ; pointage / soudage = soudés ÷ à souder).
+
+## 1.16.8
+- Excel « Suivi des travaux » : formules rendues compatibles avec les anciens tableurs (LibreOffice Android, etc.) : plus de IFERROR ni de SUBTOTAL(109), ce qui supprimait les erreurs #NOM? et Err:502.
+
+## 1.16.7
+- Excel : les paramètres isométrique (code artc, document N°, rev iso, soumission, service, pipe / class, SYS) sont aussi ajoutés aux feuilles « Par ISO » et « Détail », juste après l'ISO (ils figuraient déjà dans « Suivi des travaux » et « Tableau d'avancement »).
+
+## 1.16.6
+- Correction : les paramètres isométrique saisis avant le nom de l'ISO (dans une ligne de la liste) disparaissaient dès qu'on modifiait un autre champ. Ils suivent maintenant le nom de l'ISO au fur et à mesure de la saisie.
+
+## 1.16.5
+- Paramètres isométrique : le bloc reste ouvert quand on remplit le reste du formulaire (il se refermait à chaque changement de liste déroulante). Dans la fiche, les champs se remplissent avec les valeurs déjà connues dès qu'on saisit un ISO existant.
+
+## 1.16.4
+- Suppression d'une ligne : confirmation en deux temps (le bouton devient « Confirmer la suppression » pendant 4 secondes), comme pour « Vider la liste ».
+
+## 1.16.3
+- Extrémités de tube : ajout de « Té (passage) » (encombrement = cote C ASME B16.9) et « Réduction » (encombrement = longueur H ASME B16.9). Chaque extrémité raccordée compte toujours 1 joint à souder ; l'encombrement imposé reste possible.
+
+## 1.16.2
+- Paramètres isométrique : bloc placé en premier (avant ISO et N° spool) dans la liste et dans la fiche de saisie, avec des cases au fond plus foncé (clair et sombre). Dans la fiche, les valeurs saisies avant le nom de l'ISO sont enregistrées avec la ligne ajoutée.
+
+## 1.16.1
+- Liste : les paramètres isométrique (code artc, document N°, rev iso, soumission, service, pipe / class, SYS) passent en haut de chaque ligne, dans un bloc repliable fermé par défaut, pour gagner de la place. Le titre du bloc rappelle les valeurs déjà saisies.
+
 ## 1.16.0
 - Onglet « Suivi » supprimé de l'application.
 - Feuille Excel « Suivi des travaux » avec formules : « Pouces soudés » et les phases se saisissent dans Excel ; Pointage / Soudage = pouces soudés ÷ pouces à souder (100 % quand ils sont égaux) ; Avancement = somme des phases × pondérations (ligne modifiable) ; Poids fabriqué = avancement × poids ; Statut automatique (Non commencé / En cours / Terminé) ; indicateurs et totaux recalculés. Barres de progression et couleurs de statut conservées.
