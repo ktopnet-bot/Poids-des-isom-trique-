@@ -2,6 +2,12 @@
 
 Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
 
+## 1.19.1
+- Zones de filtres (Liste, Rapport par spool, Soudure) : fond bleu et bordure marquée, avec cases plus foncées, pour les repérer d'un coup d'œil (clair et sombre).
+
+## 1.19.0
+- Onglet « Liste » : filtres par ISO, spool, catégorie et recherche libre (désignation, ISO, spool, matériau), avec compteur « n lignes sur N » et bouton « Tout afficher ». Les totaux suivent le filtre ; les exports restent complets.
+
 ## 1.18.1
 - Onglet « Soudure » : les pouces soudés ne peuvent plus dépasser les pouces à souder du spool (la valeur est ramenée au maximum, avec un message).
 - Onglet « Rapport par spool » : filtre par isométrique (spools et totaux filtrés ; les exports restent complets).
