@@ -1,6 +1,44 @@
 # Journal des versions
 
-Le format suit [Semantic Versioning](https://semver.org/lang/fr/).
+Numérotation : X.Y (par exemple 2.0).
+
+## 2.1
+- Aide : nouvelle rubrique « Un problème ? Une erreur ? » (décrire l'erreur, joindre une capture d'écran) avec un bouton « Écrire un email » vers ktopnet@gmail.com, objet et corps pré-remplis.
+
+## 2.0
+- Numérotation des versions simplifiée : un seul chiffre après le point (2.0, 2.1…). Regroupe les évolutions 1.20.x : thème moderne, anneau de répartition, FR / EN, aide, thème clair / sombre, onglets Assemblage et Information, schémas réalistes.
+
+## 1.20.9
+- Icône soleil / lune dans l'en-tête pour basculer entre thème clair et sombre (choix mémorisé ; par défaut le thème de l'appareil).
+
+## 1.20.8
+- Onglet Information : le tableau « Schedules disponibles » n'affiche plus la colonne des poids (kg/m) pour les accessoires ; elle reste pour les tubes.
+
+## 1.20.7
+- Schémas des accessoires (coudes, tés, réductions, fonds, brides, raccords forgés, piquages, boulonnerie) : même rendu réaliste que les vannes, clair et sombre ; cotes inchangées.
+
+## 1.20.6
+- Schémas de vannes : rendu réaliste (corps métallique dégradé, volant rouge, ombres, fond clair) ; les cotes restent calculées par DN et classe.
+
+## 1.20.5
+- L'onglet « Fiche » devient « Information » ; ses champs Quantité, ISO, N° spool, poids unitaire imposé, surface imposée et joints imposés sont supprimés (ils se saisissent dans Assemblage).
+
+## 1.20.4
+- Aide : on commence par l'onglet Assemblage ; la Fiche est présentée comme information.
+
+## 1.20.3
+- Les paramètres isométrique ne sont plus dans l'onglet Fiche ; ils se renseignent uniquement dans l'onglet Assemblage.
+
+## 1.20.2
+- Icône d'aide « ? » dans l'en-tête : guide d'utilisation en français et en anglais (fenêtre, fermeture par × ou Échap).
+
+## 1.20.1
+- L'onglet « Liste » est renommé « Assemblage » (« Assembly » en anglais).
+
+## 1.20.0
+- Thème plus moderne : bandeau d'en-tête dégradé, onglets en pastilles, cartes arrondies avec ombres, boutons et totaux en dégradé.
+- Nouveaux graphiques : anneau (tubes / accessoires / brides) avec légende et pourcentages, barres empilées par ISO.
+- Bouton globe FR / EN dans l'en-tête : interface, messages et en-têtes / noms de feuilles / statuts de l'Excel traduits (les données saisies ne sont jamais traduites). Langue mémorisée.
 
 ## 1.19.1
 - Zones de filtres (Liste, Rapport par spool, Soudure) : fond bleu et bordure marquée, avec cases plus foncées, pour les repérer d'un coup d'œil (clair et sombre).
