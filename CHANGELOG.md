@@ -2,6 +2,12 @@
 
 Numérotation : X.Y (par exemple 2.0).
 
+## 2.3
+- Aide : l'onglet Information a sa propre rubrique (titre bleu), placée juste après « Principe » ; rubriques renumérotées.
+
+## 2.2
+- Aide, « Démarrer » : le réglage des paramètres isométrique passe en étape 2, avant l'ajout des pièces.
+
 ## 2.1
 - Aide : nouvelle rubrique « Un problème ? Une erreur ? » (décrire l'erreur, joindre une capture d'écran) avec un bouton « Écrire un email » vers ktopnet@gmail.com, objet et corps pré-remplis.
 
