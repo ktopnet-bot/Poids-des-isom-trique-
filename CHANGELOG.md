@@ -2,6 +2,15 @@
 
 Numérotation : X.Y (par exemple 2.0).
 
+## 2.6
+- Pouces à souder d'un spool = somme des diamètres de chaque soudure (ex. 10 + 10 + 10 + 0,5 + 0,5 = 31 po), au lieu de diamètre principal × joints. Répercuté dans Soudure, Rapport par spool, Excel et CSV.
+
+## 2.5
+- Soudure, détail des soudures : chaque soudure prend le diamètre de la pièce correspondante dans Assemblage (par exemple 0,75 po pour un piquage ¾" sur un tube de 10"), au lieu du seul diamètre principal. Les pouces soudés sont la somme des diamètres cochés ; tout coché = 100 %.
+
+## 2.4
+- Onglet Soudure : détail des soudures par spool (S1, S2, S3… selon le nombre de joints), chacune avec son diamètre ; cocher une soudure = terminée à 100 %. Les pouces soudés, l'avancement et l'Excel suivent automatiquement. La saisie manuelle et « Tout soudé » restent disponibles.
+
 ## 2.3
 - Aide : l'onglet Information a sa propre rubrique (titre bleu), placée juste après « Principe » ; rubriques renumérotées.
 

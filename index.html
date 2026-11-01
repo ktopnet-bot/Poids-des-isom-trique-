@@ -338,6 +338,14 @@ label.f input,label.f select,.svc select,.svbar input,.svbar select{border-radiu
 .dm.vl .pf,.dm.vl .hole{fill:#eef2f5}
 .dm.vl .bk{fill:#f6e2c6;stroke:#a05a14}
 .dm.vl .ut{stroke:#1d2b35}
+
+.swd{margin-top:10px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);padding:6px 10px}
+.swd summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--muted);padding:4px 0}
+.swg{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;padding:6px 0 8px}
+.swb{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:7px 8px;cursor:pointer;font-size:13px;min-height:44px}
+.swb b{font-family:var(--f-display);font-size:15px}.swb span{color:var(--muted);flex:1;font-size:12px}
+.swb input{width:22px;height:22px;accent-color:var(--ok);margin:0;flex:none}
+.swb.on{border-color:var(--ok);background:var(--tube-bg)}
 </style>
 <style>:root{color-scheme:light}html{-webkit-text-size-adjust:100%}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
@@ -345,7 +353,7 @@ label.f input,label.f select,.svc select,.svbar input,.svbar select{border-radiu
 <div class="wrap">
   <header class="title-block">
     <div class="hl"><h1>Calcul poids tuyauterie</h1><div class="hbtns"><button type="button" id="lang" aria-label="Langue / Language" title="Français / English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.9 5.7 3.9 9s-1.3 6.3-3.9 9c-2.6-2.7-3.9-5.7-3.9-9S9.4 5.7 12 3z"/></svg><span id="langlbl">FR</span></button><button type="button" id="themebtn" aria-label="Thème clair ou sombre" title="Thème clair / sombre"></button><button type="button" id="helpbtn" aria-label="Aide" title="Aide">?</button></div></div>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v2.3 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v2.6 · Kamel Nasralli</div>
   </header>
   <div id="projbar"></div>
   <nav class="tabs" role="tablist" id="tabs"></nav>
@@ -354,7 +362,7 @@ label.f input,label.f select,.svc select,.svbar input,.svbar select{border-radiu
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 2.3 · Format de fichier 6 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 2.6 · Format de fichier 6 · Licence MIT</p>
 </div>
 <div id="help" role="dialog" aria-modal="true" aria-labelledby="helptt"></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -603,7 +611,7 @@ function endFields(o,a){
 
 /* ---------- État ---------- */
 var KEY='cpt.poids.v2'; /* ancien stockage à un seul projet, lu une fois pour la migration */
-var APP_VERSION='2.3',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var APP_VERSION='2.6',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
 function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',wj:'1',mk:'cs',rt:3000};}
@@ -613,7 +621,7 @@ var KEY3='cpt.poids.v3';
 var PR={cur:null,list:[],trash:[]};
 var TIK=['code','doc','rev','sub','svc','cls','sys'];
 var TBK=['p1','p2','p3','code','doc','rev','sub','svc','cls','sys'];
-function defData(){return {mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,tb:{},ti:{},sv:{},sd:{},items:[],seed:false,open:true};}
+function defData(){return {mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,tb:{},ti:{},sv:{},sd:{},sw:{},items:[],seed:false,open:true};}
 function exampleItems(){return [
     {id:uid(),cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:3,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'coude',sub:'90lr',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:2,iso:'ISO-001',spool:'1',over:'',name:'',w:''},
@@ -622,8 +630,8 @@ function exampleItems(){return [
     {id:uid(),cat:'te',sub:'egal',nps:10,sch:'40',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''},
     {id:uid(),cat:'vanne',sub:'gate',nps:8,sch:'STD',nps2:5,cls:150,len:'',qty:1,iso:'ISO-002',spool:'1',over:'',name:'',w:''}
   ];}
-function snap(){return {mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,tb:S.tb,ti:S.ti,sv:S.sv,sd:S.sd,items:S.items,seed:S.seed,open:S.open};}
-function applyData(d){var k,df=defData();for(k in df)S[k]=(d&&d[k]!=null)?d[k]:df[k];if(!Array.isArray(S.items))S.items=[];if(!S.tb||typeof S.tb!=='object')S.tb={};if(!S.ti||typeof S.ti!=='object')S.ti={};if(!S.sv||typeof S.sv!=='object')S.sv={};if(!S.sd||typeof S.sd!=='object')S.sd={};S.items.forEach(fixItem);}
+function snap(){return {mat:S.mat,matK:S.matK,rho:S.rho,fluK:S.fluK,insOn:S.insOn,insT:S.insT,insRho:S.insRho,tb:S.tb,ti:S.ti,sv:S.sv,sd:S.sd,sw:S.sw,items:S.items,seed:S.seed,open:S.open};}
+function applyData(d){var k,df=defData();for(k in df)S[k]=(d&&d[k]!=null)?d[k]:df[k];if(!Array.isArray(S.items))S.items=[];if(!S.tb||typeof S.tb!=='object')S.tb={};if(!S.ti||typeof S.ti!=='object')S.ti={};if(!S.sv||typeof S.sv!=='object')S.sv={};if(!S.sd||typeof S.sd!=='object')S.sd={};if(!S.sw||typeof S.sw!=='object')S.sw={};S.items.forEach(fixItem);}
 function curProj(){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===PR.cur)return PR.list[i];return null;}
 function findProj(id){for(var i=0;i<PR.list.length;i++)if(PR.list[i].id===id)return PR.list[i];return null;}
 function persist(){
@@ -680,6 +688,7 @@ function dataFrom(st,items){
     if(FLUIDS.some(function(m){return m[0]===st.fluK;}))d.fluK=st.fluK;if(st.rho!=null&&num(st.rho)>=0)d.rho=num(st.rho);
     d.insOn=!!st.insOn;if(st.insT!=null)d.insT=num(st.insT);if(st.insRho!=null)d.insRho=num(st.insRho);if(st.sv&&typeof st.sv==='object'){Object.keys(st.sv).slice(0,5000).forEach(function(k){var a=st.sv[k];if(Array.isArray(a)&&a.length===7)d.sv[String(k).slice(0,200)]=a.map(function(v){v=+v;return isFinite(v)?Math.max(0,Math.min(100,Math.round(v))):0;});});}
     if(st.sd&&typeof st.sd==='object'){Object.keys(st.sd).slice(0,5000).forEach(function(k){var v=num(st.sd[k]);if(isFinite(v)&&v>=0&&String(st.sd[k]).trim()!=='')d.sd[String(k).slice(0,200)]=String(Math.round(v*100)/100);});}
+    if(st.sw&&typeof st.sw==='object'){d.sw=d.sw||{};Object.keys(st.sw).slice(0,5000).forEach(function(k){var a=st.sw[k];if(Array.isArray(a)&&a.length>0&&a.length<=500)d.sw[String(k).slice(0,200)]=a.map(function(v){return v?1:0;});});}
     if(st.ti&&typeof st.ti==='object'){Object.keys(st.ti).slice(0,2000).forEach(function(i){var o=st.ti[i],r={};if(o&&typeof o==='object'){TIK.forEach(function(k){if(o[k]!=null&&String(o[k])!=='')r[k]=String(o[k]).slice(0,120);});if(Object.keys(r).length)d.ti[String(i).slice(0,200)]=r;}});}
     if(st.tb&&typeof st.tb==='object'){TBK.forEach(function(k){if(st.tb[k]!=null)d.tb[k]=String(st.tb[k]).slice(0,120);});}
   }
@@ -687,7 +696,7 @@ function dataFrom(st,items){
 }
 function projectObj(p){
   var d=p.id===PR.cur?snap():p.data;
-  return {name:p.name,settings:{matK:d.matK,mat:d.mat,fluK:d.fluK,rho:d.rho,insOn:d.insOn,insT:d.insT,insRho:d.insRho,tb:d.tb||{},ti:d.ti||{},sv:d.sv||{},sd:d.sd||{}},
+  return {name:p.name,settings:{matK:d.matK,mat:d.mat,fluK:d.fluK,rho:d.rho,insOn:d.insOn,insT:d.insT,insRho:d.insRho,tb:d.tb||{},ti:d.ti||{},sv:d.sv||{},sd:d.sd||{},sw:d.sw||{}},
     items:d.items.map(function(it){var c=clean(it);delete c.id;return c;})};
 }
 function exportProject(p){
@@ -1519,7 +1528,7 @@ function renderListe(){
 function groupSpools(){
   var m={},order=[];
   S.items.forEach(function(it){var k=(it.iso||'Sans ISO')+'\u0001'+(it.spool||'—');if(!m[k]){m[k]=[];order.push(k);}m[k].push(it);});
-  return order.sort(function(a,b){return a.localeCompare(b,'fr',{numeric:true});}).map(function(k){var T=sumItems(m[k]);var p=k.split('\u0001');T.iso=p[0];T.sp=p[1];T.items=m[k];T.wi=maxDN(m[k])*T.wn;return T;});
+  return order.sort(function(a,b){return a.localeCompare(b,'fr',{numeric:true});}).map(function(k){var T=sumItems(m[k]);var p=k.split('\u0001');T.iso=p[0];T.sp=p[1];T.items=m[k];return T;});
 }
 var TBL=[['p1','Projet (ligne 1)','ex. STEG / ANSALDO'],['p2','Titre (ligne 2)','ex. Étude, fourniture et montage de …'],['p3','Titre (ligne 3)','ex. à l\'usine …'],['code','Code artc','ex. BOP'],['doc','Document N°','ex. AR327-23-06-IS-0007'],['rev','Rev iso','ex. C'],['sub','Soumission','ex. WR'],['svc','Service','ex. EAU INDUSTRIELLE'],['cls','Pipe / class','ex. 1A1'],['sys','SYS','ex. 1A1']];
 function tbForm(){
@@ -1544,9 +1553,9 @@ function tifRefresh(){var o=S.ti[D.iso||'Sans ISO']||{};[].forEach.call(document
 function tiApply(){var k=D.iso||'Sans ISO';TIK.forEach(function(f){if(TIP[f]!=null&&TIP[f]!==''){S.ti[k]=S.ti[k]||{};S.ti[k][f]=TIP[f];}});}
 function tiForm(){
   var I=isoTotals();if(!I.length)return '';
-  return '<h3 style="margin:14px 0 4px;font-size:15px">Données par ISO</h3><p class="note" style="margin:0 0 8px">Dans l\'ordre des colonnes du Tableau de Bord. Une case vide reprend la valeur d\'en-tête ci-dessus. Diamètre principal, joints et pouces à souder (diamètre principal × joints) sont calculés automatiquement.</p>'+I.map(function(g){var o=S.ti[g.iso]||{},sp=groupSpools().filter(function(x){return x.iso===g.iso;});
+  return '<h3 style="margin:14px 0 4px;font-size:15px">Données par ISO</h3><p class="note" style="margin:0 0 8px">Dans l\'ordre des colonnes du Tableau de Bord. Une case vide reprend la valeur d\'en-tête ci-dessus. Diamètre principal, joints et pouces à souder (somme des diamètres de chaque soudure) sont calculés automatiquement.</p>'+I.map(function(g){var o=S.ti[g.iso]||{},sp=groupSpools().filter(function(x){return x.iso===g.iso;});
     return '<div class="svc" style="margin-bottom:10px"><b>'+esc(g.iso)+'</b><div class="grid">'+TBL.slice(3).map(function(f){return '<label class="f">'+f[1]+'<input data-ti="'+esc(f[0])+'" data-iso="'+esc(g.iso)+'" type="text" maxlength="120" placeholder="'+esc(S.tb[f[0]]||f[2])+'" value="'+esc(o[f[0]]||'')+'"></label>';}).join('')+'</div>'+
-    '<div class="note" style="margin-top:6px">'+sp.map(function(x){return 'Spool '+esc(spoolNo(x.sp))+' : DN '+fmt(maxDN(x.items),1)+' × '+fmt(x.wn,0)+' joint'+(x.wn>1?'s':'')+' = '+fmt(x.wi,1)+' po';}).join(' · ')+'</div></div>';}).join('');
+    '<div class="note" style="margin-top:6px">'+sp.map(function(x){return 'Spool '+esc(spoolNo(x.sp))+' : '+fmt(x.wn,0)+' joint'+(x.wn>1?'s':'')+' = '+fmt(x.wi,1)+' po';}).join(' · ')+'</div></div>';}).join('');
 }
 var PH=[['Sortie matériel',5],['Débitage / Assemblage',25],['Pointage / Soudage',35],['NDT',5],['Inspection',5],['Peinture / Passivation',20],['Livraison site',5]];
 function svPct(k){var a=S.sv[k];return PH.map(function(_,i){return a&&a[i]!=null?+a[i]:0;});}
@@ -1604,11 +1613,25 @@ function sdKpiHTML(rows){
    '<div class="kpi"><div class="kl">Spools</div><div class="kv2">'+rows.length+'</div><div class="ks">'+n[2]+' soudés · '+n[1]+' en cours · '+n[0]+' à souder</div></div>'+
    '<div class="kpi"><div class="kl">Joints à souder</div><div class="kv2">'+fmt(rows.reduce(function(t,r){return t+r.g.wn;},0),0)+'</div><div class="ks">sur les spools affichés</div></div></div>';
 }
+function swList(g){var L=[];g.items.forEach(function(it){var c=calc(it),n=Math.round(c.wn);if(n>0&&c.wd>0)for(var i=0;i<n;i++)L.push(c.wd);});if(!L.length&&g.wn>0){var d=maxDN(g.items),n2=Math.max(1,Math.round(g.wn));for(var j=0;j<n2;j++)L.push(d);}return L;}
+function swN(g){return swList(g).length;}
+function swArr(g,k){var L=swList(g),N=L.length,a=S.sw&&S.sw[k],r=[],i,cum=0;if(Array.isArray(a)&&a.length===N)return a.map(function(x){return x?1:0;});var v=sdVal(k)||0;for(i=0;i<N;i++){cum+=L[i];r.push(cum<=v+1e-9?1:0);}return r;}
+function swCommit(g,k,arr){var L=swList(g),n=0,sum=0;S.sw[k]=arr;arr.forEach(function(x,i){if(x){n++;sum+=L[i];}});if(n===0)delete S.sd[k];else if(n===arr.length)S.sd[k]=String(Math.round(g.wi*100)/100);else S.sd[k]=String(Math.min(Math.round(g.wi*100)/100,Math.round(sum*100)/100));}
+function swHTML(g,key){
+  var L=swList(g),N=L.length;if(!N)return '';var a=swArr(g,key),done=a.reduce(function(t,x){return t+x;},0);
+  return '<details class="swd" open><summary>Détail des soudures · <b class="swc">'+done+' / '+N+'</b></summary><div class="swg">'+a.map(function(x,i){
+    return '<label class="swb'+(x?' on':'')+'"><b>S'+(i+1)+'</b><span>'+fmt(L[i],2)+' po</span><input type="checkbox" data-sw="'+i+'"'+(x?' checked':'')+' aria-label="Soudure S'+(i+1)+' terminée"></label>';}).join('')+'</div></details>';
+}
+function swSync(art){
+  var k=art.dataset.sk,g=groupSpools().filter(function(x){return x.iso+'|'+x.sp===k;})[0];if(!g)return;
+  var a=swArr(g,k),n=0;[].forEach.call(art.querySelectorAll('input[data-sw]'),function(c){var on=!!a[+c.dataset.sw];c.checked=on;if(on)n++;c.parentNode.className='swb'+(on?' on':'');});
+  var c=art.querySelector('.swc');if(c)c.textContent=n+' / '+swN(g);
+}
 function sdRowHTML(r){
   var g=r.g;
   return '<article class="svc st'+r.st+'" data-sk="'+esc(r.key)+'"><div class="svh"><div><b>'+esc(g.iso)+'</b> <span class="spn">Spool '+esc(spoolNo(g.sp))+'</span></div><span class="stchip">'+SDST[r.st]+'</span></div>'+
    '<div class="svm">DN '+fmt(maxDN(g.items),1)+' po · '+fmt(g.wn,0)+(g.wn>1?' joints':' joint')+' · <b>'+fmt(g.wi,1)+' po à souder</b></div>'+
-   sdPhHTML(r)+'<div class="sdl"><label class="f">Pouces soudés<input data-sd="'+esc(r.key)+'" inputmode="decimal" autocomplete="off" placeholder="saisir" value="'+esc(r.v==null?'':String(S.sd[r.key]))+'"></label><div class="sdr"><span>Reste</span><b class="rest">'+fmt(Math.max(0,g.wi-(r.v||0)),1)+' po</b></div><button type="button" class="btn sm" data-act="sdfull">Tout soudé</button></div></article>';
+   swHTML(g,r.key)+sdPhHTML(r)+'<div class="sdl"><label class="f">Pouces soudés<input data-sd="'+esc(r.key)+'" inputmode="decimal" autocomplete="off" placeholder="saisir" value="'+esc(r.v==null?'':String(S.sd[r.key]))+'"></label><div class="sdr"><span>Reste</span><b class="rest">'+fmt(Math.max(0,g.wi-(r.v||0)),1)+' po</b></div><button type="button" class="btn sm" data-act="sdfull">Tout soudé</button></div></article>';
 }
 var SDPH=[0,1,3,4,5,6],PCTS=[0,25,50,75,100];
 function sdForced(g){var v=sdVal(g.iso+'|'+g.sp)||0;return g.wi>0&&v/g.wi>0.1;}
@@ -1639,7 +1662,7 @@ function sdUpdateRow(art){
   var rr=sdRows().filter(function(x){return x.key===k;})[0],pv=svPct(k),fo=sdForced(g);
   [].forEach.call(art.querySelectorAll('select[data-sph]'),function(sel){var i=+sel.dataset.sph,f=fo&&i<2,cur=f?100:pv[i];if(!sel.querySelector('option[value="'+cur+'"]')){var op=document.createElement('option');op.value=cur;op.textContent=cur+' %';sel.appendChild(op);}sel.value=String(cur);sel.disabled=f;});
   if(rr){art.querySelector('.avg').textContent=fmt(sdAvg(rr),1)+' %';art.querySelector('.sdavg .pb i').style.width=Math.min(100,sdAvg(rr)).toFixed(1)+'%';}
-  art.className='svc st'+st;art.querySelector('.stchip').textContent=SDST[st];art.querySelector('.rest').textContent=fmt(Math.max(0,g.wi-(v||0)),1)+' po';
+  swSync(art);art.className='svc st'+st;art.querySelector('.stchip').textContent=SDST[st];art.querySelector('.rest').textContent=fmt(Math.max(0,g.wi-(v||0)),1)+' po';
 }
 function renderSuivi(){
   var f=S.svf==null?'all':String(S.svf);
@@ -2176,7 +2199,7 @@ document.addEventListener('click',function(e){
     else{b.classList.add('armed');b.textContent='Confirmer la suppression';setTimeout(function(){if(b.isConnected){b.classList.remove('armed');b.textContent='Supprimer';}},4000);}
     return;
   }
-  if(a==='sdfull'){var ar=b.closest('[data-sk]'),gg=groupSpools().filter(function(x){return x.iso+'|'+x.sp===ar.dataset.sk;})[0];if(gg){S.sd[ar.dataset.sk]=String(Math.round(gg.wi*100)/100);save();ar.querySelector('input').value=S.sd[ar.dataset.sk];sdUpdateRow(ar);sdRefresh();}return;}
+  if(a==='sdfull'){var ar=b.closest('[data-sk]'),gg=groupSpools().filter(function(x){return x.iso+'|'+x.sp===ar.dataset.sk;})[0];if(gg){S.sd[ar.dataset.sk]=String(Math.round(gg.wi*100)/100);delete S.sw[ar.dataset.sk];save();ar.querySelector('input[data-sd]').value=S.sd[ar.dataset.sk];sdUpdateRow(ar);sdRefresh();}return;}
   if(a==='lfreset'){S.lfi=S.lfs=S.lfc=S.lfq='';renderListe();return;}
   if(a==='clear'){
     if(b.classList.contains('armed')){S.items=[];S.seed=false;save();renderTabs();renderListe();toast('Liste vidée');}
@@ -2261,6 +2284,7 @@ function onField(e,commit){
 document.addEventListener('change',function(e){
   var t=e.target;
   if(t.id==='pj'){switchProject(t.value);return;}
+  if(t.dataset&&t.dataset.sw!==undefined&&t.type==='checkbox'){var aw=t.closest('[data-sk]');if(aw){var kw=aw.dataset.sk,gw=groupSpools().filter(function(x){return x.iso+'|'+x.sp===kw;})[0];if(gw){var ww=swArr(gw,kw);ww[+t.dataset.sw]=t.checked?1:0;swCommit(gw,kw,ww);save();var inw=aw.querySelector('input[data-sd]');if(inw)inw.value=S.sd[kw]!=null?S.sd[kw]:'';sdUpdateRow(aw);sdRefresh();}}return;}
   if(t.dataset&&t.dataset.sph!==undefined){var ar2=t.closest('[data-sk]');if(ar2){var k2=ar2.dataset.sk,arr2=svPct(k2);arr2[+t.dataset.sph]=+t.value;S.sv[k2]=arr2;save();sdUpdateRow(ar2);}return;}
   if(t.id==='lfi'){S.lfi=t.value;S.lfs='';renderListe();return;}
   if(t.id==='lfs'){S.lfs=t.value;renderListe();return;}
@@ -2306,7 +2330,7 @@ document.addEventListener('input',function(e){
   if(t.id==='sdq'){S.sdq=t.value;$('sdlist').innerHTML=sdListHTML(sdFiltered());sdRefresh();return;}
   if(t.dataset&&t.dataset.sd!==undefined){var sk=t.dataset.sd;var gm=groupSpools().filter(function(x){return x.iso+'|'+x.sp===sk;})[0];
     if(gm){var nv=num(t.value.trim().replace(',','.')),mx=Math.round(gm.wi*100)/100;if(isFinite(nv)&&nv>mx+1e-9){t.value=String(mx);toast('Maximum : '+fmt(mx,2)+' po (pouces à souder du spool).');}}
-    if(t.value.trim()==='')delete S.sd[sk];else S.sd[sk]=t.value.trim().replace(',','.');save();sdUpdateRow(t.closest('[data-sk]'));sdRefresh();return;}
+    if(t.value.trim()==='')delete S.sd[sk];else S.sd[sk]=t.value.trim().replace(',','.');delete S.sw[sk];save();sdUpdateRow(t.closest('[data-sk]'));sdRefresh();return;}
   if(t.id==='svq'){S.svq=t.value;$('svlist').innerHTML=svListHTML();return;}
   if(t.dataset&&t.dataset.tif){TIP[t.dataset.tif]=t.value;if(D.iso)tiApply();save();return;}
   if(t.dataset&&t.dataset.ti){var io=t.dataset.iso;S.ti[io]=S.ti[io]||{};S.ti[io][t.dataset.ti]=t.value;save();return;}
@@ -2341,7 +2365,7 @@ var LANG='fr';try{LANG=localStorage.getItem('cpt.lang')==='en'?'en':'fr';}catch(
 var EN={
 "Calcul poids tuyauterie":"Piping weight calculator","Calcul Poids Tuyauterie":"Piping Weight Calculator",
 "Créé par Kamel Nasralli":"Created by Kamel Nasralli",
-"Aide":"Help","Thème clair ou sombre":"Light or dark theme","Thème clair / sombre":"Light / dark theme","Information":"Information","Assemblage":"Assembly","Rapport par spool":"Spool report","Soudure":"Welding",
+"Aide":"Help","Détail des soudures":"Weld detail","Thème clair ou sombre":"Light or dark theme","Thème clair / sombre":"Light / dark theme","Information":"Information","Assemblage":"Assembly","Rapport par spool":"Spool report","Soudure":"Welding",
 "Fiche de calcul":"Information","Modifier la ligne":"Edit line","Liste de calcul":"Calculation list",
 "+ Ajouter une pièce":"+ Add an item","Ajouter à la liste":"Add to list","Mettre à jour la ligne":"Update line","Ajouté à la liste":"Added to list",
 "Vider la liste":"Clear list","Confirmer : tout supprimer":"Confirm: delete all","Confirmer la suppression":"Confirm deletion","Supprimer":"Delete","Dupliquer":"Duplicate",
@@ -2350,7 +2374,7 @@ var EN={
 "CSV exporté par cette application (modifiable dans Excel) ou sauvegarde .json.":"CSV exported by this application (editable in Excel) or .json backup.",
 "Paramètres de calcul":"Calculation settings","Paramètres isométrique":"Isometric parameters","Paramètres isométrique (à renseigner en premier)":"Isometric parameters (fill in first)",
 "Données par ISO":"Data per ISO","Données ISO":"ISO data",
-"Dans l'ordre des colonnes du Tableau de Bord. Une case vide reprend la valeur d'en-tête ci-dessus. Diamètre principal, joints et pouces à souder (diamètre principal × joints) sont calculés automatiquement.":"In the order of the Dashboard columns. An empty box takes the header value above. Main diameter, joints and inches to weld (main diameter × joints) are calculated automatically.",
+"Dans l'ordre des colonnes du Tableau de Bord. Une case vide reprend la valeur d'en-tête ci-dessus. Diamètre principal, joints et pouces à souder (somme des diamètres de chaque soudure) sont calculés automatiquement.":"In the order of the Dashboard columns. An empty box takes the header value above. Main diameter, joints and inches to weld (sum of each weld's diameter) are calculated automatically.",
 "Ces champs sont recopiés dans le tableau du récap Excel (chaque ligne reçoit les mêmes valeurs ; modifiez-les ensuite dans Excel si besoin).":"These fields are copied into the Excel summary table (every row gets the same values; edit them in Excel if needed).",
 "Tableau d'avancement : informations de l'en-tête":"Progress table: header information",
 "Projet (ligne 1)":"Project (line 1)","Titre (ligne 2)":"Title (line 2)","Titre (ligne 3)":"Title (line 3)",
