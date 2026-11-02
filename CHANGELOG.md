@@ -2,6 +2,15 @@
 
 Numérotation : X.Y (par exemple 2.0).
 
+## 2.9
+- Excel : la ligne de signature est verrouillée (feuilles protégées par mot de passe). Toutes les autres cellules restent modifiables (saisie, tri, filtres, insertion de lignes et de colonnes).
+
+## 2.8
+- Excel : la signature « Créé par KAMEL NASRALLI · ASME B36.10M / B36.19M · ASME B16.9 · B16.5 · kg · Version X.Y » est imprimée en bas de chaque feuille et dans le pied de page d'impression (avec le numéro de page).
+
+## 2.7
+- Onglet Assemblage : chaque ligne affiche en couleur vive les repères de soudure qu'elle génère (S1, S2… ou S1 à S9), avec leur nombre et leur diamètre, dans la même numérotation que l'onglet Soudure.
+
 ## 2.6
 - Pouces à souder d'un spool = somme des diamètres de chaque soudure (ex. 10 + 10 + 10 + 0,5 + 0,5 = 31 po), au lieu de diamètre principal × joints. Répercuté dans Soudure, Rapport par spool, Excel et CSV.
 
