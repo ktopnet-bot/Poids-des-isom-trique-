@@ -360,7 +360,7 @@ label.f input,label.f select,.svc select,.svbar input,.svbar select{border-radiu
 <div class="wrap">
   <header class="title-block">
     <div class="hl"><h1>Calcul poids tuyauterie</h1><div class="hbtns"><button type="button" id="lang" aria-label="Langue / Language" title="Français / English"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.7 3.9 5.7 3.9 9s-1.3 6.3-3.9 9c-2.6-2.7-3.9-5.7-3.9-9S9.4 5.7 12 3z"/></svg><span id="langlbl">FR</span></button><button type="button" id="themebtn" aria-label="Thème clair ou sombre" title="Thème clair / sombre"></button><button type="button" id="helpbtn" aria-label="Aide" title="Aide">?</button></div></div>
-    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v2.9 · Kamel Nasralli</div>
+    <div class="ref">ASME B36.10M / B36.19M<br>ASME B16.9 · B16.5 · kg<br>v3.3 · Kamel Nasralli</div>
   </header>
   <div id="projbar"></div>
   <nav class="tabs" role="tablist" id="tabs"></nav>
@@ -369,7 +369,7 @@ label.f input,label.f select,.svc select,.svbar input,.svbar select{border-radiu
 
   <main id="view"></main>
 
-  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 2.9 · Format de fichier 6 · Licence MIT</p>
+  <p class="foot">Tubes : formule 0,02466 · e · (Øe − e) avec les épaisseurs ASME B36.10M / B36.19M, exacte. Coudes, tés, réductions et fonds : longueurs ASME B16.9 multipliées par le poids du tube, à ±5 %. Brides et vannes : valeurs indicatives de catalogue, à confirmer avec Pipedata. Un poids unitaire ou une surface imposés remplacent toujours le calcul. Surface de peinture : surface extérieure du tube et des raccords ; brides, fonds et vannes sont estimés à ±20 %. Raccords forgés B16.11 : poids estimés d'après les dimensions normalisées et calés sur Pipedata (±10 %). Boulonnerie : longueurs standard ASME B16.5.<br><b>Créé par Kamel Nasralli</b> · Version 3.3 · Format de fichier 6 · Licence MIT</p>
 </div>
 <div id="help" role="dialog" aria-modal="true" aria-labelledby="helptt"></div>
 <div id="toast" role="status" aria-live="polite"></div>
@@ -618,7 +618,7 @@ function endFields(o,a){
 
 /* ---------- État ---------- */
 var KEY='cpt.poids.v2'; /* ancien stockage à un seul projet, lu une fois pour la migration */
-var APP_VERSION='2.9',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
+var APP_VERSION='3.3',FILE_VERSION=6,AUTHOR='Kamel Nasralli',APP_NAME='Calcul Poids Tuyauterie';
 var S={tab:'fiche',mat:7850,matK:'cs',rho:1000,fluK:'eau',insOn:false,insT:50,insRho:100,items:[],seed:true,edit:null,open:true,imp:null,last:null};
 var D=blank();
 function blank(){return {cat:'tube',sub:'',nps:8,sch:'STD',nps2:5,cls:150,len:'6',qty:1,iso:'',spool:'',over:'',name:'',w:'',e1:'none',e1s:'90lr',e2:'none',e2s:'90lr',encO:'',overS:'',wj:'1',mk:'cs',rt:3000};}
@@ -1815,8 +1815,14 @@ function colL(i){return i<26?String.fromCharCode(65+i):String.fromCharCode(64+Ma
 /* sheet : {name, head:[..], rows:[[..]], widths:[..], numCols:[indices], total:{label, sumCols:[indices]}} */
 function xlSign(){return (LANG==='en'?'Created by ':'Créé par ')+AUTHOR.toUpperCase()+' · ASME B36.10M / B36.19M · ASME B16.9 · B16.5 · kg · Version '+APP_VERSION;}
 var SIGS=37;
-function sheetProt(){return '<sheetProtection password="D83D" sheet="1" objects="0" scenarios="0" formatCells="0" formatColumns="0" formatRows="0" insertColumns="0" insertRows="0" insertHyperlinks="0" deleteColumns="0" deleteRows="0" sort="0" autoFilter="0" pivotTables="0"/>';}
-function signRow(r){return '<row r="'+r+'"><c r="A'+r+'" s="'+SIGS+'" t="inlineStr"><is><t>'+xe(xlSign())+'</t></is></c></row>';}
+function sheetProt(){return '<sheetProtection password="D83D" sheet="1" objects="1" scenarios="0" formatCells="0" formatColumns="0" formatRows="0" insertColumns="0" insertRows="0" insertHyperlinks="0" deleteColumns="0" deleteRows="0" sort="0" autoFilter="0" pivotTables="0"/>';}
+function signRow(r){return '';}
+function wmXml(y,W){
+  var t1=xe(AUTHOR.toUpperCase()),t2=xe('ASME B36.10M / B36.19M · ASME B16.9 · B16.5 · kg · Version '+APP_VERSION),pre=xe(LANG==='en'?'Created by':'Créé par'),hw=Math.round(W/2),H=1000000;
+  function run(t,sz,b){return '<a:r><a:rPr lang="fr-FR" sz="'+sz+'" b="'+b+'"><a:solidFill><a:srgbClr val="7F7F7F"><a:alpha val="30000"/></a:srgbClr></a:solidFill></a:rPr><a:t>'+t+'</a:t></a:r>';}
+  function one(id,x){return '<xdr:absoluteAnchor><xdr:pos x="'+x+'" y="'+y+'"/><xdr:ext cx="'+hw+'" cy="'+H+'"/><xdr:sp macro="" textlink=""><xdr:nvSpPr><xdr:cNvPr id="'+id+'" name="Watermark '+(id-1)+'"/><xdr:cNvSpPr txBox="1"/></xdr:nvSpPr><xdr:spPr><a:xfrm><a:off x="'+x+'" y="'+y+'"/><a:ext cx="'+hw+'" cy="'+H+'"/></a:xfrm><a:prstGeom prst="rect"><a:avLst/></a:prstGeom><a:noFill/><a:ln><a:noFill/></a:ln></xdr:spPr><xdr:txBody><a:bodyPr vertOverflow="overflow" horzOverflow="overflow" wrap="none" lIns="0" tIns="0" rIns="0" bIns="0" anchor="ctr"/><a:lstStyle/><a:p><a:pPr algn="ctr"/>'+run(pre,1000,0)+'</a:p><a:p><a:pPr algn="ctr"/>'+run(t1,3000,1)+'</a:p><a:p><a:pPr algn="ctr"/>'+run(t2,900,0)+'</a:p></xdr:txBody></xdr:sp><xdr:clientData fLocksWithSheet="1" fPrintsWithSheet="1"/></xdr:absoluteAnchor>';}
+  return '<?xml version="1.0" encoding="UTF-8" standalone="yes"?><xdr:wsDr xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" xmlns:a="http://schemas.openxmlformats.org/drawingml/2006/main">'+one(2,0)+one(3,hw)+'</xdr:wsDr>';
+}
 function hfXml(){return '<headerFooter><oddFooter>&amp;L'+xe(xlSign())+'&amp;R'+(LANG==='en'?'Page':'Page')+' &amp;P / &amp;N</oddFooter></headerFooter>';}
 function sheetXml(sh){
   var nR=sh.rows.length,last=nR+1,x='<?xml version="1.0" encoding="UTF-8" standalone="yes"?><worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><sheetViews><sheetView workbookViewId="0"><pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/></sheetView></sheetViews><cols>';
@@ -2004,7 +2010,16 @@ function buildXlsx(){
     ct+='<Override PartName="/xl/worksheets/sheet'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>';
     wb+='<sheet name="'+xe(sh.name)+'" sheetId="'+(i+1)+'" r:id="rId'+(i+1)+'"/>';
     wr+='<Relationship Id="rId'+(i+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet'+(i+1)+'.xml"/>';
-    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:sh.xml||sheetXml(sh)});
+    var wx=(sh.xml||sheetXml(sh)).replace('<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main">','<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">').replace('</worksheet>','<drawing r:id="rId1"/></worksheet>');
+    ct+='<Override PartName="/xl/drawings/drawing'+(i+1)+'.xml" ContentType="application/vnd.openxmlformats-officedocument.drawing+xml"/>';
+    files.push({name:'xl/worksheets/sheet'+(i+1)+'.xml',data:wx});
+    files.push({name:'xl/worksheets/_rels/sheet'+(i+1)+'.xml.rels',data:'<?xml version="1.0" encoding="UTF-8" standalone="yes"?><Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/drawing" Target="../drawings/drawing'+(i+1)+'.xml"/></Relationships>'});
+    var ws0=0,yy=0,lr=1,mm,re1=/<col [^>]*width="([\d.]+)"/g,re2=/<row r="(\d+)"([^>]*)>/g,hts={};
+    while((mm=re1.exec(wx)))ws0+=(+mm[1]*7+5)*9525;
+    while((mm=re2.exec(wx))){lr=+mm[1];var hm=/ ht="([\d.]+)"/.exec(mm[2]);if(hm)hts[lr]=+hm[1];}
+    for(var rr=1;rr<=lr+2;rr++)yy+=(hts[rr]||15)*12700;
+    ws0=Math.max(ws0,6000000);
+    files.push({name:'xl/drawings/drawing'+(i+1)+'.xml',data:wmXml(yy,ws0)});
   });
   ct+='</Types>';wb+='</sheets><calcPr calcId="191029" fullCalcOnLoad="1"/></workbook>';
   wr+='<Relationship Id="rId'+(sheets.length+1)+'" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles" Target="styles.xml"/></Relationships>';

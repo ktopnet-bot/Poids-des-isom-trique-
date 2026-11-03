@@ -2,6 +2,18 @@
 
 Numérotation : X.Y (par exemple 2.0).
 
+## 3.3
+- Filigrane Excel horizontal (plus en diagonale) et répété 2 fois pour couvrir toute la largeur du tableau.
+
+## 3.2
+- Filigrane Excel placé sous le tableau (plus jamais au-dessus des chiffres), pour garder les valeurs lisibles.
+
+## 3.1
+- Filigrane Excel plus discret : plus petit et plus transparent.
+
+## 3.0
+- Excel : la ligne de signature est remplacée par un filigrane en diagonale (« Créé par KAMEL NASRALLI », normes ASME et numéro de version) sur chaque feuille. Le filigrane est verrouillé par la protection des feuilles et s'imprime. Le pied de page d'impression est conservé.
+
 ## 2.9
 - Excel : la ligne de signature est verrouillée (feuilles protégées par mot de passe). Toutes les autres cellules restent modifiables (saisie, tri, filtres, insertion de lignes et de colonnes).
 
